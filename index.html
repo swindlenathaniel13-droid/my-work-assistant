@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V7.2.0</title>
+    <title>Work Portal V7.3.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -27,7 +27,7 @@
         }
 
         /* =========================================
-           1. LOGIN SCREEN (Travel Style - Preserved)
+           1. LOGIN SCREEN
            ========================================= */
         #login-view {
             display: flex; width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 2000; background: white; transition: opacity 0.5s ease;
@@ -53,7 +53,7 @@
         @media (max-width: 900px) { #login-view { flex-direction: column; } .login-right { width: 100%; height: 60%; } .login-left { height: 40%; } }
 
         /* =========================================
-           2. DASHBOARD (Dealer Style)
+           2. DASHBOARD VIEW
            ========================================= */
         #dashboard-view {
             display: none; height: 100vh; width: 100%;
@@ -108,7 +108,7 @@
             flex: 1; overflow-y: auto; padding: 30px;
         }
 
-        /* FORM CARD (The "Add New Car" Style) */
+        /* FORM CARD */
         .form-card {
             background: white; border-radius: 12px; padding: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); max-width: 1000px; margin: 0 auto;
         }
@@ -214,7 +214,7 @@
         <div class="main-content">
             <div class="header">
                 <div class="search-bar">Search here...</div>
-                <div style="font-weight:600; color:#1e293b;">Work Portal v7.2</div>
+                <div style="font-weight:600; color:#1e293b;">Work Portal v7.3</div>
             </div>
 
             <div class="scroll-area">
@@ -340,7 +340,7 @@
 
     document.getElementById('logout-btn').addEventListener('click', () => location.reload());
 
-    // --- 2. CONTRACT LOGIC (Unchanged) ---
+    // --- 2. CONTRACT LOGIC ---
     const modePhone = document.getElementById('mode-phone');
     const modeWatch = document.getElementById('mode-watch');
     const priceInput = document.getElementById('con-price');
@@ -383,7 +383,7 @@
         document.getElementById('con-due-today').innerText = "$" + m.totalDue.toFixed(2);
     }
 
-    // --- 3. PDF GENERATOR (Exact PDF Match) ---
+    // --- 3. PDF GENERATOR ---
     genBtn.addEventListener('click', () => {
         const m = getMath();
         const name = document.getElementById('con-name').value || "";
@@ -410,7 +410,7 @@
                     td, th { border: 1px solid black; padding: 8px; vertical-align: top; text-align: left; }
                     .no-border td { border: none; padding: 4px; }
                     .bold { font-weight: bold; }
-                    .small { font-size: 9pt; }
+                    .small { font-size: 10pt; } /* Increased to 10pt */
                     h3 { text-align: center; font-weight: bold; font-size: 14pt; margin: 20px 0; }
                 </style>
             </head>
@@ -430,10 +430,10 @@
                 <div style="margin-top:40px; font-weight: bold; font-size: 12pt;">Itemization of the Amount Financed of $${m.financed.toFixed(2)}</div>
                 <table class="no-border" style="width:100%; margin-top: 10px; margin-bottom: 30px; font-size: 11pt;"><tr><td>Cash Price</td><td>$${m.price.toFixed(2)}</td></tr><tr><td>Sales Tax (8.9%)</td><td>$${m.tax.toFixed(2)}</td></tr><tr><td>Total Cash Price plus Sales Tax</td><td>$${(m.price + m.tax).toFixed(2)}</td></tr><tr><td>Cash Down payment</td><td>$${m.down.toFixed(2)}</td></tr><tr><td>Sales Tax paid at time of sale</td><td>$${m.tax.toFixed(2)}</td></tr><tr><td>Unpaid Balance of Cash Price/Unpaid Balance</td><td>$${m.financed.toFixed(2)}</td></tr><tr><td>Prepaid FINANCE CHARGE</td><td>$0.00</td></tr><tr><td style="border-top:2px solid black; padding-top: 10px;"><strong>Amount Financed</strong></td><td style="border-top:2px solid black; padding-top: 10px;"><strong>$${m.financed.toFixed(2)}</strong></td></tr></table>
                 <div class="small" style="margin-top:20px; text-align:justify; line-height: 1.4;"><strong>Agreement to Purchase and Make Payments:</strong> The Buyer ("you" or "Buyer") agrees to purchase from the Seller ("we", "us", "our", or "Seller") the items described above on the terms set forth in this contract. You agree to make payments according to the payment schedule above. The Federal Truth-in-Lending Disclosures above are part of this contract. Items payable under this contract will appear on the monthly billing statements for your plan. Payments will first be applied to any past due balances and then, in order, to any deposit due, payments due under this contract, current service charges for your plan and then to any other charges for your service plan. Partial payments may result in the suspension or cancellation of your plan service and in equipment not operating on our network. You may prepay this contract in full or make additional payments in increments of $ at any time.<br><br><strong>Consumer Cellular, Incorporated Wireless Customer Agreement ("WCA"):</strong> You have been provided with a copy of the WCA. The WCA also applies to this transaction, but if the WCA is inconsistent with anything stated in this contract, this contract will prevail. Provisions of the WCA that are prohibited by law will not apply. Manufacturer warranty information, if any, is provided with the items sold.<br><br><strong>Default:</strong> Except where prohibited by law, if you commit any substantial default under this contract, we may declare the remaining unpaid balance of the contract immediately due and payable. You agree to maintain Service for any device purchased under this contract, and any termination of that Service will be a substantial default under this contract.<br><br><strong>NOTICE:</strong> ANY HOLDER OF THIS CONSUMER CREDIT CONTRACT IS SUBJECT TO ALL CLAIMS AND DEFENSES WHICH THE DEBTOR COULD ASSERT AGAINST THE SELLER OF GOODS OR SERVICES OBTAINED PURSUANT HERETO OR WITH THE PROCEEDS HEREOF. RECOVERY HEREUNDER BY THE DEBTOR SHALL NOT EXCEED AMOUNTS PAID BY THE DEBTOR HEREUNDER.</div>
-                <div style="margin-top:20px; font-weight: bold;">You acknowledge receipt of the Consumer Cellular, Incorporated WCA You also acknowledge receipt of a completely filled in copy of this contract when you signed it.</div>
+                <div style="margin-top:20px; font-weight: bold; font-size: 11pt;">You acknowledge receipt of the Consumer Cellular, Incorporated WCA You also acknowledge receipt of a completely filled in copy of this contract when you signed it.</div>
                 <br><br><table class="no-border"><tr><td width="50%"><strong>BUYER'S SIGNATURE:</strong></td><td><strong>SELLER'S SIGNATURE:</strong></td></tr><tr><td style="border-bottom:2px solid black; height:40px;"></td><td style="vertical-align:bottom;">CONSUMER CELLULAR, INCORPORATED</td></tr><tr><td class="small">(Please type your name in the box above to electronically sign this document)</td><td></td></tr></table>
                 <div class="page-break"></div>
-                <br><br><br><div style="font-size: 14pt; font-weight: bold; font-family: Arial, sans-serif; text-align: center; line-height: 2;">Account Number: <span style="font-weight:normal;">${acct}</span><br>Phone Number: <span style="font-weight:normal;">${phone}</span></div>
+                <br><br><br><div style="font-size: 14pt; font-weight: bold; font-family: Arial, sans-serif; text-align: left; margin-left: 20px; margin-top: 50px; line-height: 2;">Account Number: <span style="font-weight:normal;">${acct}</span><br>Phone Number: <span style="font-weight:normal;">${phone}</span></div>
             </body>
             </html>
         `);
