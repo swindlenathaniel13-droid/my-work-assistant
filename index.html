@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Work Assistant V3.1</title>
+    <title>Work Portal V3.2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent-color: #ff7b00; /* Consumer Cellular Orange */
+            --accent-color: #ff7b00;
             --accent-hover: #e66f00;
             --bg-dark: #121212;
             --text-light: #ffffff;
@@ -23,10 +23,9 @@
             display: flex;
             background-color: #f4f4f4;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
 
-        /* --- LEFT BANNER PANEL --- */
+        /* --- BANNER --- */
         #banner-panel {
             flex: 4;
             background-color: var(--bg-dark);
@@ -34,8 +33,6 @@
             justify-content: center;
             align-items: center;
             padding: 40px;
-            overflow: hidden;
-            transition: flex 0.5s ease;
         }
 
         #hero-text {
@@ -46,7 +43,7 @@
             text-align: center;
         }
 
-        /* --- RIGHT INTERACTION PANEL --- */
+        /* --- MAIN PANEL --- */
         #interaction-panel {
             flex: 3;
             background-color: #fff;
@@ -54,11 +51,9 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow-y: auto;
-            transition: all 0.5s ease;
         }
 
-        /* Top Bar */
+        /* TOP BAR */
         #top-bar {
             position: absolute;
             top: 20px;
@@ -69,14 +64,8 @@
             z-index: 10;
         }
 
-        #time-container {
-            text-align: right;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
         #time-display {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 500;
             color: var(--text-dark);
         }
@@ -86,18 +75,12 @@
             border: none;
             cursor: pointer;
             color: var(--text-muted);
-            transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 8px;
+            display: none; /* Hidden until login */
         }
         
-        .icon-btn:hover {
-            color: var(--accent-color);
-        }
+        .icon-btn:hover { color: var(--accent-color); }
 
-        /* Log Out Button */
         #logout-btn {
             display: none;
             padding: 8px 16px;
@@ -107,22 +90,9 @@
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
-        #logout-btn:hover {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        #nav-tools {
-            display: none; /* Hidden until login */
-            gap: 10px;
-            border-right: 1px solid #ddd;
-            padding-right: 15px;
-        }
-
-        /* --- LOGIN SECTION --- */
+        /* LOGIN SCREEN */
         #login-section {
             display: flex;
             flex-direction: column;
@@ -133,42 +103,18 @@
             width: 100%;
         }
 
-        h1 {
-            color: var(--text-dark);
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            margin-bottom: 40px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
+        .input-group { margin-bottom: 20px; }
+        .input-label { display: block; margin-bottom: 8px; font-weight: 500; }
+        
         .modern-input {
             width: 100%;
             padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s;
             box-sizing: border-box;
         }
-
-        .modern-input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
+        .modern-input:focus { outline: none; border-color: var(--accent-color); }
 
         .login-btn {
             width: 100%;
@@ -180,12 +126,8 @@
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-
-        .login-btn:hover {
-            background-color: var(--accent-hover);
-        }
+        .login-btn:hover { background-color: var(--accent-hover); }
 
         #login-error {
             color: #d32f2f;
@@ -197,38 +139,26 @@
             display: none;
         }
 
-        /* --- DASHBOARD SECTION --- */
+        /* DASHBOARD (Hidden) */
         #dashboard-section {
             display: none;
             flex-direction: column;
             height: 100%;
-            padding-top: 40px;
-            max-width: 1000px;
-            width: 100%;
-            margin: 0 auto;
-            align-items: center;
             justify-content: center;
-        }
-
-        .dashboard-placeholder {
+            align-items: center;
             text-align: center;
-            color: var(--text-muted);
         }
 
-        /* --- MODAL STYLES --- */
+        /* MODAL STYLES */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.6);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 2000;
         }
-
         .modal-content {
             background-color: white;
             padding: 30px;
@@ -237,61 +167,24 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             position: relative;
         }
-
         .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: var(--text-muted);
+            position: absolute; top: 15px; right: 15px;
+            cursor: pointer; font-size: 1.5rem; color: #666;
         }
-
-        .modal-header {
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 10px;
-        }
-
         .toggle-container {
-            display: flex;
-            background-color: #f0f0f0;
-            border-radius: 8px;
-            padding: 4px;
-            margin-top: 5px;
+            display: flex; background: #f0f0f0; border-radius: 8px; padding: 4px; margin-top: 5px;
         }
-
         .toggle-btn {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            border-radius: 6px;
-            font-weight: 500;
-            color: var(--text-muted);
+            flex: 1; padding: 8px; border: none; background: transparent; cursor: pointer;
+            border-radius: 6px; font-weight: 500;
         }
-
         .toggle-btn.active {
-            background-color: white;
-            color: var(--accent-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: white; color: var(--accent-color); box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
         .action-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
+            width: 100%; padding: 12px; background: var(--accent-color); color: white;
+            border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;
         }
-        
-        .action-btn:hover { background-color: var(--accent-hover); }
 
     </style>
 </head>
@@ -303,53 +196,38 @@
 
     <div id="interaction-panel">
         <div id="top-bar">
-            <div id="time-container">
-                <div id="date-display">Loading...</div>
-                <div id="time-display"></div>
-            </div>
+            <div id="time-display">Loading...</div>
             
-            <div id="nav-tools">
-                <button id="contract-btn" class="icon-btn" title="Create Contract">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                </button>
-            </div>
+            <button id="contract-btn" class="icon-btn" title="Create Contract">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </button>
 
             <button id="logout-btn">Log Out</button>
         </div>
 
         <div id="login-section">
-            <h1>Welcome</h1>
-            <p class="subtitle">Please log in to access your assistant.</p>
-            
+            <h1 style="color:#333;">Welcome</h1>
+            <p class="subtitle">Enter access code.</p>
             <div id="login-error">Incorrect password.</div>
 
-            <form id="login-form">
-                <div class="input-group">
-                    <label for="password-input" class="input-label">Access Code</label>
-                    <input type="password" id="password-input" class="modern-input" placeholder="Enter password">
-                </div>
-                <button type="submit" class="login-btn">Enter Portal</button>
-            </form>
+            <div class="input-group">
+                <input type="password" id="password-input" class="modern-input" placeholder="Password">
+            </div>
+            <button type="button" id="login-trigger" class="login-btn">Log In</button>
             
-             <p style="margin-top: 20px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
-                System v3.1.0 | Personal Use
-            </p>
+            <p style="margin-top: 20px; text-align: center; color: #999; font-size: 0.8rem;">System v3.2.0</p>
         </div>
 
         <div id="dashboard-section">
-            <div class="dashboard-placeholder">
-                <h1 style="color: var(--accent-color); font-size: 3rem;">Ready</h1>
-                <p style="font-size: 1.2rem;">Click the Document icon (top right) to create a contract.</p>
-            </div>
+            <h1 style="color: var(--accent-color); font-size: 3rem;">Ready</h1>
+            <p style="font-size: 1.2rem; color: #666;">Click the Document icon (top right) to create a contract.</p>
         </div>
     </div>
 
     <div id="contract-modal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-modal" id="close-contract">&times;</span>
-            <div class="modal-header">
-                <h2 style="margin:0;">Easy Pay Contract</h2>
-            </div>
+            <h2 style="margin-top:0; border-bottom:2px solid var(--accent-color); padding-bottom:10px;">Easy Pay Contract</h2>
             
             <div style="display:flex; gap:15px;">
                 <div style="flex:1;">
@@ -369,14 +247,12 @@
                 <div style="flex:1;">
                     <div class="input-group">
                         <label class="input-label">Item Description</label>
-                        <input type="text" id="con-item" class="modern-input" placeholder="iPhone 17 128GB">
+                        <input type="text" id="con-item" class="modern-input" placeholder="iPhone 17">
                     </div>
                     <div class="input-group">
                         <label class="input-label">Retail Price ($)</label>
                         <input type="number" id="con-price" class="modern-input" placeholder="0.00" step="0.01">
                     </div>
-                    
-                    <label class="input-label">Device Type</label>
                     <div class="toggle-container">
                         <button class="toggle-btn active" id="con-mode-phone">Phone</button>
                         <button class="toggle-btn" id="con-mode-watch">Watch</button>
@@ -384,159 +260,219 @@
                 </div>
             </div>
             
-            <div style="background-color:#f9f9f9; padding:15px; border-radius:8px; margin-top:10px; font-size:0.9rem; line-height: 1.6;">
+            <div style="background:#f9f9f9; padding:15px; border-radius:8px; font-size:0.9rem;">
                 <div><strong>Retail Price:</strong> <span id="disp-price">$0.00</span></div>
                 <div><strong>Sales Tax (8.9%):</strong> <span id="disp-tax">$0.00</span></div>
                 <div><strong>Down Payment:</strong> <span id="disp-down">$0.00</span></div>
-                <div style="margin-top:5px; padding-top:5px; border-top:1px solid #ddd;">
-                    <strong>Total Due Today:</strong> <span id="con-due-today" style="color:var(--accent-color); font-weight:bold; font-size:1.1rem;">$0.00</span>
+                <div style="margin-top:5px; border-top:1px solid #ddd; padding-top:5px;">
+                    <strong>Total Due Today:</strong> <span id="con-due-today" style="color:var(--accent-color); font-weight:bold;">$0.00</span>
                 </div>
-                <div style="margin-top:5px;">
-                    <strong>Monthly Installment:</strong> <span id="disp-monthly">$0.00</span>
-                </div>
+                <div><strong>Monthly Installment:</strong> <span id="disp-monthly">$0.00</span></div>
             </div>
 
-            <button id="generate-btn" class="action-btn">Generate Printable Contract</button>
+            <button id="generate-btn" class="action-btn">Generate Contract</button>
         </div>
     </div>
 
 <script>
-    // --- 1. TIME FUNCTION ---
+    // --- TIME ---
     function updateTime() {
         const now = new Date();
-        const timeString = now.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
-        const dateString = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        document.getElementById('date-display').innerText = dateString;
-        document.getElementById('time-display').innerText = timeString;
+        document.getElementById('time-display').innerText = now.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
     }
     setInterval(updateTime, 1000);
     updateTime();
 
-    // --- 2. DOM ELEMENTS ---
-    const loginForm = document.getElementById('login-form');
-    const passwordInput = document.getElementById('password-input');
-    const loginSection = document.getElementById('login-section');
-    const dashboardSection = document.getElementById('dashboard-section');
-    const loginError = document.getElementById('login-error');
+    // --- ELEMENTS ---
+    const passInput = document.getElementById('password-input');
+    const loginBtn = document.getElementById('login-trigger');
+    const loginSect = document.getElementById('login-section');
+    const dashSect = document.getElementById('dashboard-section');
     const logoutBtn = document.getElementById('logout-btn');
-    const navTools = document.getElementById('nav-tools');
-    const bannerPanel = document.getElementById('banner-panel');
+    const contractBtn = document.getElementById('contract-btn');
+    const loginError = document.getElementById('login-error');
+    const banner = document.getElementById('banner-panel');
 
-    // --- 3. LOGIN LOGIC ---
-    loginForm.addEventListener('submit', function(event) {
-        event.preventDefault(); 
-        if (passwordInput.value.toLowerCase() === "spokanecc") {
-            loginSection.style.display = 'none';
-            bannerPanel.style.display = 'none';
-            dashboardSection.style.display = 'flex';
-            logoutBtn.style.display = 'block'; 
-            navTools.style.display = 'flex';
+    // --- LOGIN FUNCTION ---
+    function tryLogin() {
+        // Case-insensitive check
+        if (passInput.value.toLowerCase() === "spokanecc") {
+            loginSect.style.display = 'none';
+            banner.style.display = 'none';
+            dashSect.style.display = 'flex';
+            logoutBtn.style.display = 'block';
+            contractBtn.style.display = 'block';
         } else {
             loginError.style.display = 'block';
-            passwordInput.value = "";
-            setTimeout(() => { loginError.style.display = 'none'; }, 3000);
-        }
-    });
-
-    // --- 4. LOGOUT LOGIC ---
-    logoutBtn.addEventListener('click', function() {
-        dashboardSection.style.display = 'none';
-        bannerPanel.style.display = 'flex';
-        loginSection.style.display = 'flex';
-        logoutBtn.style.display = 'none';
-        navTools.style.display = 'none';
-        passwordInput.value = "";
-    });
-
-    // --- 5. CONTRACT LOGIC ---
-    const contractBtn = document.getElementById('contract-btn');
-    const contractModal = document.getElementById('contract-modal');
-    const closeContract = document.getElementById('close-contract');
-    const conModePhone = document.getElementById('con-mode-phone');
-    const conModeWatch = document.getElementById('con-mode-watch');
-    const conPrice = document.getElementById('con-price');
-    const generateBtn = document.getElementById('generate-btn');
-
-    let conMode = 'phone';
-
-    contractBtn.addEventListener('click', () => { contractModal.style.display = 'flex'; conPrice.focus(); });
-    closeContract.addEventListener('click', () => { contractModal.style.display = 'none'; });
-
-    // Close modal on outside click
-    window.onclick = function(event) {
-        if (event.target == contractModal) {
-            contractModal.style.display = "none";
+            passInput.value = "";
+            setTimeout(() => loginError.style.display = 'none', 2000);
         }
     }
 
-    conModePhone.addEventListener('click', () => {
-        conMode = 'phone';
-        conModePhone.classList.add('active');
-        conModeWatch.classList.remove('active');
-        updateContractTotals();
+    loginBtn.addEventListener('click', tryLogin);
+    passInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') tryLogin();
     });
 
-    conModeWatch.addEventListener('click', () => {
-        conMode = 'watch';
-        conModeWatch.classList.add('active');
-        conModePhone.classList.remove('active');
-        updateContractTotals();
+    // --- LOGOUT ---
+    logoutBtn.addEventListener('click', () => {
+        location.reload(); // Simple reload to reset everything
     });
 
-    conPrice.addEventListener('input', updateContractTotals);
+    // --- CONTRACT GENERATOR LOGIC ---
+    const modal = document.getElementById('contract-modal');
+    const closeBtn = document.getElementById('close-contract');
+    const modePhone = document.getElementById('con-mode-phone');
+    const modeWatch = document.getElementById('con-mode-watch');
+    const priceInput = document.getElementById('con-price');
+    const genBtn = document.getElementById('generate-btn');
+    let isPhone = true;
 
-    function getContractMath() {
-        const price = parseFloat(conPrice.value);
-        if (isNaN(price) || price <= 0) {
-            return { price: 0, salesTax: 0, monthly: 0, downPrincipal: 0, totalDown: 0, financed: 0 };
-        }
+    contractBtn.addEventListener('click', () => { modal.style.display = 'flex'; priceInput.focus(); });
+    closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
 
-        const taxRate = 0.089;
-        const salesTax = price * taxRate;
-        
+    modePhone.addEventListener('click', () => {
+        isPhone = true;
+        modePhone.classList.add('active');
+        modeWatch.classList.remove('active');
+        updateMath();
+    });
+
+    modeWatch.addEventListener('click', () => {
+        isPhone = false;
+        modeWatch.classList.add('active');
+        modePhone.classList.remove('active');
+        updateMath();
+    });
+
+    priceInput.addEventListener('input', updateMath);
+
+    function getMath() {
+        const price = parseFloat(priceInput.value) || 0;
+        const tax = price * 0.089;
         let monthly = 0;
-        let downPrincipal = 0;
+        let down = 0;
 
-        if (conMode === 'phone') {
-            monthly = Math.floor(price / 24);
-            const financedAmount = monthly * 24;
-            downPrincipal = price - financedAmount;
-        } else {
-            // Watch Logic: Round UP to nearest penny
-            monthly = Math.ceil((price / 24) * 100) / 100;
-            downPrincipal = 0;
+        if (price > 0) {
+            if (isPhone) {
+                // Phone: Monthly rounded down to whole dollar
+                monthly = Math.floor(price / 24);
+                down = price - (monthly * 24);
+            } else {
+                // Watch: Monthly rounded UP to nearest penny
+                monthly = Math.ceil((price / 24) * 100) / 100;
+                down = 0;
+            }
         }
         
-        const financed = monthly * 24;
-        const totalDown = downPrincipal + salesTax;
-        
-        return { price, salesTax, monthly, downPrincipal, totalDown, financed };
+        return {
+            price: price,
+            tax: tax,
+            down: down,
+            monthly: monthly,
+            totalDue: down + tax,
+            financed: monthly * 24
+        };
     }
 
-    function updateContractTotals() {
-        const math = getContractMath();
-        document.getElementById('disp-price').innerText = "$" + math.price.toFixed(2);
-        document.getElementById('disp-tax').innerText = "$" + math.salesTax.toFixed(2);
-        document.getElementById('disp-down').innerText = "$" + math.downPrincipal.toFixed(2);
-        document.getElementById('con-due-today').innerText = "$" + math.totalDown.toFixed(2);
-        document.getElementById('disp-monthly').innerText = "$" + math.monthly.toFixed(2);
+    function updateMath() {
+        const m = getMath();
+        document.getElementById('disp-price').innerText = "$" + m.price.toFixed(2);
+        document.getElementById('disp-tax').innerText = "$" + m.tax.toFixed(2);
+        document.getElementById('disp-down').innerText = "$" + m.down.toFixed(2);
+        document.getElementById('con-due-today').innerText = "$" + m.totalDue.toFixed(2);
+        document.getElementById('disp-monthly').innerText = "$" + m.monthly.toFixed(2);
     }
 
-    generateBtn.addEventListener('click', () => {
-        const math = getContractMath();
-        const buyerName = document.getElementById('con-name').value || "________________";
-        const accountNum = document.getElementById('con-acct').value || "________________";
-        const phoneNum = document.getElementById('con-phone').value || "________________";
-        const itemDesc = document.getElementById('con-item').value || "Device";
+    genBtn.addEventListener('click', () => {
+        const m = getMath();
+        const name = document.getElementById('con-name').value || "________________";
+        const acct = document.getElementById('con-acct').value || "________________";
+        const phone = document.getElementById('con-phone').value || "________________";
+        const item = document.getElementById('con-item').value || "Device";
         const date = new Date().toLocaleDateString();
 
-        const printWindow = window.open('', '_blank');
-        
-        printWindow.document.write(`
+        const win = window.open('', '_blank');
+        win.document.write(`
             <html>
             <head>
-                <title>Installment Contract</title>
+                <title>Contract</title>
                 <style>
-                    body { font-family: "Times New Roman", serif; padding: 40px; font-size: 12pt; line-height: 1.2; }
-                    h1, h2, h3 { text-align: center; margin-bottom: 10px; font-weight: bold; }
-                    .header { text-align: center; margin-bottom: 20px; font
+                    body { font-family: "Times New Roman", serif; padding: 40px; font-size: 12pt; }
+                    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                    td, th { border: 1px solid black; padding: 5px; text-align: left; }
+                    .no-border td { border: none; }
+                    .center { text-align: center; }
+                    .bold { font-weight: bold; }
+                    .section { margin-bottom: 20px; }
+                    .small { font-size: 10pt; }
+                </style>
+            </head>
+            <body>
+                [cite_start]<h3 class="center">NOTICE TO CONSUMER [cite: 1, 40]</h3>
+                [cite_start]<p class="small">By signing below, you consent to receipt of the included contract and Truth-in-Lending disclosures in an electronic form. [cite: 2, 41] [cite_start]You have a right to withdraw this consent and to receive this document in a non-electronic form. [cite: 3, 42] [cite_start]To withdraw consent... contact Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517. [cite: 4, 43]</p>
+                
+                <table class="no-border">
+                    [cite_start]<tr><td><strong>DATE:</strong> ${date} [cite: 7, 46]</td></tr>
+                    [cite_start]<tr><td><strong>BUYER'S SIGNATURE:</strong> ___________________________________ [cite: 8, 47]</td></tr>
+                </table>
+
+                [cite_start]<h3 class="center">CONSUMER CREDIT INSTALLMENT SALE CONTRACT [cite: 10, 49]</h3>
+
+                <table class="no-border">
+                    <tr>
+                        [cite_start]<td><strong>Seller/Creditor:</strong><br>Consumer Cellular<br>12447 SW 69th Avenue<br>Portland, OR 97223-8517 [cite: 11, 50]</td>
+                        [cite_start]<td><strong>Buyer:</strong><br>${name}<br>Account: ${acct}<br>Phone: ${phone} [cite: 11, 50]</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr class="bold"><td>SKU</td><td>Item Description</td><td>Price</td><td>Down Payment</td><td>Balance</td></tr>
+                    <tr><td>--</td><td>${item}</td><td>$${m.price.toFixed(2)}</td><td>$${m.down.toFixed(2)}</td><td>$${m.financed.toFixed(2)}</td></tr>
+                [cite_start]</table> [cite: 12, 51]
+
+                [cite_start]<h4>Federal Truth-in-Lending Disclosures [cite: 13, 52]</h4>
+                <table>
+                    <tr class="bold"><td>APR</td><td>FINANCE CHARGE</td><td>Amount Financed</td><td>Total of Payments</td><td>Total Sale Price</td></tr>
+                    <tr>
+                        <td>0%</td>
+                        <td>$0.00</td>
+                        <td>$${m.financed.toFixed(2)}</td>
+                        <td>$${m.financed.toFixed(2)}</td>
+                        <td>$${m.price.toFixed(2)}</td>
+                    </tr>
+                [cite_start]</table> [cite: 14, 53]
+
+                <div class="section">
+                    [cite_start]<strong>Payment Schedule:</strong> 24 Payments of <strong>$${m.monthly.toFixed(2)}</strong> due Monthly. [cite: 16, 55]
+                </div>
+
+                [cite_start]<h4>Itemization of Amount Financed [cite: 18, 57]</h4>
+                <table class="no-border" style="width:60%">
+                    <tr><td>Cash Price</td><td>$${m.price.toFixed(2)}</td></tr>
+                    <tr><td>Sales Tax (8.9%)</td><td>$${m.tax.toFixed(2)}</td></tr>
+                    <tr><td>Total Cash Price + Tax</td><td>$${(m.price + m.tax).toFixed(2)}</td></tr>
+                    <tr><td>Down Payment (Principal)</td><td>$${m.down.toFixed(2)}</td></tr>
+                    <tr><td>Tax Paid Today</td><td>$${m.tax.toFixed(2)}</td></tr>
+                    <tr><td><strong>Amount Financed</strong></td><td><strong>$${m.financed.toFixed(2)}</strong></td></tr>
+                [cite_start]</table> [cite: 19, 58]
+
+                [cite_start]<p class="small"><strong>Agreement:</strong> The Buyer agrees to purchase from the Seller the items described above... [cite: 20, 59] [cite_start]You agree to make payments according to the payment schedule above. [cite: 21, 60] [cite_start]The Federal Truth-in-Lending Disclosures above are part of this contract. [cite: 22, 61]</p>
+                
+                [cite_start]<p class="small"><strong>Default:</strong> If you commit any substantial default... we may declare the remaining unpaid balance immediately due. [cite: 28, 67]</p>
+
+                [cite_start]<p class="small"><strong>NOTICE:</strong> ANY HOLDER OF THIS CONSUMER CREDIT CONTRACT IS SUBJECT TO ALL CLAIMS AND DEFENSES WHICH THE DEBTOR COULD ASSERT... [cite: 31, 70]</p>
+
+                <br><br>
+                <table class="no-border">
+                    [cite_start]<tr><td><strong>BUYER'S SIGNATURE:</strong> ___________________________________ [cite: 34, 73]</td></tr>
+                    [cite_start]<tr><td><strong>SELLER'S SIGNATURE:</strong> CONSUMER CELLULAR, INCORPORATED [cite: 36, 75]</td></tr>
+                </table>
+            </body>
+            </html>
+        `);
+        win.document.close();
+    });
+</script>
+</body>
+</html>
