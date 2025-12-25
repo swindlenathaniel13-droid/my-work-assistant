@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V13.5.0</title>
+    <title>Work Portal V13.6.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -29,8 +29,9 @@
 
         /* LOGIN */
         #login-view { display: flex; width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 2000; background: white; transition: opacity 0.5s ease; }
-        .login-left { flex: 1; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; padding: 40px; color: white; text-align: center; }
-        .login-quote { font-family: 'Inter', sans-serif; font-size: 2.5rem; font-weight: 600; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.5); max-width: 80%; }
+        /* UPDATED IMAGE AND OVERLAY */
+        .login-left { flex: 1; background: linear-gradient(rgba(16, 43, 74, 0.4), rgba(16, 43, 74, 0.6)), url('https://images.unsplash.com/photo-1486406146925-c627a92ad1ab?q=80&w=2000&auto=format&fit=crop'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; padding: 60px; color: white; text-align: center; }
+        .login-quote { font-family: 'Inter', sans-serif; font-size: 2.2rem; font-weight: 300; line-height: 1.4; text-shadow: 0 4px 15px rgba(0,0,0,0.3); max-width: 800px; letter-spacing: 0.5px; }
         .login-right { width: 500px; background-color: #1e3a8a; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 60px; color: white; position: relative; }
         .login-brand { font-family: 'Playfair Display', serif; font-size: 2rem; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid white; border-top: 2px solid white; padding: 10px 0; margin-bottom: 60px; position: relative; }
         .login-brand::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: white; }
@@ -195,7 +196,7 @@
 <body>
 
     <div id="login-view">
-        <div class="login-left"><div class="login-quote">WORK IS THE ONLY THING<br>YOU DO THAT MAKES YOU<br>RICHER</div></div>
+        <div class="login-left"><div class="login-quote">"Success is the sum of small efforts, repeated day in and day out."</div></div>
         <div class="login-right">
             <div class="login-brand"><span class="brand-inner">WORK PORTAL</span></div>
             <form id="login-form" style="width: 100%;">
@@ -228,7 +229,7 @@
         </div>
 
         <div class="main-content">
-            <div class="header"><div class="header-title">Work Portal v13.5</div><div></div></div>
+            <div class="header"><div class="header-title">Work Portal v13.6</div><div></div></div>
             <div class="scroll-area">
                 
                 <div id="view-home" class="view-section active">
@@ -577,7 +578,7 @@
             <div class="section"><div class="sec-title">Monthly Rate Plan</div><div class="line-row"><div class="lr-label">Plan</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.planPrice.toFixed(2)}</div></div><div class="line-row"><div class="lr-label">Line 1 Included in Plan</div><div class="lr-fill"></div><div class="lr-price"></div></div>${addLineQty > 0 ? `<div class="line-row"><div class="lr-label"># of Additional Lines: ${addLineQty}</div><div class="lr-fill"></div><div class="lr-price">x $15 <span class="orange-sym">$</span>${d.addLines.toFixed(2)}</div></div>` : ''}${unlLineQty > 0 ? `<div class="line-row"><div class="lr-label"># of Additional Unlimited Lines: ${unlLineQty}</div><div class="lr-fill"></div><div class="lr-price">x $20 <span class="orange-sym">$</span>${d.unlLines.toFixed(2)}</div></div>` : ''}${watchQty > 0 ? `<div class="line-row"><div class="lr-label"># of Smartwatch Lines: ${watchQty}</div><div class="lr-fill"></div><div class="lr-price">x $5 <span class="orange-sym">$</span>${d.watchLines.toFixed(2)}</div></div>` : ''}${allyQty > 0 ? `<div class="line-row"><div class="lr-label"># of IRIS Ally Lines: ${allyQty}</div><div class="lr-fill"></div><div class="lr-price">x $25 <span class="orange-sym">$</span>${d.allyLines.toFixed(2)}</div></div>` : ''}${homeQty > 0 ? `<div class="line-row"><div class="lr-label"># of Home Phone Base Lines: ${homeQty} &nbsp;&nbsp; ${hp15} x $15 &nbsp; ${hp20} x $20</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.homeTotal.toFixed(2)}</div></div>` : ''}<div class="line-row"><div class="lr-label">Asurion Protection &nbsp;&nbsp; ${asurNo} NO &nbsp; ${asurYes} YES</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.asurion.toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL FOR RATE PLAN</div><div>$${d.rateTotal.toFixed(2)}</div></div>
             <div class="section"><div class="sec-title">Surcharges and Other Items Estimate</div><div class="line-row"><div class="lr-label">Zip Code Entered: ${zip}</div><div class="lr-fill"></div><div class="lr-price"></div></div><div class="line-row"><div class="lr-label">Surcharges and Other Items</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.taxOther.toFixed(2)}</div></div><div class="line-row"><div class="lr-label">Government Taxes and Fees</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.taxGov.toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL FOR SURCHARGES AND FEES</div><div>$${d.surchTotal.toFixed(2)}</div></div>
             <div class="section"><div class="sec-title">EASYPAY Interest-Free Device Financing</div><div class="line-row"><div class="lr-label">Device 1 Monthly Fee</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.dev1.toFixed(2)}</div></div><div class="line-row"><div class="lr-label">Device 2 Monthly Fee</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.dev2.toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL FOR EASY PAY</div><div>$${d.devTotal.toFixed(2)}</div></div>
-            <div class="section"><div class="sec-title">Promotions and Other Credits</div><div class="line-row"><div class="lr-label">Rate Plan Promotion</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">-$</span>${d.credPlan.toFixed(2)}</div></div><div class="line-row"><div class="lr-label"># of SIM Kit Credit(s): ${simQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(simQty*10).toFixed(2)}</div></div><div class="line-row"><div class="lr-label"># of Customer Service Surveys: ${surveyQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(surveyQty*10).toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL CREDITS FOR PROMOTIONS</div><div>-$${d.credTotal.toFixed(2)}</div></div>
+            <div class="section"><div class="sec-title">Promotions and Other Credits</div><div class="line-row"><div class="lr-label">Rate Plan Promotion</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">-$</span>${d.credPlan.toFixed(2)}</div></div>${simQty > 0 ? `<div class="line-row"><div class="lr-label"># of SIM Kit Credit(s): ${simQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(simQty*10).toFixed(2)}</div></div>` : ''}${surveyQty > 0 ? `<div class="line-row"><div class="lr-label"># of Customer Service Surveys: ${surveyQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(surveyQty*10).toFixed(2)}</div></div>` : ''}</div><div class="total-bar"><div>TOTAL CREDITS FOR PROMOTIONS</div><div>-$${d.credTotal.toFixed(2)}</div></div>
             <div style="margin-top:20px;"><div class="check-row"><div>Do You Have SmartFlex Turned On?</div><div class="check-opts"><div>${checkNo(sf)} NO</div><div>${checkYes(sf)} YES</div></div></div><div style="padding:0 40px; font-size:10px; font-style:italic; color:#F15A22; margin-bottom:10px;">Totals will change if data limits are exceeded and the plan is flexed up.</div><div class="check-row"><div>AARP or USAA Member ID Added?</div><div class="check-opts"><div>${checkNo(aarp)} NO</div><div>${checkYes(aarp)} YES</div></div></div><div class="check-row"><div>AutoPay and E-Billing Active?</div><div class="check-opts"><div>${checkNo(auto)} NO</div><div>${checkYes(auto)} YES</div></div></div></div>
             <div class="grand-total-box"><div class="gt-label">GRAND TOTAL OF FIRST MONTH INVOICE</div><div class="gt-amount">$${d.grandTotal.toFixed(2)}</div></div>
             <div class="footer">Estimate Provided By<br>© 2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025<br>Date: ${new Date().toLocaleDateString()}</div></div>
