@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V12.4.0</title>
+    <title>Work Portal V13.0.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -20,6 +20,9 @@
             --info-bg: #eff6ff;
             --info-text: #1e40af;
             --info-border: #bfdbfe;
+            --warn-bg: #fff7ed;
+            --warn-text: #9a3412;
+            --warn-border: #fed7aa;
         }
 
         body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--main-bg); color: var(--text-dark); height: 100vh; overflow: hidden; }
@@ -146,15 +149,14 @@
         .ts-name { font-weight: 700; color: var(--text-dark); font-size: 1.1rem; }
         .ts-print-btn { width: 100%; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: white; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .ts-print-btn:hover { background: var(--primary); color: white; }
-        .ts-details { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px; flex:1; white-space: pre-wrap; }
+        .ts-details { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 15px; flex:1; white-space: pre-wrap; }
         .ts-spam-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 0.85rem; }
         .ts-spam-title { font-weight: 700; color: #ea580c; margin-bottom: 4px; text-transform: uppercase; font-size: 0.75rem; }
-        .ts-print-bar { display: flex; gap: 10px; margin-bottom: 25px; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid var(--border); align-items: center; }
-        .ts-print-label { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-right: 10px; }
         .ts-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .ts-filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: white; cursor: pointer; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s; }
         .ts-filter-btn:hover { background: #f8fafc; }
         .ts-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .ts-search-bar { width: 100%; padding: 12px 18px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; }
 
         /* BILL ESTIMATOR */
         .bill-calc-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border); }
@@ -217,7 +219,7 @@
         </div>
 
         <div class="main-content">
-            <div class="header"><div class="header-title">Work Portal v12.4</div><div></div></div>
+            <div class="header"><div class="header-title">Work Portal v13.0</div><div></div></div>
             <div class="scroll-area">
                 
                 <div id="view-home" class="view-section active">
@@ -234,113 +236,38 @@
                             <div class="card-title"><h2>First Bill Estimator</h2><p>Calculate and print the estimated first invoice.</p></div>
                             <div class="btn-group"><button class="btn btn-outline" onclick="resetBill()">Clear</button><button class="btn btn-primary" onclick="generateBillPDF()">Generate Bill PDF</button></div>
                         </div>
-
                         <div class="bill-section">
                             <div class="bill-sec-title">Monthly Rate Plan</div>
-                            
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Select Plan & Lines</div>
-                                <div class="bill-input-group">
-                                    <select id="be-quick-plan" class="bill-input-sm" style="width:160px;" onchange="updateBillFromQuick()"></select>
-                                    <select id="be-quick-lines" class="bill-input-sm" style="width:80px;" onchange="updateBillFromQuick()">
-                                        <option value="1">1 Line</option><option value="2">2 Lines</option><option value="3">3 Lines</option><option value="4">4 Lines</option><option value="5">5 Lines</option><option value="6">6 Lines</option><option value="7">7 Lines</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Base Plan Price</div>
-                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-plan-price" class="bill-input-sm" value="0" readonly></div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Additional Standard Lines ($15 ea)</div>
-                                <div class="bill-input-group"><input type="number" id="be-add-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Additional Unlimited Lines ($20 ea)</div>
-                                <div class="bill-input-group"><input type="number" id="be-unl-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Smartwatch Lines ($5 ea)</div>
-                                <div class="bill-input-group"><input type="number" id="be-watch-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Iris Ally Lines ($25 ea)</div>
-                                <div class="bill-input-group"><input type="number" id="be-ally-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Home Phone Base Lines</div>
-                                <div class="bill-input-group">
-                                    <select id="be-home-type" class="bill-input-sm" style="width:80px;" onchange="calcBill()"><option value="0">None</option><option value="15">@ $15</option><option value="20">@ $20</option></select>
-                                    <input type="number" id="be-home-qty" class="bill-input-sm" value="0" placeholder="Qty" oninput="calcBill()">
-                                </div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Asurion Protection Total</div>
-                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-asurion" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;">
-                                <div class="bill-label" style="font-weight:700;">TOTAL FOR RATE PLAN</div>
-                                <div class="bill-cost" id="be-total-rate">$0.00</div>
-                            </div>
+                            <div class="bill-calc-row"><div class="bill-label">Select Plan & Lines</div><div class="bill-input-group"><select id="be-quick-plan" class="bill-input-sm" style="width:160px;" onchange="updateBillFromQuick()"></select><select id="be-quick-lines" class="bill-input-sm" style="width:80px;" onchange="updateBillFromQuick()"><option value="1">1 Line</option><option value="2">2 Lines</option><option value="3">3 Lines</option><option value="4">4 Lines</option><option value="5">5 Lines</option><option value="6">6 Lines</option><option value="7">7 Lines</option></select></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Base Plan Price</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-plan-price" class="bill-input-sm" value="0" readonly></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Additional Standard Lines ($15 ea)</div><div class="bill-input-group"><input type="number" id="be-add-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Additional Unlimited Lines ($20 ea)</div><div class="bill-input-group"><input type="number" id="be-unl-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Smartwatch Lines ($5 ea)</div><div class="bill-input-group"><input type="number" id="be-watch-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Iris Ally Lines ($25 ea)</div><div class="bill-input-group"><input type="number" id="be-ally-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Home Phone Base Lines</div><div class="bill-input-group"><select id="be-home-type" class="bill-input-sm" style="width:80px;" onchange="calcBill()"><option value="0">None</option><option value="15">@ $15</option><option value="20">@ $20</option></select><input type="number" id="be-home-qty" class="bill-input-sm" value="0" placeholder="Qty" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Asurion Protection Total</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-asurion" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL FOR RATE PLAN</div><div class="bill-cost" id="be-total-rate">$0.00</div></div>
                         </div>
-
                         <div class="bill-section">
                             <div class="bill-sec-title">Surcharges & Taxes</div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Zip Code (for printout)</div>
-                                <div class="bill-input-group"><input type="text" id="be-zip" class="bill-input-sm" style="width:80px;"></div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Estimated Govt Taxes & Fees</div>
-                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-gov" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Surcharges & Other Items</div>
-                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-other" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;">
-                                <div class="bill-label" style="font-weight:700;">TOTAL SURCHARGES</div>
-                                <div class="bill-cost" id="be-total-surch">$0.00</div>
-                            </div>
+                            <div class="bill-calc-row"><div class="bill-label">Zip Code (for printout)</div><div class="bill-input-group"><input type="text" id="be-zip" class="bill-input-sm" style="width:80px;"></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Estimated Govt Taxes & Fees</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-gov" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Surcharges & Other Items</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-other" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL SURCHARGES</div><div class="bill-cost" id="be-total-surch">$0.00</div></div>
                         </div>
-
                         <div class="bill-section">
                             <div class="bill-sec-title">EasyPay Financing</div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Device 1 Monthly</div>
-                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev1" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Device 2 Monthly</div>
-                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev2" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;">
-                                <div class="bill-label" style="font-weight:700;">TOTAL EASYPAY</div>
-                                <div class="bill-cost" id="be-total-dev">$0.00</div>
-                            </div>
+                            <div class="bill-calc-row"><div class="bill-label">Device 1 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev1" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Device 2 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev2" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL EASYPAY</div><div class="bill-cost" id="be-total-dev">$0.00</div></div>
                         </div>
-
                         <div class="bill-section">
                             <div class="bill-sec-title">Promotions & Credits</div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Rate Plan Promo</div>
-                                <div class="bill-input-group"><span style="color:#64748b;">-$</span><input type="number" id="be-cred-plan" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">SIM Kit Credits ($10 ea)</div>
-                                <div class="bill-input-group"><input type="number" id="be-cred-sim" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row">
-                                <div class="bill-label">Survey Credits ($10 ea)</div>
-                                <div class="bill-input-group"><input type="number" id="be-cred-survey" class="bill-input-sm" value="0" oninput="calcBill()"></div>
-                            </div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;">
-                                <div class="bill-label" style="font-weight:700;">TOTAL CREDITS</div>
-                                <div class="bill-cost" id="be-total-cred">-$0.00</div>
-                            </div>
+                            <div class="bill-calc-row"><div class="bill-label">Rate Plan Promo</div><div class="bill-input-group"><span style="color:#64748b;">-$</span><input type="number" id="be-cred-plan" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">SIM Kit Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-sim" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row"><div class="bill-label">Survey Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-survey" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
+                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL CREDITS</div><div class="bill-cost" id="be-total-cred">-$0.00</div></div>
                         </div>
-
                         <div class="bill-section">
                             <div class="row">
                                 <div class="col"><label class="label">SmartFlex?</label><select id="be-opt-smart" class="select"><option>YES</option><option>NO</option></select></div>
@@ -348,16 +275,11 @@
                                 <div class="col"><label class="label">AutoPay?</label><select id="be-opt-auto" class="select"><option>NO</option><option>YES</option></select></div>
                             </div>
                         </div>
-                        
-                        <div style="background:#fff7ed; color:#9a3412; padding:15px; border-radius:8px; border:1px solid #fed7aa; margin-bottom:20px; text-align:center; font-size:0.9rem; font-weight:600;">
-                            * Prices reflect AutoPay & E-Billing discount. Taxes and fees are additional.
-                        </div>
-
+                        <div style="background:#fff7ed; color:#9a3412; padding:15px; border-radius:8px; border:1px solid #fed7aa; margin-bottom:20px; text-align:center; font-size:0.9rem; font-weight:600;">* Prices reflect AutoPay & E-Billing discount. Taxes and fees are additional.</div>
                         <div style="background:#1e3a8a; color:white; padding:20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
                             <div style="font-size:1.1rem; font-weight:600;">ESTIMATED MONTHLY TOTAL<br><span style="font-size:0.8rem; font-weight:400; opacity:0.8;">(Before Taxes & Fees)</span></div>
                             <div style="font-size:1.8rem; font-weight:700;" id="be-grand-total">$0.00</div>
                         </div>
-
                     </div>
                 </div>
 
@@ -381,22 +303,15 @@
                 <div id="view-troubleshoot" class="view-section">
                     <div class="card" style="max-width:1000px;">
                         <div class="card-header"><div class="card-title"><h2>Quick Fix & Troubleshoot</h2><p>Printable guides tailored for specific devices.</p></div></div>
-                        <div class="ts-print-bar">
-                            <span class="ts-print-label">Printable Guides:</span>
-                            <button class="ts-print-btn" onclick="printTroubleshoot('apple')">Apple</button>
-                            <button class="ts-print-btn" onclick="printTroubleshoot('samsung')">Samsung</button>
-                            <button class="ts-print-btn" onclick="printTroubleshoot('moto')">Motorola</button>
-                            <button class="ts-print-btn" onclick="printTroubleshoot('cc')">Flip/Base/Ally</button>
-                            <button class="ts-print-btn" onclick="printTroubleshoot('tablet')">Tablet</button>
-                        </div>
+                        <div class="ts-top-bar"><div class="ts-title-lg">Select Device Guide</div><div style="font-size:0.9rem; color:#64748b;">Click 'Print' for a customer handout</div></div>
                         <div class="ts-controls">
+                            <input type="text" class="ts-search-bar" id="ts-search" placeholder="Type device name (e.g. 'iPhone 17', 'Razr')..." onkeyup="searchTroubleshoot()">
                             <button class="ts-filter-btn active" onclick="filterTroubleshoot('all', this)">All</button>
-                            <button class="ts-filter-btn" onclick="filterTroubleshoot('general', this)">General</button>
                             <button class="ts-filter-btn" onclick="filterTroubleshoot('apple', this)">Apple</button>
                             <button class="ts-filter-btn" onclick="filterTroubleshoot('samsung', this)">Samsung</button>
                             <button class="ts-filter-btn" onclick="filterTroubleshoot('moto', this)">Motorola</button>
-                            <button class="ts-filter-btn" onclick="filterTroubleshoot('pixel', this)">Pixel</button>
-                            <button class="ts-filter-btn" onclick="filterTroubleshoot('cc', this)">Consumer Cellular</button>
+                            <button class="ts-filter-btn" onclick="filterTroubleshoot('pixel', this)">Google</button>
+                            <button class="ts-filter-btn" onclick="filterTroubleshoot('cc', this)">CC Devices</button>
                             <button class="ts-filter-btn" onclick="filterTroubleshoot('tablet', this)">Tablet</button>
                         </div>
                         <div class="ts-grid" id="ts-grid-container"></div>
@@ -624,7 +539,7 @@
             <div class="section"><div class="sec-title">Promotions and Other Credits</div><div class="line-row"><div class="lr-label">Rate Plan Promotion</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">-$</span>${d.credPlan.toFixed(2)}</div></div>${simQty > 0 ? `<div class="line-row"><div class="lr-label"># of SIM Kit Credit(s): ${simQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(simQty*10).toFixed(2)}</div></div>` : ''}${surveyQty > 0 ? `<div class="line-row"><div class="lr-label"># of Customer Service Surveys: ${surveyQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(surveyQty*10).toFixed(2)}</div></div>` : ''}</div><div class="total-bar"><div>TOTAL CREDITS FOR PROMOTIONS</div><div>-$${d.credTotal.toFixed(2)}</div></div>
             <div style="margin-top:20px;"><div class="check-row"><div>Do You Have SmartFlex Turned On?</div><div class="check-opts"><div>${checkNo(sf)} NO</div><div>${checkYes(sf)} YES</div></div></div><div style="padding:0 40px; font-size:10px; font-style:italic; color:#F15A22; margin-bottom:10px;">Totals will change if data limits are exceeded and the plan is flexed up.</div><div class="check-row"><div>AARP or USAA Member ID Added?</div><div class="check-opts"><div>${checkNo(aarp)} NO</div><div>${checkYes(aarp)} YES</div></div></div><div class="check-row"><div>AutoPay and E-Billing Active?</div><div class="check-opts"><div>${checkNo(auto)} NO</div><div>${checkYes(auto)} YES</div></div></div></div>
             <div class="grand-total-box"><div class="gt-label">GRAND TOTAL OF FIRST MONTH INVOICE</div><div class="gt-amount">$${d.grandTotal.toFixed(2)}</div></div>
-            <div class="footer">Estimate Provided By ${new Date().toLocaleDateString()}<br>© 2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025</div></div>
+            <div class="footer">Estimate Provided By<br>© 2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025<br>Date: ${new Date().toLocaleDateString()}</div></div>
             <script>window.print();<\/script></body></html>`);
         win.document.close();
     }
@@ -657,18 +572,46 @@
         {category: "general", title: "No Service / Can't Call", content: "1. Restart (OFF 30s → ON)\n2. Airplane Mode (ON 10s → OFF)\n3. Reseat SIM (Physical) or Toggle eSIM in Settings\n4. Network Reset (Settings → General/System → Reset)"},
         {category: "general", title: "Slow Internet", content: "1. Toggle Wi-Fi OFF/ON\n2. Airplane Mode Reset\n3. Restart Device"},
         {category: "general", title: "Battery Draining Fast", content: "1. Restart\n2. Turn OFF Low Power Mode (sometimes causes glitches)\n3. Check Battery Usage in Settings\n4. Close unused apps"},
-        {category: "apple", title: "iPhone Signal Reset", content: "Settings → Cellular → Toggle Plan OFF (10s) → ON", spam: "Ignore 'Virus Detected' popups. Only install from App Store."},
-        {category: "apple", title: "iPhone Network Reset", content: "Settings → General → Transfer/Reset → Reset → Reset Network Settings"},
-        {category: "apple", title: "Apple Watch Restart", content: "Press & hold side button → Power Off → Wait 30s → ON"},
-        {category: "samsung", title: "Samsung Signal Reset", content: "Settings → Connections → SIM Manager → Toggle Plan OFF (10s) → ON", spam: "Avoid 'Cleaner' or 'Battery Booster' apps."},
-        {category: "samsung", title: "Safe Mode (Test Bad App)", content: "Restart → Hold Volume Down during startup. If issues stop, uninstall recent apps."},
-        {category: "moto", title: "Moto Signal Reset", content: "Settings → Network & Internet → Internet → Toggle Mobile Data OFF/ON", spam: "Beware fake 'System Update' ads in browser."},
-        {category: "moto", title: "Moto App Glitch", content: "Settings → Apps → [App Name] → Storage → Clear Cache"},
-        {category: "pixel", title: "Pixel Signal Reset", content: "Settings → Network → Internet → Mobile Data OFF/ON\nTurn OFF 'Adaptive Connectivity' for 5 mins."},
-        {category: "cc", title: "Iris Flip No Service", content: "1. Restart\n2. Remove SIM 60s → Reinsert", spam: "Don't press buttons for robocalls. Hang up."},
-        {category: "cc", title: "Home Phone Base", content: "1. Unplug power 2 mins → Plug back in\n2. Move near window\n3. Rotate antenna"},
-        {category: "cc", title: "Iris Ally (Pendant)", content: "1. Check charging cradle light\n2. Test SOS button (cancel immediately after connect)"},
-        {category: "tablet", title: "Tablet No Service", content: "1. Restart\n2. Reseat SIM card", spam: "Free games often have tricky ads. Do not install from pop-ups."}
+        {category: "apple", title: "iPhone 17", content: "1. Cellular Fix: Settings > Cellular > Toggle Plan OFF/ON.\n2. VoiceOver Fix: Settings > Accessibility > VoiceOver > OFF.\n3. App Cache Clean: Delete App > Re-download.\n4. Safety Check: Remove unknown apps.", spam: "Beware of 'cleaner' apps. Only download from App Store."},
+        {category: "apple", title: "iPhone 17 Air", content: "1. Battery Diagnostics: Settings > Battery.\n2. VoiceOver Fix: Settings > Accessibility > VoiceOver > OFF.\n3. Storage Offload: Settings > General > iPhone Storage.\n4. Control Center Toggles: Cycle Airplane Mode/WiFi.", spam: "Avoid pop-up ads claiming virus infection."},
+        {category: "apple", title: "iPhone 17 Pro", content: "1. Display Sluggishness: Turn OFF Low Power Mode.\n2. VoiceOver Fix: Settings > Accessibility > VoiceOver > OFF.\n3. Reboot: Power off 30s -> ON.\n4. Safety Check: Remove unknown apps.", spam: "If screen opens strange websites, check for spam apps."},
+        {category: "apple", title: "iPhone 17 Pro Max", content: "1. Persistent Notification: Settings > Notifications > Toggle App OFF/ON.\n2. VoiceOver Fix: Settings > Accessibility > VoiceOver > OFF.\n3. Haptics Check: Settings > Sounds & Haptics.\n4. Safety Check: Remove unknown apps.", spam: "If screen opens strange websites, check for spam apps."},
+        {category: "apple", title: "iPhone 16", content: "1. Network Reset: Settings > General > Transfer/Reset > Reset Network Settings.\n2. VoiceOver Fix: Settings > Accessibility > VoiceOver > OFF.\n3. Clear Safari: Settings > Safari > Clear History.\n4. Safety Check: Remove unknown apps.", spam: "Never enter Apple ID in a pop-up unless verified."},
+        {category: "apple", title: "iPhone 16E", content: "1. Network Reset: Settings > General > Transfer/Reset > Reset Network Settings.\n2. VoiceOver Fix: Settings > Accessibility > VoiceOver > OFF.\n3. Face ID Reset: Settings > Face ID & Passcode > Reset.\n4. Safety Check: Remove unknown apps.", spam: "Never enter Apple ID in a pop-up unless verified."},
+        {category: "apple", title: "Apple Watch SE 3rd Gen", content: "1. Unpair/Re-pair: Use Watch App on iPhone.\n2. VoiceOver: Settings > Accessibility > VoiceOver > OFF.\n3. Water Lock: Hold Digital Crown to eject water.", spam: "Do not respond to strange watch notifications."},
+        {category: "apple", title: "Apple Watch 11", content: "1. Digital Crown Check: Clean and test scrolling.\n2. VoiceOver: Settings > Accessibility > VoiceOver > OFF.\n3. Clear Workout Data: Delete faulty workout in Fitness app.", spam: "Do not respond to strange watch notifications."},
+        {category: "apple", title: "Apple Watch Ultra 3", content: "1. Action Button: Reconfigure in Settings.\n2. AssistiveTouch: Settings > Accessibility > AssistiveTouch > Toggle OFF/ON.\n3. Compass: Open Compass > Figure-8 motion.", spam: "Do not respond to strange watch notifications."},
+        {category: "apple", title: "Apple Watch SE 2nd Gen", content: "1. Silent Mode Test: Toggle Silent Mode in Control Center.\n2. Taptic Time: Settings > Clock > Taptic Time > Toggle OFF/ON.\n3. Face Switch: Change watch face temporarily.", spam: "Do not respond to strange watch notifications."},
+        {category: "apple", title: "Apple Watch 10", content: "1. Mirror Alerts: Check Watch App > Notifications on iPhone.\n2. Quick Actions: Settings > Accessibility > Quick Actions > Toggle OFF/ON.\n3. Storage: Watch App > General > Storage > Delete music/photos.", spam: "Do not respond to strange watch notifications."},
+        {category: "apple", title: "Apple Watch Ultra 2", content: "1. Low Power Mode: Ensure it is OFF.\n2. Reduce Transparency: Settings > Accessibility > Reduce Transparency > Toggle.\n3. Cellular Test: Check Control Center for green cellular icon.", spam: "Do not respond to strange watch notifications."},
+        
+        {category: "samsung", title: "S25 Ultra", content: "1. Safe Mode: Restart > Hold Vol Down. If fixed, delete recent apps.\n2. Network Toggle: Settings > Connections > SIM Manager.\n3. TalkBack: Settings > Accessibility > TalkBack > OFF.\n4. Wipe Cache: Recovery Mode > Wipe Cache Partition.", spam: "Be wary of apps asking for unnecessary permissions."},
+        {category: "samsung", title: "S25 FE", content: "1. Safe Mode: Restart > Hold Vol Down.\n2. Network Toggle: Settings > Connections > SIM Manager.\n3. TalkBack: Settings > Accessibility > TalkBack > OFF.\n4. App Optimizer: Device Care > Optimize Now.", spam: "Be wary of apps asking for unnecessary permissions."},
+        {category: "samsung", title: "S25 Edge", content: "1. Safe Mode: Restart > Hold Vol Down.\n2. Network Toggle: Settings > Connections > SIM Manager.\n3. TalkBack: Settings > Accessibility > TalkBack > OFF.\n4. Edge Panel: Check handle position settings.", spam: "Be wary of apps asking for unnecessary permissions."},
+        {category: "samsung", title: "S25", content: "1. Safe Mode: Restart > Hold Vol Down.\n2. Network Toggle: Settings > Connections > SIM Manager.\n3. TalkBack: Settings > Accessibility > TalkBack > OFF.\n4. Force Stop UI: Settings > Apps > System UI > Force Stop.", spam: "Be wary of apps asking for unnecessary permissions."},
+        {category: "samsung", title: "Galaxy Z Fold7", content: "1. Flex Sensor: Open/Close device 3 times quickly.\n2. Network Toggle: Settings > Connections > SIM Manager.\n3. TalkBack: Settings > Accessibility > TalkBack > OFF.\n4. Multi-Window: Reset Recent Apps list.", spam: "Keyboard themes can sometimes be spam apps."},
+        {category: "samsung", title: "Galaxy Z Flip7 FE", content: "1. Cover Screen: Remove and re-add widgets.\n2. Network Toggle: Settings > Connections > SIM Manager.\n3. TalkBack: Settings > Accessibility > TalkBack > OFF.\n4. Camera Lag: Turn off heavy processing in Camera settings.", spam: "Keyboard themes can sometimes be spam apps."},
+        {category: "samsung", title: "Galaxy A15 (Physical SIM)", content: "1. SIM Cycle: Remove SIM tray 60s -> Reinsert.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. SD Card: Settings > Storage > Unmount/Remount.\n4. Side Key: Check double-press settings.", spam: "Free games often contain spam ads."},
+        {category: "samsung", title: "Galaxy A36 5G", content: "1. Network Toggle: Settings > Connections > SIM Manager.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. RAM Plus: Settings > Device Care > Memory > RAM Plus.\n4. Notifications: Clear Notification History.", spam: "Free games often contain spam ads."},
+        {category: "samsung", title: "Galaxy A16 5G", content: "1. Network Toggle: Settings > Connections > SIM Manager.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. SD Card: Settings > Storage > Unmount/Remount.\n4. Side Key: Check double-press settings.", spam: "Free games often contain spam ads."},
+        {category: "samsung", title: "Galaxy Tab A11+", content: "1. Multi-User: Switch profiles then switch back.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. Second Screen: Toggle Second Screen mode.\n4. DeX Mode: Toggle DeX on/off if available.", spam: "Do not install apps from browser pop-ups."},
+
+        {category: "moto", title: "Razr 2025", content: "1. Network Toggle: Settings > Network > Internet.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. Cover Sensor: Clean proximity sensor.\n4. Safety Check: Check Apps list for spam.", spam: "Apps changing phone behavior are often spam."},
+        {category: "moto", title: "Razr 2024", content: "1. Network Toggle: Settings > Network > Internet.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. Peek Display: Toggle in Moto App.\n4. Audio: Reset Dolby Atmos settings.", spam: "Apps changing phone behavior are often spam."},
+        {category: "moto", title: "Moto G 2025", content: "1. Network Toggle: Settings > Network > Internet.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. Force Stop UI: Settings > Apps > System UI > Force Stop.\n4. Camera: Clear Data on Camera app.", spam: "Utility apps showing video ads are spam."},
+        {category: "moto", title: "Moto G Power 2025", content: "1. Network Toggle: Settings > Network > Internet.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. Battery Saver: Toggle OFF/ON.\n4. Fingerprint: Check screen timeout settings.", spam: "Utility apps showing video ads are spam."},
+        {category: "moto", title: "Moto G Stylus 2025", content: "1. Network Toggle: Settings > Network > Internet.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. Stylus: Remove and re-insert firmly.\n4. Screen Record: Force stop screen recorder.", spam: "Utility apps showing video ads are spam."},
+        {category: "moto", title: "Moto G Play 2024", content: "1. SIM Cycle: Remove SIM tray 60s -> Reinsert.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. SD Card: Unmount/Remount.\n4. Lock Screen: Change wallpaper to refresh.", spam: "Utility apps showing video ads are spam."},
+        {category: "moto", title: "Moto Edge 2024", content: "1. Network Toggle: Settings > Network > Internet.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. Edge Touch: Adjust accidental touch protection.\n4. Ready For: Disconnect from external display.", spam: "Utility apps showing video ads are spam."},
+
+        {category: "pixel", title: "Pixel 10", content: "1. Network Toggle: Settings > Network > Internet.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. Adaptive Connectivity: Turn OFF for 5 mins -> ON.\n4. Search: Re-index device content in Google settings.", spam: "Watch for phishing texts about 'package delivery'."},
+
+        {category: "cc", title: "Iris Eazy Flip", content: "1. Reboot: OFF 30s -> ON.\n2. Display: Check Settings > Display > Contrast.\n3. T9 Text: Toggle input mode in message.\n4. Volume: Check side volume rocker.", spam: "Don't press buttons for robocalls."},
+        {category: "cc", title: "Verve Home Base", content: "1. Power Cycle: Unplug 2 mins (remove battery) -> Plug in.\n2. Volume: Check Ringer Volume switch.\n3. Voicemail: Call Care for reset.\n4. Antenna: Rotate 90 degrees.", spam: "Hang up on 'medical alert problem' calls."},
+        {category: "cc", title: "Iris Home Base", content: "1. Power Cycle: Unplug 2 mins (remove battery) -> Plug in.\n2. Display: Check for call blocking menu.\n3. Voicemail: Call Care for reset.\n4. Lights: Check manual for light codes.", spam: "Hang up on 'medical alert problem' calls."},
+        {category: "cc", title: "Iris Ally", content: "1. SOS Test: Press SOS -> Cancel immediately.\n2. Charging: Ensure light is green on cradle.\n3. Sensitivity: Call Care to adjust fall detection.\n4. Range: Test connection near cradle.", spam: "Hang up on 'medical alert problem' calls."},
+        
+        {category: "tablet", title: "TCL Tab 8 Gen 2", content: "1. SIM Cycle: Remove SIM tray 60s -> Reinsert.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF.\n3. Profiles: Switch user profiles.\n4. Keyboard: Clean dock pins.", spam: "Free games often have tricky ads."}
     ];
 
     function initTroubleshoot() {
@@ -695,7 +638,6 @@
     function filterTroubleshoot(cat, btn) {
         document.querySelectorAll('.ts-filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
         const items = document.querySelectorAll('.ts-card');
         items.forEach(item => {
             if(cat === 'all' || item.dataset.category === cat || (cat === 'general' && item.dataset.category === 'general')) {
@@ -705,225 +647,39 @@
             }
         });
     }
-
-    function printTroubleshoot(type) {
-        const items = troubleshootData.filter(i => i.category === type || i.category === 'general');
-        let contentHtml = items.map(item => {
-            let spam = item.spam ? `<div class="warning-box"><strong>⚠️ Spam Warning:</strong> ${item.spam}</div>` : '';
-            return `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
-        }).join('');
-
-        const win = window.open('', '_blank');
-        win.document.write(`
-            <html><head><title>Quick Guide</title><style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
-                body { font-family: 'Inter', sans-serif; padding: 40px; color: #0f172a; -webkit-print-color-adjust: exact; }
-                .header { display: flex; justify-content: space-between; border-bottom: 3px solid #ff7b00; padding-bottom: 20px; margin-bottom: 30px; }
-                .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #1e3a8a; }
-                .title { font-size: 2rem; font-weight: 700; margin-bottom: 20px; color: #1e3a8a; text-transform: capitalize; }
-                .step-box { margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; page-break-inside: avoid; }
-                .step-text { white-space: pre-wrap; line-height: 1.6; font-size: 1.1rem; }
-                .warning-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 15px; border-radius: 8px; margin-top: 10px; font-size: 1rem; border-left: 5px solid #ea580c; }
-                .footer { margin-top: 50px; text-align: center; color: #64748b; font-size: 0.85rem; border-top: 1px solid #e2e8f0; padding-top: 20px; }
-                h3 { color: #2563eb; margin-bottom: 10px; font-size: 1.4rem; }
-            </style></head><body>
-                <div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>
-                <div class="title">${type.toUpperCase()} Quick Fix Guide</div>
-                ${contentHtml}
-                <div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div>
-                <script>window.print();<\/script>
-            </body></html>
-        `);
-        win.document.close();
-    }
     
+    function searchTroubleshoot() {
+        const term = document.getElementById('ts-search').value.toLowerCase();
+        const items = document.querySelectorAll('.ts-card');
+        items.forEach(item => {
+            const text = item.innerText.toLowerCase();
+            item.style.display = text.includes(term) ? 'flex' : 'none';
+        });
+    }
+
     function printSingleTS(title) {
         const item = troubleshootData.find(i => i.title === title);
         if(!item) return;
         let spam = item.spam ? `<div class="warning-box"><strong>⚠️ Spam Warning:</strong> ${item.spam}</div>` : '';
         let contentHtml = `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
         const win = window.open('', '_blank');
-        win.document.write(`
-            <html><head><title>Quick Guide</title><style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
-                body { font-family: 'Inter', sans-serif; padding: 40px; color: #0f172a; -webkit-print-color-adjust: exact; }
-                .header { display: flex; justify-content: space-between; border-bottom: 3px solid #ff7b00; padding-bottom: 20px; margin-bottom: 30px; }
-                .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #1e3a8a; }
-                .title { font-size: 2rem; font-weight: 700; margin-bottom: 20px; color: #1e3a8a; text-transform: capitalize; }
-                .step-box { margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; page-break-inside: avoid; }
-                .step-text { white-space: pre-wrap; line-height: 1.6; font-size: 1.3rem; }
-                .warning-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 20px; border-radius: 8px; margin-top: 20px; font-size: 1.1rem; border-left: 6px solid #ea580c; }
-                .footer { margin-top: 50px; text-align: center; color: #64748b; font-size: 0.85rem; border-top: 1px solid #e2e8f0; padding-top: 20px; }
-                h3 { color: #2563eb; margin-bottom: 15px; font-size: 1.6rem; }
-            </style></head><body>
-                <div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>
-                ${contentHtml}
-                <div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div>
-                <script>window.print();<\/script>
-            </body></html>
-        `);
+        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:40px;color:#0f172a;-webkit-print-color-adjust:exact}.header{display:flex;justify-content:space-between;border-bottom:3px solid #ff7b00;padding-bottom:20px;margin-bottom:30px}.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1e3a8a}.title{font-size:2rem;font-weight:700;margin-bottom:20px;color:#1e3a8a;text-transform:capitalize}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.3rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:20px;border-radius:8px;margin-top:20px;font-size:1.1rem;border-left:6px solid #ea580c}.footer{margin-top:50px;text-align:center;color:#64748b;font-size:0.85rem;border-top:1px solid #e2e8f0;padding-top:20px}h3{color:#2563eb;margin-bottom:15px;font-size:1.6rem}</style></head><body><div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>${contentHtml}<div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div><script>window.print();<\/script></body></html>`);
+        win.document.close();
+    }
+    
+    // KEEP THE OLD PRINT FUNCTION FOR BULK
+    function printTroubleshoot(type) {
+        const items = troubleshootData.filter(i => i.category === type || i.category === 'general');
+        let contentHtml = items.map(item => {
+            let spam = item.spam ? `<div class="warning-box"><strong>⚠️ Spam Warning:</strong> ${item.spam}</div>` : '';
+            return `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
+        }).join('');
+        const win = window.open('', '_blank');
+        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:40px;color:#0f172a;-webkit-print-color-adjust:exact}.header{display:flex;justify-content:space-between;border-bottom:3px solid #ff7b00;padding-bottom:20px;margin-bottom:30px}.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1e3a8a}.title{font-size:2rem;font-weight:700;margin-bottom:20px;color:#1e3a8a;text-transform:capitalize}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.1rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:15px;border-radius:8px;margin-top:10px;font-size:1rem;border-left:5px solid #ea580c}.footer{margin-top:50px;text-align:center;color:#64748b;font-size:0.85rem;border-top:1px solid #e2e8f0;padding-top:20px}h3{color:#2563eb;margin-bottom:10px;font-size:1.4rem}</style></head><body><div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div><div class="title">${type.toUpperCase()} Quick Fix Guide</div>${contentHtml}<div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div><script>window.print();<\/script></body></html>`);
         win.document.close();
     }
 
-    const carriers = [
-        {name: "011 Communications", contact: "866-624-3948", details: ""},
-        {name: "Access Wireless", contact: "866-594-3644", details: ""},
-        {name: "Adams Telephone", contact: "866-220-6867", details: ""},
-        {name: "Affinity Cellular", contact: "CS: 833-679-1090 | Port: 866-488-8717", details: "PIN: last 4 digits of MDN (default)"},
-        {name: "Airtalk Wireless", contact: "CS: 855-924-7825", details: ""},
-        {name: "Airvoice Wireless", contact: "888-944-2355", details: "Type: AT&T MVNO\nSPID: 6214 | Sub-SPID: 987C\nAccount #: 20-digit SIM #\nPIN: possible\nResponse time: within 24 hours\nEmail escalation: use Emailing Carriers process"},
-        {name: "Alta Fiber (Cincinnati Bell)", contact: "513-565-2532", details: "Account #: yes\nPIN: 3-digit customer code (provided by carrier)\nResponse time: 24 hours\nNotes: ConnEX/TMO escalation may be required if provider doesn't recognize SPID."},
-        {name: "Altice Mobile", contact: "866-200-7186", details: "Type: T-Mobile MVNO (Optimum/Lightpath)\nIVR path: 1 -> 1 -> 2 -> 2\nAccount #: required match\nZIP: required match\nPIN: 6 digits (customer must request; valid 7 days; sent via SMS + email)"},
-        {name: "Appalachian Wireless", contact: "800-438-2355", details: "Note: customer must call to get porting info\nHours (EST): M-F 7a–7p; Sat 9a–2p"},
-        {name: "Assurance Wireless", contact: "888-898-4888", details: "Account #: yes (numbers/alphanumeric)\nPIN: default letters+number combo or 6-digit DOB\nResponse time: 1–4 hours"},
-        {name: "Assist Wireless", contact: "855-420-2445", details: "Note: Lifeline service"},
-        {name: "Astound", contact: "800-427-8686", details: ""},
-        {name: "AT&T Wireless", contact: "Port: 877-844-5584 | Biz: 800-331-0500", details: "Port-out PIN: required for Postpaid/Business (not same as account PIN). Get via *PORT (7678). Valid 4 days.\nPrepaid: No NTP; AT&T sends text verification; resubmit leaving NTP empty."},
-        {name: "AT&T Landline", contact: "Digital Port: 844-266-3011", details: "PIN: Standard Landline not required; U-Verse required."},
-        {name: "Bandwidth.com", contact: "800-808-5150", details: "See Google Voice if relevant."},
-        {name: "Basic Talk", contact: "866-382-3770", details: ""},
-        {name: "Ben Lomand Connect", contact: "800-974-7779", details: "Account #: 8–9 digits\nPIN: customer calls to receive PIN"},
-        {name: "Birch (Cbeyond)", contact: "888-772-4724", details: ""},
-        {name: "Bluegrass Cellular", contact: "270-765-6361", details: ""},
-        {name: "Bluepeak Fiber", contact: "888-745-2888", details: "Account #: yes (on bill)\nPIN: yes (same as account PIN)"},
-        {name: "Blue Ridge Mobile", contact: "800-222-5377", details: ""},
-        {name: "Blue Ridge Residential", contact: "610-377-2250", details: "PIN: Number Transfer PIN required for all landlines"},
-        {name: "Boom Mobile", contact: "800-767-5599", details: "Account #: yes\nPIN: yes (call; generally last 4 of phone #)\nZIP: required"},
-        {name: "Boost Mobile", contact: "Port: 833-642-6678", details: "Account #: yes (call/chat)\nPIN: yes (6 digits; expires 4–7 days)\nNote: each MDN requires its own NTP\nResponse time: within 24 hours"},
-        {name: "Breezeline Mobile", contact: "855-811-5188", details: "Account #: yes (Account Reference Number)\nPIN: yes\nZIP: yes"},
-        {name: "Breezeline Telecom", contact: "888-745-9457", details: "Account #: yes (16 digits)\nNTP: not needed"},
-        {name: "Brightspeed", contact: "833-692-7773", details: "Account #: yes (upper right online account / top of billing)"},
-        {name: "Buckeye Broadband", contact: "419-724-9800", details: "Account #: yes\nPIN: yes (call CS)"},
-        {name: "Cavalier Telephone", contact: "800-347-1991", details: ""},
-        {name: "Cellcom", contact: "800-236-0055", details: "PIN: NTP required (not same as account PIN)"},
-        {name: "Cellular One", contact: "800-730-2351", details: ""},
-        {name: "CenturyLink (Port IN)", contact: "Port Out: 866-434-2555", details: "CRITICAL: NO MODIFICATIONS ALLOWED.\n- Any Resolution Required = CANCEL + RESUBMIT (do not update).\n- Must use physical service address (no PO Box).\n- Do NOT activate SIM until confirmed. If active, RTS required to reuse SIM."},
-        {name: "Charity Mobile", contact: "877-474-3662", details: ""},
-        {name: "Charter / Spectrum", contact: "Port: 833-889-0571", details: "See Spectrum entry."},
-        {name: "Claro (Puerto Rico)", contact: "Prepaid: 787-751-1995", details: ""},
-        {name: "Clear Rate", contact: "877-877-4799", details: ""},
-        {name: "Community Phone", contact: "833-779-2345 opt 5", details: "Account #: 9 digits\nPIN: 6 digits\nResponse time: 5 mins"},
-        {name: "Comporium", contact: "803-324-9011", details: "Account #: required; listed on bill"},
-        {name: "Consolidated Comm.", contact: "844-968-7224", details: ""},
-        {name: "Cox Mobile", contact: "877-756-9400", details: "Account #: last 9 digits\nPIN: 4-digit NTP (different from account PIN); call 800-969-6587"},
-        {name: "Credo", contact: "877-762-7336", details: "Account #: text ACCOUNT to 27336\nPIN: yes (provided only to customer)"},
-        {name: "Cricket Wireless", contact: "800-274-2538", details: "SPID: 6214\nAccount #: 9 digits\nNTP: required; valid 5 days; get via *PORT (7678) or App"},
-        {name: "Cross Wireless", contact: "800-828-6567", details: ""},
-        {name: "C-Spire", contact: "Carrier: 601-487-7950", details: "Customer must request port out and reply by text within 8 hours."},
-        {name: "Dialpad", contact: "855-342-5723", details: ""},
-        {name: "Easy Wireless", contact: "877-476-3451", details: "Account #: 7 digits\nPIN: customer-set security PIN"},
-        {name: "Everything Wireless", contact: "310-315-1300", details: ""},
-        {name: "Fidium", contact: "844-434-3486", details: ""},
-        {name: "FirstNet", contact: "800-574-7000", details: "Critical: must convert FirstNet to AT&T Consumer at store before porting out."},
-        {name: "FTC Wireless", contact: "888-218-5050", details: ""},
-        {name: "Flash Mobile", contact: "866-735-3324", details: "Account #: in online account\nPIN: 4-digit security PIN"},
-        {name: "Flash Wireless", contact: "888-226-2141", details: "Account/PIN: online account"},
-        {name: "FreedomPop", contact: "None", details: "Account/PIN: via online account port-out page"},
-        {name: "Frontier", contact: "888-608-8023", details: "PIN: 5-digit passcode (not bill PIN); online under My Profile"},
-        {name: "GCI", contact: "800-800-4800", details: "NTP: customer requests online/phone; valid 7 days"},
-        {name: "Gen Mobile", contact: "833-528-1380", details: "Account #: customer IMEI\nPIN: call CS for NTP"},
-        {name: "Google Fi", contact: "844-825-5234", details: "Customer must unlock number via Google steps."},
-        {name: "Google Voice", contact: "866-777-7550", details: "Account #: 10-digit number\nPIN: Voicemail PIN\nUnlock: $3 fee unless originally ported in."},
-        {name: "Go Smart", contact: "877-582-7788", details: "Type: T-Mobile reseller"},
-        {name: "GTC Communications", contact: "800-486-4030", details: ""},
-        {name: "GVTC", contact: "800-367-4882", details: "Account #: 10-digit MDN\nPIN: none"},
-        {name: "H2O Wireless", contact: "800-643-4917", details: "Account #: 8 digits\nPIN: last 4 of SIM"},
-        {name: "Hawaiian Telcom", contact: "877-482-3322", details: ""},
-        {name: "HTC", contact: "843-369-8442", details: ""},
-        {name: "HughesNet", contact: "866-347-3292", details: "Ask for Tier 4 PIN"},
-        {name: "Inland Cellular", contact: "800-248-8822", details: ""},
-        {name: "iWireless", contact: "303-854-2515", details: ""},
-        {name: "Jolt Mobile", contact: "888-833-3110", details: ""},
-        {name: "Liberty Puerto Rico", contact: "800-331-0500", details: "Can only assist porting OUT to Liberty."},
-        {name: "Life Wireless", contact: "770-818-3919", details: "Lifeline service"},
-        {name: "Limitless Mobile", contact: "888-249-8030", details: ""},
-        {name: "Lingo", contact: "866-405-4646", details: "NTP: customer must call; does not expire"},
-        {name: "Lively (Jitterbug)", contact: "800-733-6632", details: "Account #: 6 or 7 digits\nPIN: call to get (letters/numbers)\nResponse: 24h"},
-        {name: "MagicJack", contact: "800-624-4252", details: "Account #: my.magicJack.com\nPIN: password (8 digits recommended)"},
-        {name: "Mediacom", contact: "866-746-7303", details: ""},
-        {name: "MetroPCS", contact: "800-518-7518", details: "Account #: 9 digits\nPIN: 6 digits (via MyMetro/611)"},
-        {name: "Midco", contact: "800-888-1300", details: "Account #: 9 digits\nNTP: not required"},
-        {name: "Mid-Texas Cellular", contact: "800-695-0150", details: ""},
-        {name: "Mint Mobile", contact: "Care: 800-683-7392", details: "Type: T-Mobile MVNO\nAcct# & PIN: Required via Chat/App.\nSteps:\n1. Open Chat\n2. Type 'Account Number'\n3. Select 'To Port Out'\n4. Provide SMS code."},
-        {name: "Mobi PCS", contact: "808-723-1019", details: ""},
-        {name: "Nextech Wireless", contact: "877-621-2600", details: ""},
-        {name: "NorthWest Missouri", contact: "800-331-6341", details: "Service ending; must port by 12/31/2024"},
-        {name: "NTS Communications", contact: "None", details: "Escalate via email"},
-        {name: "OnStar", contact: "877-865-7864", details: ""},
-        {name: "Ooma", contact: "888-711-6662", details: "Account #: phone number\nPIN: Y1234"},
-        {name: "Optimum Mobile", contact: "866-200-7186", details: "Account #: 7 digits\nPIN: required (email/text, valid 7 days)"},
-        {name: "PagePlus", contact: "800-550-2436", details: "See Tracfone"},
-        {name: "Patriot Mobile", contact: "877-367-7524", details: "PIN: 6 digits"},
-        {name: "Pioneer Cooperative", contact: "405-375-6969", details: ""},
-        {name: "PNG", contact: "800-860-9495", details: ""},
-        {name: "Previ", contact: "801-437-0620", details: ""},
-        {name: "Prine TIME", contact: "541-447-9840", details: ""},
-        {name: "PureTalk", contact: "770-818-3919", details: "Acct/PIN: Call to obtain. PIN expires 10 days."},
-        {name: "RCN", contact: "800-746-4726", details: ""},
-        {name: "Reach Mobile", contact: "844-445-3665", details: "PIN: call CS to receive email with info"},
-        {name: "Ready Mobile", contact: "877-878-6738", details: ""},
-        {name: "Red Pocket", contact: "888-993-3888", details: "Disable Port Out Blocker online to get info."},
-        {name: "RingCentral", contact: "888-898-4591", details: ""},
-        {name: "Rise Broadband", contact: "877-910-6207", details: ""},
-        {name: "Selectel", contact: "877-218-5744", details: "Account #: phone number\nPIN: last 4 of phone"},
-        {name: "Shentel", contact: "800-743-6835", details: ""},
-        {name: "Simple Mobile", contact: "See Tracfone", details: "Account #: Last 15 of SIM if BYOD"},
-        {name: "Skype", contact: "Online", details: "Account #: maybe username or phone+SSN\nPIN: last 4 SSN or 0000"},
-        {name: "Sonic", contact: "877-970-7771", details: "Account #: no\nPIN: no"},
-        {name: "Southeast Nebraska", contact: "None", details: "Escalate via email"},
-        {name: "Southern California Tel", contact: "800-840-6673", details: "Account #: top of bill\nPIN: last 4 of MDN"},
-        {name: "Southern Linc", contact: "205-257-1995", details: "Account #: required\nPIN: 0000"},
-        {name: "Spectrum Mobile", contact: "833-224-6603", details: "Account #: online (billing tab)\nPIN: 6-digit NTP via App/Online (valid 72h)"},
-        {name: "Spectrum Landline", contact: "833-889-0571", details: "Account #: 9 digits (highlighted blue on bill)\nPIN: 4-digit security code"},
-        {name: "Speedtalk Mobile", contact: "310-707-0000", details: ""},
-        {name: "StandUp Wireless", contact: "800-544-4441", details: "Acct/PIN: Call to get"},
-        {name: "Suddenlink", contact: "877-794-2724", details: ""},
-        {name: "Tag Mobile", contact: "800-986-5670", details: "Account #: 6 digits\nPIN: 4 digits (call)"},
-        {name: "TDS Telecom", contact: "888-225-5837", details: ""},
-        {name: "Tello", contact: "866-377-0294", details: "Acct/PIN: online account"},
-        {name: "Thumb Cellular", contact: "800-443-5057", details: ""},
-        {name: "Ting", contact: "855-846-4389", details: "Acct/PIN: ting.com settings"},
-        {name: "T-Mobile", contact: "Port: 877-789-3106", details: "Postpaid: PIN via App/Web (valid 4 days)\nPrepaid: 6-digit NTP"},
-        {name: "Tracfone Family", contact: "800-327-2077", details: "Includes: Straight Talk, Net10, Total, Simple, Walmart Family.\nAccount #: IMEI or Last 15 SIM\nPIN: NTP via Text/Online (valid 7 days)"},
-        {name: "TruConnect", contact: "844-701-8980", details: "PIN: Security PIN"},
-        {name: "True Wireless", contact: "833-733-8524", details: ""},
-        {name: "Ultra Mobile", contact: "888-777-0446", details: "Account #: required (call)\nPIN: last 4 of MDN"},
-        {name: "Union Wireless", contact: "888-926-2273", details: "PIN: customer passcode (case sensitive)"},
-        {name: "US Cellular", contact: "888-900-7678", details: "Account #: 9 digits\nPIN: 6 digits (call/store)"},
-        {name: "US Mobile", contact: "878-205-0088", details: "PIN: each line needs own PIN (valid 7 days)"},
-        {name: "Verizon Wireless", contact: "888-844-7095", details: "Postpaid: NTP via #PORT (7678), valid 7 days.\nPrepaid: Now requires NTP too."},
-        {name: "Verizon Landline", contact: "888-636-5317", details: "PIN: Not required for standard; FiOS required."},
-        {name: "Viero Mobile", contact: "877-484-2376", details: "Account #: 4 digits\nPIN: required"},
-        {name: "Visible", contact: "Chat/App", details: "Account: online\nPIN: request via App"},
-        {name: "VoiPly", contact: "844-486-4759", details: "AI answers; they contact customer"},
-        {name: "VoIPo", contact: "Closed", details: "Ceased operations Aug 2025"},
-        {name: "Vonage", contact: "732-944-0000", details: "PIN: only if set\nResponse: 24-72h"},
-        {name: "Vyve Broadcast", contact: "855-367-8983", details: ""},
-        {name: "Windstream", contact: "866-215-6844", details: "Match name exactly."},
-        {name: "Wireless Works", contact: "800-747-9977", details: ""},
-        {name: "Xfinity Mobile", contact: "Port: 877-547-7230", details: "PIN: NTP ONLY via App/Online. Agents cannot provide."},
-        {name: "Ziply", contact: "866-699-4759", details: "Account/PIN: on bill"}
-    ];
-    function initPorting() { const list = document.getElementById('port-list-container'); list.innerHTML = ""; carriers.forEach(c => { const item = document.createElement('li'); item.className = 'port-item'; item.innerHTML = `<div class="port-header" onclick="this.parentElement.classList.toggle('expanded')"><div class="port-name">${c.name}</div><div class="port-contact">${c.contact}</div></div><div class="port-details">${c.details || "No special instructions."}</div>`; list.appendChild(item); }); }
-    function filterCarriers() { const term = document.getElementById('port-search').value.toLowerCase(); document.querySelectorAll('.port-item').forEach(item => { const text = item.innerText.toLowerCase(); item.style.display = text.includes(term) ? 'block' : 'none'; }); }
-    initPorting();
-
-    // CONTRACT LOGIC
-    const modePhone = document.getElementById('mode-phone'); const modeWatch = document.getElementById('mode-watch'); const priceInput = document.getElementById('con-price'); const genBtn = document.getElementById('generate-btn'); let isPhone = true;
-    modePhone.addEventListener('change', () => { isPhone = true; updateMath(); }); modeWatch.addEventListener('change', () => { isPhone = false; updateMath(); }); priceInput.addEventListener('input', updateMath);
-    const qPriceInput = document.getElementById('quick-price'); const qModePhone = document.getElementById('q-mode-phone'); const qModeWatch = document.getElementById('q-mode-watch');
-    qModePhone.addEventListener('change', () => { isPhone = true; updateMath(); }); qModeWatch.addEventListener('change', () => { isPhone = false; updateMath(); }); qPriceInput.addEventListener('input', updateMath);
-    const checkHighValue = (inputElement) => { const price = parseFloat(inputElement.value) || 0; if(price > 700) { hvModal.style.display = 'flex'; } };
-    
-    // ATTACH HIGH VALUE TO CONTRACT ONLY
-    priceInput.addEventListener('blur', () => { checkHighValue(priceInput); }); priceInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { checkHighValue(priceInput); priceInput.blur(); } });
-    function closeHvModal() { hvModal.style.display = 'none'; } function confirmHv() { hvModal.style.display = 'none'; generatePDF(); }
-    genBtn.addEventListener('click', () => { const price = parseFloat(priceInput.value) || 0; if(price > 700) { hvModal.style.display = 'flex'; } else { generatePDF(); } });
-    
-    document.getElementById('con-phone').addEventListener('input', function (e) { let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/); e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : ''); });
-    function getMath(pInput) { const price = parseFloat(pInput.value) || 0; const tax = price * 0.089; let monthly = 0, down = 0, financed = 0; if (price > 0) { if (isPhone) { monthly = Math.floor(price / 24); down = price - (monthly * 24); financed = monthly * 24; } else { monthly = Math.ceil((price / 24) * 100) / 100; down = 0; financed = price; } } return { price, tax, down, monthly, totalDue: down + tax, financed, totalPayments: monthly * 24, totalSalePrice: down + (monthly * 24) }; }
-    function updateMath() { const m = getMath(priceInput); document.getElementById('disp-tax').innerText = "$" + m.tax.toFixed(2); document.getElementById('disp-down').innerText = "$" + m.down.toFixed(2); document.getElementById('disp-monthly').innerText = "$" + m.monthly.toFixed(2); document.getElementById('con-due-today').innerText = "$" + m.totalDue.toFixed(2); const qm = getMath(qPriceInput); document.getElementById('q-tax').innerText = "$" + qm.tax.toFixed(2); document.getElementById('q-down').innerText = "$" + qm.down.toFixed(2); document.getElementById('q-monthly').innerText = "$" + qm.monthly.toFixed(2); document.getElementById('q-total').innerText = "$" + qm.totalDue.toFixed(2); }
-    function generatePDF() { const m = getMath(priceInput); const name = document.getElementById('con-name').value || ""; const address = document.getElementById('con-address').value || ""; const city = document.getElementById('con-city').value || ""; const state = document.getElementById('con-state').value || ""; const zip = document.getElementById('con-zip').value || ""; const fullAddress = address + ", " + city + ", " + state + " " + zip; const acct = document.getElementById('con-acct').value || ""; const phone = document.getElementById('con-phone').value || ""; const item = document.getElementById('con-item').value || ""; const sku = (document.getElementById('con-sku').value || "000000") + "236"; const date = new Date().toLocaleDateString(); const win = window.open('', '_blank'); win.document.write(`<html><head><title>Installment Contract</title><style>@media print { body { margin: 0; padding: 25px; } .page-break { page-break-before: always; } } body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.4; color: #000; padding: 40px; } table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11pt; } td, th { border: 1px solid black; padding: 8px; vertical-align: top; text-align: left; } .no-border td { border: none; padding: 4px; } .bold { font-weight: bold; } .small { font-size: 9pt; } .legal-large { font-size: 12pt; text-align: justify; line-height: 1.4; } h3 { text-align: center; font-weight: bold; font-size: 14pt; margin: 20px 0; }</style></head><body><div class="bold" style="font-size:12pt; margin-bottom:10px;">NOTICE TO CONSUMER</div><div class="legal-large">By signing below, you consent to receipt of the included contract and Truth-in-Lending disclosures in an electronic form. You have a right to withdraw this consent and to receive this document in a non-electronic form. To withdraw consent and request this document in a non-electronic form, send a written request including your name, address and contact phone number to Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517. Your consent only applies to the included contract and Truth-in-Lending disclosures. To update the information needed to contact you electronically, contact Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517, call 800-686-4460 or manage your account online at www.ConsumerCellular.com.</div><br><table class="no-border"><tr><td width="10%"><strong>DATE:</strong></td><td>${date}</td></tr><tr><td><strong>BUYER'S SIGNATURE:</strong></td><td>__________________________________________</td></tr><tr><td colspan="2" class="small">(Please type your name in the box above to electronically sign this document)</td></tr></table><h3>CONSUMER CREDIT INSTALLMENT SALE CONTRACT</h3><table class="no-border" style="margin-bottom: 30px;"><tr><td width="50%"><strong>Seller/Creditor:</strong><br>Consumer Cellular<br>12447 SW 69th Avenue<br>Portland, OR 97223-8517</td><td><strong>Buyer:</strong><br>${name}<br>${fullAddress}</td></tr></table><table style="border: 2px solid black; margin-bottom:30px;"><tr style="background:#f0f0f0;"><th>SKU Number</th><th>Item Description</th><th>Price</th><th>Down payment Paid today</th><th>Balance</th></tr><tr><td>${sku}</td><td>${item}</td><td>$${m.price.toFixed(2)}</td><td>$${m.down.toFixed(2)}</td><td>$${m.financed.toFixed(2)}</td></tr></table><div class="bold" style="margin-top:20px; font-size:12pt;">Federal Truth-in-Lending Disclosures</div><table style="border: 2px solid black; margin-bottom:30px;"><tr style="background:#f0f0f0;"><th width="15%">ANNUAL % RATE</th><th width="15%">FINANCE CHARGE</th><th width="20%">Amount Financed</th><th width="20%">Total of Payments</th><th width="30%">Total Sale Price</th></tr><tr class="small" style="height: 50px;"><td>The cost of your credit as a yearly rate.</td><td>The dollar amount the credit will cost you.</td><td>The amount of credit provided to you or on your behalf.</td><td>The amount you will have paid after you have made all payments as scheduled.</td><td>The total cost of your purchase on credit, including your down payment of $${m.down.toFixed(2)}.</td></tr><tr class="bold" style="font-size:12pt;"><td>0%</td><td>$0.00</td><td>$${m.financed.toFixed(2)}</td><td>$${m.totalPayments.toFixed(2)}</td><td>$${m.totalSalePrice.toFixed(2)}</td></tr></table><div style="margin-top:20px; font-size:12pt;"><strong>Your Payment Schedule will be:</strong></div><table style="border: 2px solid black;"><tr style="background:#f0f0f0;"><th>SKU Number</th><th>Number of Payments</th><th>Amount of Payments</th><th>When Payments are Due</th></tr><tr><td>${sku}</td><td>24</td><td>$${m.monthly.toFixed(2)}</td><td>Monthly, beginning on Next Bill Cycle</td></tr></table><div class="small" style="margin-top:20px;">See your Wireless Customer Agreement for any additional information about nonpayment, default, any required repayment in full before the scheduled date, and prepayment refunds and penalties.</div><br><div class="bold" style="font-size:12pt;">Itemization of the Amount Financed of $${m.financed.toFixed(2)}</div><div class="page-break"></div><table class="no-border" style="width:100%; margin-top: 10px; margin-bottom: 20px; font-size: 11pt;"><tr><td>Cash Price</td><td>$${m.price.toFixed(2)}</td></tr><tr><td>Sales Tax (8.9%)</td><td>$${m.tax.toFixed(2)}</td></tr><tr><td>Total Cash Price plus Sales Tax</td><td>$${(m.price + m.tax).toFixed(2)}</td></tr><tr><td>Cash Down payment</td><td>$${m.down.toFixed(2)}</td></tr><tr><td>Sales Tax paid at time of sale</td><td>$${m.tax.toFixed(2)}</td></tr><tr><td>Unpaid Balance of Cash Price/Unpaid Balance</td><td>$${m.financed.toFixed(2)}</td></tr><tr><td>Prepaid FINANCE CHARGE</td><td>$0.00</td></tr><tr><td style="border-top:2px solid black; padding-top: 10px;"><strong>Amount Financed</strong></td><td style="border-top:2px solid black; padding-top: 10px;"><strong>$${m.financed.toFixed(2)}</strong></td></tr></table><div class="legal-large"><strong>Agreement to Purchase and Make Payments:</strong> The Buyer ("you" or "Buyer") agrees to purchase from the Seller ("we", "us", "our", or "Seller") the items described above on the terms set forth in this contract. You agree to make payments according to the payment schedule above. The Federal Truth-in-Lending Disclosures above are part of this contract. Items payable under this contract will appear on the monthly billing statements for your plan. Payments will first be applied to any past due balances and then, in order, to any deposit due, payments due under this contract, current service charges for your plan and then to any other charges for your service plan. Partial payments may result in the suspension or cancellation of your plan service and in equipment not operating on our network. You may prepay this contract in full or make additional payments in increments of $ at any time.<br><br><strong>Consumer Cellular, Incorporated Wireless Customer Agreement ("WCA"):</strong> You have been provided with a copy of the WCA. The WCA also applies to this transaction, but if the WCA is inconsistent with anything stated in this contract, this contract will prevail. Provisions of the WCA that are prohibited by law will not apply. Manufacturer warranty information, if any, is provided with the items sold.<br><br><strong>Default:</strong> Except where prohibited by law, if you commit any substantial default under this contract, we may declare the remaining unpaid balance of the contract immediately due and payable. You agree to maintain Service for any device purchased under this contract, and any termination of that Service will be a substantial default under this contract.<br><br><strong>NOTICE:</strong> ANY HOLDER OF THIS CONSUMER CREDIT CONTRACT IS SUBJECT TO ALL CLAIMS AND DEFENSES WHICH THE DEBTOR COULD ASSERT AGAINST THE SELLER OF GOODS OR SERVICES OBTAINED PURSUANT HERETO OR WITH THE PROCEEDS HEREOF. RECOVERY HEREUNDER BY THE DEBTOR SHALL NOT EXCEED AMOUNTS PAID BY THE DEBTOR HEREUNDER.</div><div style="margin-top:20px; font-weight: bold; font-size: 12pt;">You acknowledge receipt of the Consumer Cellular, Incorporated WCA You also acknowledge receipt of a completely filled in copy of this contract when you signed it.</div><br><br><table class="no-border"><tr><td width="50%"><strong>BUYER'S SIGNATURE:</strong></td><td><strong>SELLER'S SIGNATURE:</strong></td></tr><tr><td style="border-bottom:2px solid black; height:40px;"></td><td style="vertical-align:bottom;">CONSUMER CELLULAR, INCORPORATED</td></tr><tr><td class="small">(Please type your name in the box above to electronically sign this document)</td><td></td></tr></table><div class="page-break"></div><br><br><br><table style="width:100%; border:none; margin-top:50px;"><tr><td style="width:50%; text-align:center; border:none; font-size:12pt; font-weight:bold; font-family:Arial, sans-serif;">Account Number: <span style="font-weight:normal;">${acct}</span></td><td style="width:50%; text-align:center; border:none; font-size:12pt; font-weight:bold; font-family:Arial, sans-serif;">Phone Number: <span style="font-weight:normal;">${phone}</span></td></tr></table></body></html>`); win.document.close(); }
+    initTroubleshoot();
 </script>
 </body>
 </html>
