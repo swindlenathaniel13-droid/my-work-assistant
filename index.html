@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V3.9.0</title>
+    <title>Work Portal V3.10.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -76,7 +76,7 @@
             <div id="login-error">Incorrect password.</div>
             <div class="input-group"><input type="password" id="password-input" class="modern-input" placeholder="Password"></div>
             <button type="button" id="login-trigger" class="login-btn">Log In</button>
-            <p style="margin-top: 20px; text-align: center; color: #999; font-size: 0.8rem;">System v3.9.0</p>
+            <p style="margin-top: 20px; text-align: center; color: #999; font-size: 0.8rem;">System v3.10.0</p>
         </div>
 
         <div id="dashboard-section">
@@ -208,10 +208,12 @@
 
         if (price > 0) {
             if (isPhone) {
+                // Phone: Round down monthly
                 monthly = Math.floor(price / 24);
                 down = price - (monthly * 24);
                 financed = monthly * 24;
             } else {
+                // Watch: Round up monthly
                 monthly = Math.ceil((price / 24) * 100) / 100;
                 down = 0;
                 financed = price; 
@@ -264,26 +266,26 @@
                 <title>Installment Contract</title>
                 <style>
                     @media print {
-                        body { margin: 0; padding: 20px; }
+                        body { margin: 0; padding: 25px; }
                         .page-break { page-break-before: always; }
                     }
-                    body { font-family: Arial, sans-serif; padding: 40px; font-size: 12pt; line-height: 1.4; color: #000; }
-                    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12pt; }
-                    td, th { border: 1px solid black; padding: 8px; vertical-align: top; text-align: left; }
-                    .no-border td { border: none; padding: 4px; }
+                    body { font-family: Arial, sans-serif; padding: 40px; font-size: 12.5pt; line-height: 1.5; color: #000; }
+                    table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 12pt; }
+                    td, th { border: 1px solid black; padding: 10px; vertical-align: top; text-align: left; }
+                    .no-border td { border: none; padding: 6px; }
                     .center { text-align: center; }
                     .bold { font-weight: bold; }
-                    .box { border: 2px solid black; padding: 5px; margin: 10px 0; }
-                    .small { font-size: 10pt; }
-                    h3 { text-align: center; font-weight: bold; margin: 20px 0; font-size: 14pt; }
+                    .box { border: 2px solid black; padding: 10px; margin: 15px 0; }
+                    .small { font-size: 11pt; }
+                    h3 { text-align: center; font-weight: bold; margin: 25px 0; font-size: 16pt; }
                 </style>
             </head>
             <body>
-                <div class="bold" style="font-size:12pt; margin-bottom:10px;">NOTICE TO CONSUMER</div>
+                <div class="bold" style="font-size:14pt; margin-bottom:15px;">NOTICE TO CONSUMER</div>
                 <div class="small">By signing below, you consent to receipt of the included contract and Truth-in-Lending disclosures in an electronic form. You have a right to withdraw this consent and to receive this document in a non-electronic form. To withdraw consent and request this document in a non-electronic form, send a written request including your name, address and contact phone number to Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517. Your consent only applies to the included contract and Truth-in-Lending disclosures. To update the information needed to contact you electronically, contact Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517, call 800-686-4460 or manage your account online at www.ConsumerCellular.com.</div>
                 
                 <br>
-                <table class="no-border">
+                <table class="no-border" style="margin-bottom:40px;">
                     <tr><td width="10%"><strong>DATE:</strong></td><td>${date}</td></tr>
                     <tr><td><strong>BUYER'S SIGNATURE:</strong></td><td>__________________________________________</td></tr>
                     <tr><td colspan="2" class="small">(Please type your name in the box above to electronically sign this document)</td></tr>
@@ -291,7 +293,7 @@
 
                 <h3>CONSUMER CREDIT INSTALLMENT SALE CONTRACT</h3>
 
-                <table class="no-border" style="margin-bottom: 30px;">
+                <table class="no-border" style="margin-bottom: 40px;">
                     <tr>
                         <td width="50%">
                             <strong>Seller/Creditor:</strong><br>
@@ -302,12 +304,14 @@
                         <td>
                             <strong>Buyer:</strong><br>
                             ${name}<br>
-                            ${fullAddress}
+                            ${fullAddress}<br>
+                            Account: ${acct}<br>
+                            Phone: ${phone}
                         </td>
                     </tr>
                 </table>
 
-                <table style="border: 2px solid black;">
+                <table style="border: 2px solid black; margin-bottom:40px;">
                     <tr style="background:#f0f0f0;">
                         <th>SKU Number</th><th>Item Description</th><th>Price</th><th>Down payment Paid today</th><th>Balance</th>
                     </tr>
@@ -316,8 +320,8 @@
                     </tr>
                 </table>
 
-                <div class="bold" style="margin-top:20px;">Federal Truth-in-Lending Disclosures</div>
-                <table style="border: 2px solid black;">
+                <div class="bold" style="margin-top:20px; font-size:14pt;">Federal Truth-in-Lending Disclosures</div>
+                <table style="border: 2px solid black; margin-bottom:40px;">
                     <tr style="background:#f0f0f0;">
                         <th width="15%">ANNUAL % RATE</th>
                         <th width="15%">FINANCE CHARGE</th>
@@ -325,14 +329,14 @@
                         <th width="20%">Total of Payments</th>
                         <th width="30%">Total Sale Price</th>
                     </tr>
-                    <tr class="small">
+                    <tr class="small" style="height: 60px;">
                         <td>The cost of your credit as a yearly rate.</td>
                         <td>The dollar amount the credit will cost you.</td>
                         <td>The amount of credit provided to you or on your behalf.</td>
                         <td>The amount you will have paid after you have made all payments as scheduled.</td>
                         <td>The total cost of your purchase on credit, including your down payment of $${m.down.toFixed(2)}.</td>
                     </tr>
-                    <tr class="bold" style="font-size:12pt;">
+                    <tr class="bold" style="font-size:13pt;">
                         <td>0%</td>
                         <td>$0.00</td>
                         <td>$${m.financed.toFixed(2)}</td>
@@ -341,7 +345,7 @@
                     </tr>
                 </table>
 
-                <div style="margin-top:20px;"><strong>Your Payment Schedule will be:</strong></div>
+                <div style="margin-top:20px; font-size:13pt;"><strong>Your Payment Schedule will be:</strong></div>
                 <table style="border: 2px solid black;">
                     <tr style="background:#f0f0f0;">
                         <th>SKU Number</th><th>Number of Payments</th><th>Amount of Payments</th><th>When Payments are Due</th>
@@ -355,8 +359,8 @@
                 
                 <div class="page-break"></div>
 
-                <div style="margin-top:20px; font-weight: bold; font-size: 12pt;">Itemization of the Amount Financed of $${m.financed.toFixed(2)}</div>
-                <table class="no-border" style="width:100%; margin-top: 10px; font-size: 12pt;">
+                <div style="margin-top:40px; font-weight: bold; font-size: 14pt;">Itemization of the Amount Financed of $${m.financed.toFixed(2)}</div>
+                <table class="no-border" style="width:100%; margin-top: 20px; margin-bottom: 40px; font-size: 13pt;">
                     <tr><td>Cash Price</td><td>$${m.price.toFixed(2)}</td></tr>
                     <tr><td>Sales Tax (8.9%)</td><td>$${m.tax.toFixed(2)}</td></tr>
                     <tr><td>Total Cash Price plus Sales Tax</td><td>$${(m.price + m.tax).toFixed(2)}</td></tr>
@@ -364,10 +368,10 @@
                     <tr><td>Sales Tax paid at time of sale</td><td>$${m.tax.toFixed(2)}</td></tr>
                     <tr><td>Unpaid Balance of Cash Price/Unpaid Balance</td><td>$${m.financed.toFixed(2)}</td></tr>
                     <tr><td>Prepaid FINANCE CHARGE</td><td>$0.00</td></tr>
-                    <tr><td style="border-top:2px solid black; padding-top: 10px;"><strong>Amount Financed</strong></td><td style="border-top:2px solid black; padding-top: 10px;"><strong>$${m.financed.toFixed(2)}</strong></td></tr>
+                    <tr><td style="border-top:2px solid black; padding-top: 15px;"><strong>Amount Financed</strong></td><td style="border-top:2px solid black; padding-top: 15px;"><strong>$${m.financed.toFixed(2)}</strong></td></tr>
                 </table>
 
-                <div class="small" style="margin-top:30px; text-align:justify; line-height: 1.5;">
+                <div class="small" style="margin-top:30px; text-align:justify; line-height: 1.6;">
                     <strong>Agreement to Purchase and Make Payments:</strong> The Buyer ("you" or "Buyer") agrees to purchase from the Seller ("we", "us", "our", or "Seller") the items described above on the terms set forth in this contract. You agree to make payments according to the payment schedule above. The Federal Truth-in-Lending Disclosures above are part of this contract. Items payable under this contract will appear on the monthly billing statements for your plan. Payments will first be applied to any past due balances and then, in order, to any deposit due, payments due under this contract, current service charges for your plan and then to any other charges for your service plan. Partial payments may result in the suspension or cancellation of your plan service and in equipment not operating on our network. You may prepay this contract in full or make additional payments in increments of $ at any time.
                     <br><br>
                     <strong>Consumer Cellular, Incorporated Wireless Customer Agreement ("WCA"):</strong> You have been provided with a copy of the WCA. The WCA also applies to this transaction, but if the WCA is inconsistent with anything stated in this contract, this contract will prevail. Provisions of the WCA that are prohibited by law will not apply. Manufacturer warranty information, if any, is provided with the items sold.
@@ -377,13 +381,13 @@
                     <strong>NOTICE:</strong> ANY HOLDER OF THIS CONSUMER CREDIT CONTRACT IS SUBJECT TO ALL CLAIMS AND DEFENSES WHICH THE DEBTOR COULD ASSERT AGAINST THE SELLER OF GOODS OR SERVICES OBTAINED PURSUANT HERETO OR WITH THE PROCEEDS HEREOF. RECOVERY HEREUNDER BY THE DEBTOR SHALL NOT EXCEED AMOUNTS PAID BY THE DEBTOR HEREUNDER.
                 </div>
 
-                <div style="margin-top:20px; font-weight: bold;">You acknowledge receipt of the Consumer Cellular, Incorporated WCA You also acknowledge receipt of a completely filled in copy of this contract when you signed it.</div>
+                <div style="margin-top:30px; font-weight: bold; font-size: 12pt;">You acknowledge receipt of the Consumer Cellular, Incorporated WCA You also acknowledge receipt of a completely filled in copy of this contract when you signed it.</div>
 
-                <br><br>
+                <br><br><br>
                 <table class="no-border">
                     <tr><td width="50%"><strong>BUYER'S SIGNATURE:</strong></td><td><strong>SELLER'S SIGNATURE:</strong></td></tr>
                     <tr>
-                        <td style="border-bottom:2px solid black; height:40px;"></td>
+                        <td style="border-bottom:2px solid black; height:50px;"></td>
                         <td style="vertical-align:bottom;">CONSUMER CELLULAR, INCORPORATED</td>
                     </tr>
                     <tr>
@@ -394,7 +398,8 @@
 
                 <div class="page-break"></div>
 
-                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+                <br><br><br>
+                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 50vh;">
                     <div style="font-size: 24pt; font-weight: bold; font-family: Arial, sans-serif; text-align: center;">
                         Account Number: <span style="font-weight:normal;">${acct}</span><br><br>
                         Phone Number: <span style="font-weight:normal;">${phone}</span>
