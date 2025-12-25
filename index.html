@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V9.3.0</title>
+    <title>Work Portal V9.4.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -240,7 +240,7 @@
         </div>
 
         <div class="main-content">
-            <div class="header"><div class="header-title">Work Portal v9.3</div><div></div></div>
+            <div class="header"><div class="header-title">Work Portal v9.4</div><div></div></div>
             <div class="scroll-area">
                 
                 <div id="view-home" class="view-section active">
@@ -392,6 +392,7 @@
         {name: "The Streamer", price: "$45", data: "20GB", family: "connect", bestFor: "I watch stuff and don't want surprises", examples: ["30-40 hours SD video", "10-16 hours HD video"]},
         {name: "Unlimited", price: "$60", data: "Unlimited", family: "unlimited", bestFor: "Heavy streaming + social + hotspot use", examples: ["High definition streaming", "Frequent tethering", "Multi-line accounts share 50GB high-speed data"]},
         {name: "Unlimited (50+)", price: "$40", data: "Unlimited", family: "50plus", bestFor: "Single user 50+", examples: ["Discounted rate for seniors", "35GB high-speed data"]},
+        {name: "Unlimited for AARP", price: "$55", data: "Unlimited", family: "50plus", bestFor: "AARP Members (2 Lines Required)", examples: ["Age: 50 or over", "AARP Member Exclusive", "At least 2 Line(s) Required", "Unlimited Talk, Text & Data"]},
     ];
 
     let currentSelectedPlan = null;
@@ -445,7 +446,7 @@
                 <div style="color:#334155;">${plan.bestFor}</div>
             </div>
 
-            <h3 style="font-size:1rem; margin-bottom:10px;">Real-Life Examples</h3>
+            <h3 style="font-size:1rem; margin-bottom:10px;">Details</h3>
             <ul style="padding-left:20px; color:#475569; line-height:1.5;">${exampleList}</ul>
         `;
 
@@ -508,7 +509,7 @@
                 </div>
 
                 <div class="section">
-                    <strong>What you can do with ${plan.data}:</strong>
+                    <strong>Plan Details:</strong>
                     <ul>${exampleList}</ul>
                 </div>
 
