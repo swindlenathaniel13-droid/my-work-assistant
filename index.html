@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Work Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-color: #ff7b00; /* Orange Accent */
+            --accent-hover: #e66f00;
+            --bg-dark: #121212;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --text-muted: #666666;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            background-color: #f4f4f4;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* --- LEFT BANNER PANEL --- */
+        #banner-panel {
+            flex: 4;
+            background-color: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            overflow: hidden;
+            transition: flex 0.5s ease;
+        }
+
+        #hero-text {
+            color: var(--text-light);
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        /* --- RIGHT INTERACTION PANEL --- */
+        #interaction-panel {
+            flex: 3;
+            background-color: #fff;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+            transition: all 0.5s ease;
+        }
+
+        /* Top Bar */
+        #top-bar {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        #time-container {
+            text-align: right;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        #time-display {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* Log Out Button */
+        #logout-btn {
+            display: none;
+            padding: 8px 16px;
+            background-color: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        #logout-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        /* --- LOGIN SECTION --- */
+        #login-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            max-width: 400px;
+            margin: auto;
+            width: 100%;
+        }
+
+        h1 {
+            color: var(--text-dark);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .modern-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .modern-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        #login-error {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        /* --- DASHBOARD SECTION --- */
+        #dashboard-section {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            padding-top: 40px;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            align-items: center; /* Center content for empty state */
+            justify-content: center;
+        }
+
+        .dashboard-placeholder {
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="banner-panel">
+        <div id="hero-text">WORK<br>PORTAL</div>
+    </div>
+
+    <div id="interaction-panel">
+        <div id="top-bar">
+            <div id="time-container">
+                <div id="date-display">Loading...</div>
+                <div id="time-display"></div>
+            </div>
+            <button id="logout-btn">Log Out</button>
+        </div>
+
+        <div id="login-section">
+            <h1>Welcome</h1>
+            <p class="subtitle">Please log in to access your assistant.</p>
+            
+            <div id="login-error">Incorrect password.</div>
+
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="password-input" class="input-label">Access Code</label>
+                    <input type="password" id="password-input" class="modern-input" placeholder="Enter password">
+                </div>
+                <button type="submit" class="login-btn">Enter Portal</button>
+            </form>
+            
+             <p style="margin-top: 20px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+                System v3.0.0 | Personal Use
+            </p>
+        </div>
+
+        <div id="dashboard-section">
+            <div class="dashboard-placeholder">
+                <h1 style="color: var(--accent-color); font-size: 3rem;">Ready</h1>
+                <p style="font-size: 1.2rem;">Select a tool to begin.</p>
+                <p style="font-size: 0.9rem; margin-top: 20px;">(No tools loaded yet)</p>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    // --- 1. TIME FUNCTION ---
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
+        const dateString = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        
+        document.getElementById('date-display').innerText = dateString;
+        document.getElementById('time-display').innerText = timeString;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // --- 2. DOM ELEMENTS ---
+    const loginForm = document.getElementById('login-form');
+    const passwordInput = document.getElementById('password-input');
+    const loginSection = document.getElementById('login-section');
+    const dashboardSection = document.getElementById('dashboard-section');
+    const loginError = document.getElementById('login-error');
+    const logoutBtn = document.getElementById('logout-btn');
+    const bannerPanel = document.getElementById('banner-panel');
+
+    // --- 3. LOGIN LOGIC ---
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault(); 
+        
+        // Password Check (Case Insensitive)
+        // Change "spokanecc" below to whatever you want your password to be
+        if (passwordInput.value.toLowerCase() === "spokanecc") {
+            // Success: Switch to Dashboard
+            loginSection.style.display = 'none';
+            bannerPanel.style.display = 'none'; // Hide banner to go full screen
+            dashboardSection.style.display = 'flex';
+            logoutBtn.style.display = 'block'; 
+        } else {
+            // Error
+            loginError.style.display = 'block';
+            passwordInput.value = "";
+            setTimeout(() => {
+                loginError.style.display = 'none';
+            }, 3000);
+        }
+    });
+
+    // --- 4. LOGOUT LOGIC ---
+    logoutBtn.addEventListener('click', function() {
+        // Reset to Login Screen
+        dashboardSection.style.display = 'none';
+        bannerPanel.style.display = 'flex';
+        loginSection.style.display = 'flex';
+        logoutBtn.style.display = 'none';
+        passwordInput.value = "";
+    });
+
+</script>
+</body>
+</html>
