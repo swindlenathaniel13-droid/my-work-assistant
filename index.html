@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V14.5.0</title>
+    <title>Work Portal V14.6.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -215,6 +215,7 @@
         .ts-details { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 15px; flex:1; white-space: pre-wrap; }
         .ts-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .ts-filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: white; cursor: pointer; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s; }
+        .ts-filter-btn:hover { background: #f8fafc; }
         .ts-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         .ts-search-bar { width: 100%; padding: 12px 18px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; }
         .ts-spam-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 0.85rem; }
@@ -850,25 +851,7 @@
         let spam = item.spam ? `<div class="warning-box"><strong>⚠️ Spam Warning:</strong> ${item.spam}</div>` : '';
         let contentHtml = `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
         const win = window.open('', '_blank');
-        win.document.write(`
-            <html><head><title>Quick Guide</title><style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
-                body { font-family: 'Inter', sans-serif; padding: 40px; color: #0f172a; -webkit-print-color-adjust: exact; }
-                .header { display: flex; justify-content: space-between; border-bottom: 3px solid #ff7b00; padding-bottom: 20px; margin-bottom: 30px; }
-                .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #1e3a8a; }
-                .title { font-size: 2rem; font-weight: 700; margin-bottom: 20px; color: #1e3a8a; text-transform: capitalize; }
-                .step-box { margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; page-break-inside: avoid; }
-                .step-text { white-space: pre-wrap; line-height: 1.6; font-size: 1.3rem; }
-                .warning-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 20px; border-radius: 8px; margin-top: 20px; font-size: 1.1rem; border-left: 6px solid #ea580c; }
-                .footer { margin-top: 50px; text-align: center; color: #64748b; font-size: 0.85rem; border-top: 1px solid #e2e8f0; padding-top: 20px; }
-                h3 { color: #2563eb; margin-bottom: 15px; font-size: 1.6rem; }
-            </style></head><body>
-                <div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>
-                ${contentHtml}
-                <div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div>
-                <script>window.print();<\/script>
-            </body></html>
-        `);
+        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:40px;color:#0f172a;-webkit-print-color-adjust:exact}.header{display:flex;justify-content:space-between;border-bottom:3px solid #ff7b00;padding-bottom:20px;margin-bottom:30px}.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1e3a8a}.title{font-size:2rem;font-weight:700;margin-bottom:20px;color:#1e3a8a;text-transform:capitalize}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.3rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:20px;border-radius:8px;margin-top:20px;font-size:1.1rem;border-left:6px solid #ea580c}.footer{margin-top:50px;text-align:center;color:#64748b;font-size:0.8rem;border-top:1px solid #e2e8f0;padding-top:20px}h3{color:#2563eb;margin-bottom:15px;font-size:1.6rem}</style></head><body><div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>${contentHtml}<div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div><script>window.print();<\/script></body></html>`);
         win.document.close();
     }
     
@@ -1040,6 +1023,7 @@
 
     // CONTRACT LOGIC
     const modePhone = document.getElementById('mode-phone'); const modeWatch = document.getElementById('mode-watch'); const priceInput = document.getElementById('con-price'); const genBtn = document.getElementById('trigger-gen'); let isPhone = true;
+    const hvModal = document.getElementById('hv-modal');
     modePhone.addEventListener('change', () => { isPhone = true; updateMath(); }); modeWatch.addEventListener('change', () => { isPhone = false; updateMath(); }); priceInput.addEventListener('input', updateMath);
     const qPriceInput = document.getElementById('quick-price'); const qModePhone = document.getElementById('q-mode-phone'); const qModeWatch = document.getElementById('q-mode-watch');
     qModePhone.addEventListener('change', () => { isPhone = true; updateMath(); }); qModeWatch.addEventListener('change', () => { isPhone = false; updateMath(); }); qPriceInput.addEventListener('input', updateMath);
