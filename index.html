@@ -3,31 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V14.0.0</title>
+    <title>Work Portal V14.1.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sidebar-bg: #ffffff;
-            --main-bg: #f1f5f9;
+            --sidebar-bg: rgba(255, 255, 255, 0.95);
+            --header-bg: rgba(255, 255, 255, 0.95);
             --text-dark: #0f172a;
             --text-muted: #64748b;
-            --primary: #2563eb;
+            --primary: #1e3a8a; /* Deep Navy */
+            --accent: #2563eb;  /* Brighter Blue */
             --border: #e2e8f0;
-            --hover-bg: #f8fafc;
-            --danger-bg: #fef2f2;
-            --danger-text: #991b1b;
-            --danger-border: #fecaca;
-            --info-bg: #eff6ff;
-            --info-text: #1e40af;
-            --info-border: #bfdbfe;
-            --warn-bg: #fff7ed;
-            --warn-text: #9a3412;
-            --warn-border: #fed7aa;
+            --hover-bg: #f1f5f9;
         }
 
-        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--main-bg); color: var(--text-dark); height: 100vh; overflow: hidden; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            color: var(--text-dark); 
+            height: 100vh; 
+            overflow: hidden; 
+            /* GLOBAL BACKGROUND IMAGE (Airplane Wing) */
+            background: linear-gradient(rgba(16, 43, 74, 0.4), rgba(16, 43, 74, 0.4)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
 
-        /* LOGIN REDESIGN v14 */
+        /* --- LOGIN SCREEN --- */
         #login-view { 
             display: flex; 
             flex-direction: column; 
@@ -39,118 +41,115 @@
             top: 0; 
             left: 0; 
             z-index: 2000; 
-            /* New Image + Heavy Blue Overlay */
-            background: linear-gradient(rgba(30, 58, 138, 0.9), rgba(30, 58, 138, 0.95)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
+            background: inherit; /* Uses body background */
+            backdrop-filter: blur(5px); /* Slight blur for login focus */
             transition: opacity 0.5s ease; 
         }
 
         .login-box-title {
             border: 3px solid white;
-            padding: 20px 50px;
+            padding: 15px 40px;
             margin-bottom: 60px;
             color: white;
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.1);
         }
 
-        .login-form-container {
-            width: 320px;
-            display: flex;
-            flex-direction: column;
-        }
+        .login-form-container { width: 320px; display: flex; flex-direction: column; }
 
         .login-label {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 5px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.85rem; color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
         }
 
         .login-input {
-            width: 100%;
-            background: transparent;
-            border: none;
+            width: 100%; background: transparent; border: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-            padding: 12px 0;
-            color: white;
-            font-size: 1.2rem;
-            outline: none;
-            transition: border-color 0.3s;
-            margin-bottom: 50px;
+            padding: 12px 0; color: white; font-size: 1.2rem;
+            outline: none; transition: border-color 0.3s; margin-bottom: 40px;
             font-family: 'Inter', sans-serif;
         }
-
-        .login-input:focus {
-            border-bottom: 2px solid white;
-        }
-
-        .login-input::placeholder {
-            color: rgba(255, 255, 255, 0.2);
-        }
+        .login-input:focus { border-bottom: 2px solid white; }
+        .login-input::placeholder { color: rgba(255, 255, 255, 0.3); font-size: 1rem; }
 
         .pill-btn {
-            background-color: white;
-            color: #1e3a8a;
-            border: none;
-            padding: 15px 0;
-            width: 100%;
-            border-radius: 50px;
-            font-size: 0.95rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            background-color: white; color: var(--primary); border: none;
+            padding: 15px 0; width: 100%; border-radius: 50px;
+            font-size: 0.95rem; font-weight: 800; letter-spacing: 1px;
+            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
             text-transform: uppercase;
         }
+        .pill-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
 
-        .pill-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
+        #login-error { color: #fca5a5; margin-top: 20px; font-size: 0.9rem; display: none; text-align: center; font-weight: 500; }
 
-        #login-error {
-            color: #fca5a5;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            display: none;
-            text-align: center;
-            font-weight: 500;
-        }
 
-        /* DASHBOARD */
+        /* --- DASHBOARD LAYOUT --- */
         #dashboard-view { display: none; height: 100vh; width: 100%; }
-        .sidebar { width: 260px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px 20px; box-sizing: border-box; }
-        .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; font-weight: 700; font-size: 1.3rem; color: #1e3a8a; }
-        .brand-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #1e3a8a, #3b82f6); border-radius: 8px; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+        
+        .sidebar { 
+            width: 260px; 
+            background-color: var(--sidebar-bg); 
+            border-right: 1px solid var(--border); 
+            display: flex; flex-direction: column; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            transition: width 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Collapsed Sidebar State */
+        .sidebar.collapsed { width: 80px; padding: 20px 10px; }
+        .sidebar.collapsed .brand-text { display: none; }
+        .sidebar.collapsed .nav-text { display: none; }
+        .sidebar.collapsed .nav-section-label { display: none; }
+        .sidebar.collapsed .brand { justify-content: center; }
+        .sidebar.collapsed .nav-item { justify-content: center; padding: 12px; }
+
+        .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; font-weight: 700; font-size: 1.3rem; color: var(--primary); white-space: nowrap; overflow: hidden; }
+        .brand-icon { min-width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+        
         .nav-menu { list-style: none; padding: 0; margin: 0; flex: 1; }
-        .nav-item { padding: 12px 15px; border-radius: 8px; color: var(--text-muted); cursor: pointer; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; transition: all 0.2s; }
+        .nav-item { padding: 12px 15px; border-radius: 8px; color: var(--text-muted); cursor: pointer; margin-bottom: 5px; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; transition: all 0.2s; white-space: nowrap; overflow: hidden; }
         .nav-item:hover { background-color: var(--hover-bg); color: var(--text-dark); }
         .nav-item.active { background-color: #eff6ff; color: var(--primary); font-weight: 600; }
-        .nav-section { margin-top: 30px; }
-        .nav-label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 15px; padding-left: 15px; }
+        .nav-section-label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 10px; padding-left: 15px; margin-top: 20px; }
 
-        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .header { height: 70px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
-        .header-title { font-weight: 600; color: #1e293b; font-size: 1.1rem; }
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        
+        .header { 
+            height: 70px; 
+            background: var(--header-bg); 
+            border-bottom: 1px solid var(--border); 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 0 30px; 
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .menu-toggle { cursor: pointer; color: var(--text-muted); padding: 5px; border-radius: 5px; }
+        .menu-toggle:hover { background: var(--hover-bg); color: var(--text-dark); }
+        
+        .header-clock { font-family: 'Oswald', sans-serif; font-size: 1.1rem; color: var(--primary); font-weight: 500; letter-spacing: 0.5px; }
+        
         .scroll-area { flex: 1; overflow-y: auto; padding: 40px; }
         .view-section { display: none; animation: fadeIn 0.3s ease-out; }
         .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* CARDS & UI */
-        .card { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid var(--border); max-width: 900px; margin: 0 auto; }
+        /* CARDS */
+        .card { background: rgba(255, 255, 255, 0.98); border-radius: 16px; padding: 40px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid white; max-width: 900px; margin: 0 auto; backdrop-filter: blur(5px); }
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 25px; border-bottom: 1px solid var(--border); }
         .card-title h2 { margin: 0 0 5px 0; font-size: 1.5rem; font-weight: 700; color: var(--text-dark); }
         .card-title p { margin: 0; color: var(--text-muted); font-size: 0.95rem; }
+
+        /* FORM ELEMENTS */
         .btn-group { display: flex; gap: 12px; }
         .btn { padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; border: 1px solid transparent; transition: all 0.2s; }
         .btn-outline { background: white; border-color: var(--border); color: var(--text-dark); }
@@ -167,18 +166,24 @@
         .radio-item { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; cursor: pointer; }
         .radio-item input { accent-color: var(--primary); width: 18px; height: 18px; }
 
-        /* CALC BOX */
+        /* SPECIFIC TOOL STYLES */
         .calc-panel { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-top: 10px; }
         .calc-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; color: var(--text-muted); }
         .calc-total { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); font-weight: 700; color: var(--text-dark); font-size: 1.2rem; display: flex; justify-content: space-between; }
 
-        /* PORTING */
-        .alert-box { background-color: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger-text); padding: 15px 20px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; line-height: 1.5; }
-        .port-search-bar { width: 100%; padding: 14px 18px; margin-bottom: 25px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; transition: all 0.2s; }
-        .port-search-bar:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        .bill-calc-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border); }
+        .bill-calc-row:last-child { border-bottom: none; }
+        .bill-label { font-size: 0.9rem; color: var(--text-dark); font-weight: 500; }
+        .bill-input-group { display: flex; align-items: center; gap: 10px; }
+        .bill-input-sm { width: 60px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; text-align: center; font-size: 0.9rem; }
+        .bill-cost { width: 80px; text-align: right; font-weight: 600; color: var(--text-dark); }
+        .bill-section { margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
+        .bill-sec-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--primary); margin-bottom: 15px; letter-spacing: 0.5px; }
+        .discount-toggle { background: #fff7ed; border: 1px solid #fed7aa; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: #9a3412; font-weight: 600; }
+
+        .port-search-bar { width: 100%; padding: 14px 18px; margin-bottom: 25px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; }
         .port-list { list-style: none; padding: 0; margin: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
         .port-item { border-bottom: 1px solid var(--border); background: white; cursor: pointer; transition: background 0.1s; }
-        .port-item:last-child { border-bottom: none; }
         .port-item:hover { background: #f8fafc; }
         .port-header { padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; }
         .port-name { font-weight: 600; color: var(--text-dark); font-size: 1rem; }
@@ -186,17 +191,8 @@
         .port-details { display: none; padding: 20px 25px; background: #f1f5f9; border-top: 1px solid var(--border); font-size: 0.9rem; color: #334155; line-height: 1.6; white-space: pre-wrap; }
         .port-item.expanded .port-details { display: block; }
         .port-item.expanded .port-header { background: #eff6ff; }
-        .port-item.expanded .port-name { color: var(--primary); }
 
-        /* LISTS (Support) */
-        .list-group { list-style: none; padding: 0; margin: 0; }
-        .list-item { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .list-item:last-child { border-bottom: none; }
-        .list-name { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
-        .list-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
-        .list-action span { color: var(--primary); font-weight: 600; font-size: 1rem; }
-
-        /* PLAN ESTIMATOR */
+        /* PLAN EST */
         .split-view { display: flex; gap: 30px; height: 600px; }
         .plan-list { flex: 1; border: 1px solid var(--border); border-radius: 12px; overflow-y: auto; background: white; }
         .plan-btn { display: block; width: 100%; text-align: left; padding: 20px; border: none; border-bottom: 1px solid var(--border); background: white; cursor: pointer; transition: all 0.2s; }
@@ -205,16 +201,8 @@
         .plan-name { font-weight: 700; color: var(--text-dark); font-size: 1rem; margin-bottom: 4px; }
         .plan-price { font-size: 0.9rem; color: var(--primary); font-weight: 600; }
         .plan-detail-view { flex: 2; border: 1px solid var(--border); border-radius: 12px; background: white; padding: 30px; overflow-y: auto; }
-        .smartflex-box { background: var(--info-bg); border: 1px solid var(--info-border); color: var(--info-text); padding: 20px; border-radius: 12px; margin-top: 30px; font-size: 0.95rem; line-height: 1.6; }
-        .smartflex-title { font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .data-reality-bar { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; font-size: 0.85rem; color: var(--text-muted); }
-        .dr-item strong { display: block; color: var(--text-dark); margin-bottom: 4px; }
-
-        /* PLAN ESTIMATOR CALCULATOR */
         .est-calc-box { margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--border); }
-        .est-row { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; }
         .est-price-display { font-size: 1.8rem; font-weight: 700; color: #1e3a8a; }
-        .est-disclaimer { font-size: 0.85rem; color: #94a3b8; font-style: italic; margin-top: 5px; }
 
         /* TROUBLESHOOT */
         .ts-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
@@ -225,33 +213,25 @@
         .ts-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
         .ts-icon { width: 40px; height: 40px; border-radius: 8px; background: #eff6ff; color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; }
         .ts-name { font-weight: 700; color: var(--text-dark); font-size: 1.1rem; }
-        .ts-print-btn { width: 100%; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: white; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .ts-print-btn:hover { background: var(--primary); color: white; }
         .ts-details { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 15px; flex:1; white-space: pre-wrap; }
-        .ts-spam-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 0.85rem; }
-        .ts-spam-title { font-weight: 700; color: #ea580c; margin-bottom: 4px; text-transform: uppercase; font-size: 0.75rem; }
-        .ts-print-bar { display: flex; gap: 10px; margin-bottom: 25px; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid var(--border); align-items: center; }
-        .ts-print-label { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-right: 10px; }
         .ts-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .ts-filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: white; cursor: pointer; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s; }
-        .ts-filter-btn:hover { background: #f8fafc; }
         .ts-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         .ts-search-bar { width: 100%; padding: 12px 18px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; }
+        .ts-spam-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 0.85rem; }
+        .ts-print-btn { width: 100%; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: white; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .ts-print-btn:hover { background: var(--primary); color: white; }
 
-        /* BILL ESTIMATOR */
-        .bill-calc-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border); }
-        .bill-calc-row:last-child { border-bottom: none; }
-        .bill-label { font-size: 0.9rem; color: var(--text-dark); font-weight: 500; }
-        .bill-input-group { display: flex; align-items: center; gap: 10px; }
-        .bill-input-sm { width: 60px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; text-align: center; font-size: 0.9rem; }
-        .bill-cost { width: 80px; text-align: right; font-weight: 600; color: var(--text-dark); }
-        .bill-section { margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
-        .bill-sec-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--primary); margin-bottom: 15px; letter-spacing: 0.5px; }
-        .discount-toggle { background: #fff7ed; border: 1px solid #fed7aa; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: #9a3412; font-weight: 600; }
+        /* WELCOME */
+        .welcome-box { text-align: center; padding: 80px 20px; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .welcome-icon { width: 80px; height: 80px; background: rgba(255,255,255,0.2); color: white; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 25px; backdrop-filter: blur(5px); }
         
-        /* HOME */
-        .welcome-box { text-align: center; padding: 80px 20px; color: var(--text-muted); }
-        .welcome-icon { width: 80px; height: 80px; background: #eff6ff; color: var(--primary); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 25px; }
+        .alert-box { background-color: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger-text); padding: 15px 20px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; line-height: 1.5; }
+        .list-group { list-style: none; padding: 0; margin: 0; }
+        .list-item { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .list-name { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
+        .list-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+        .list-action span { color: var(--primary); font-weight: 600; font-size: 1rem; }
 
         /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
@@ -259,7 +239,6 @@
         .modal-icon { width: 60px; height: 60px; background: #eff6ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
         .modal-title { font-size: 1.4rem; font-weight: 700; color: #1e3a8a; margin-bottom: 10px; }
         .modal-msg { color: #475569; font-size: 1rem; line-height: 1.5; margin-bottom: 25px; }
-        .modal-msg strong { color: #0f172a; }
         .modal-actions { display: flex; gap: 10px; justify-content: center; }
 
     </style>
@@ -268,39 +247,42 @@
 
     <div id="login-view">
         <div class="login-box-title">WORK PORTAL</div>
-        
         <form id="login-form" class="login-form-container">
             <label class="login-label">Password</label>
             <input type="password" id="password-input" class="login-input">
             <button type="submit" class="pill-btn">ENTER</button>
         </form>
-        
         <div id="login-error">Access Denied</div>
     </div>
 
     <div id="dashboard-view" style="display:flex;">
-        <div class="sidebar">
-            <div class="brand"><div class="brand-icon">D</div><div>DealerTouch</div></div>
+        <div class="sidebar" id="app-sidebar">
+            <div class="brand"><div class="brand-icon">D</div><div class="brand-text">DealerTouch</div></div>
             <ul class="nav-menu">
-                <li class="nav-item active" id="nav-home" onclick="switchView('view-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Home</li>
-                <li class="nav-item" id="nav-calc" onclick="switchView('view-calc')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="8" y1="2" x2="8" y2="6"></line><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> EasyPay Calculator</li>
-                <li class="nav-item" id="nav-estimator" onclick="switchView('view-estimator')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg> Plan Estimator</li>
-                <li class="nav-item" id="nav-bill" onclick="switchView('view-bill')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Bill Estimator</li>
-                <li class="nav-item" id="nav-troubleshoot" onclick="switchView('view-troubleshoot')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> Quick Fix</li>
-                <li class="nav-item" id="nav-contract" onclick="switchView('view-contract')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> EasyPay Contract</li>
-                <li class="nav-item" id="nav-porting" onclick="switchView('view-porting')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Porting Contact List</li>
+                <li class="nav-item active" id="nav-home" onclick="switchView('view-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> <span class="nav-text">Home</span></li>
+                <li class="nav-item" id="nav-calc" onclick="switchView('view-calc')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="8" y1="2" x2="8" y2="6"></line><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> <span class="nav-text">EasyPay Calculator</span></li>
+                <li class="nav-item" id="nav-estimator" onclick="switchView('view-estimator')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg> <span class="nav-text">Plan Estimator</span></li>
+                <li class="nav-item" id="nav-bill" onclick="switchView('view-bill')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> <span class="nav-text">Bill Estimator</span></li>
+                <li class="nav-item" id="nav-troubleshoot" onclick="switchView('view-troubleshoot')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> <span class="nav-text">Quick Fix</span></li>
+                <li class="nav-item" id="nav-contract" onclick="switchView('view-contract')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> <span class="nav-text">EasyPay Contract</span></li>
+                <li class="nav-item" id="nav-porting" onclick="switchView('view-porting')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> <span class="nav-text">Porting Contacts</span></li>
             </ul>
             <div class="nav-section">
-                <div class="nav-label">System</div>
+                <div class="nav-section-label">System</div>
                 <ul class="nav-menu">
-                    <li class="nav-item" id="nav-support" onclick="switchView('view-support')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Support</li>
-                    <li class="nav-item" id="logout-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Sign out</li>
+                    <li class="nav-item" id="nav-support" onclick="switchView('view-support')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> <span class="nav-text">Support</span></li>
+                    <li class="nav-item" id="logout-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span class="nav-text">Sign out</span></li>
                 </ul>
             </div>
         </div>
 
         <div class="main-content">
-            <div class="header"><div class="header-title">Work Portal v14.0</div><div></div></div>
+            <div class="header">
+                <div class="header-left">
+                    <div class="menu-toggle" onclick="toggleSidebar()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+                </div>
+                <div class="header-clock" id="live-clock"></div>
+            </div>
             <div class="scroll-area">
                 
                 <div id="view-home" class="view-section active">
@@ -311,6 +293,7 @@
                         <div style="display:flex; gap:15px; justify-content:center; margin-top:30px; flex-wrap:wrap;">
                             <button class="btn btn-outline" onclick="switchView('view-bill')">Bill Estimator</button>
                             <button class="btn btn-outline" onclick="switchView('view-troubleshoot')">Quick Fix</button>
+                            <button class="btn btn-outline" onclick="switchView('view-estimator')">Plan Estimator</button>
                         </div>
                     </div>
                 </div>
@@ -321,60 +304,14 @@
                             <div class="card-title"><h2>First Bill Estimator</h2><p>Calculate and print the estimated first invoice.</p></div>
                             <div class="btn-group"><button class="btn btn-outline" onclick="resetBill()">Clear</button><button class="btn btn-primary" onclick="generateBillPDF()">Generate Bill PDF</button></div>
                         </div>
-
-                        <div class="discount-toggle">
-                            <input type="checkbox" id="be-apply-5-percent" onchange="calcBill()" style="width:20px; height:20px;">
-                            <label for="be-apply-5-percent">Apply 5% AARP/USAA Discount (Not valid on 'Unlimited for AARP')</label>
-                        </div>
-
-                        <div class="bill-section">
-                            <div class="bill-sec-title">Monthly Rate Plan</div>
-                            <div class="bill-calc-row"><div class="bill-label">Select Plan & Lines</div><div class="bill-input-group"><select id="be-quick-plan" class="bill-input-sm" style="width:160px;" onchange="updateBillFromQuick()"></select><select id="be-quick-lines" class="bill-input-sm" style="width:80px;" onchange="updateBillFromQuick()"><option value="1">1 Line</option><option value="2">2 Lines</option><option value="3">3 Lines</option><option value="4">4 Lines</option><option value="5">5 Lines</option><option value="6">6 Lines</option><option value="7">7 Lines</option></select></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Base Plan Price</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-plan-price" class="bill-input-sm" value="0" readonly></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Additional Standard Lines ($15 ea)</div><div class="bill-input-group"><input type="number" id="be-add-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Additional Unlimited Lines ($20 ea)</div><div class="bill-input-group"><input type="number" id="be-unl-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Smartwatch Lines ($5 ea)</div><div class="bill-input-group"><input type="number" id="be-watch-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Iris Ally Lines ($25 ea)</div><div class="bill-input-group"><input type="number" id="be-ally-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Home Phone Base Lines</div><div class="bill-input-group"><select id="be-home-type" class="bill-input-sm" style="width:80px;" onchange="calcBill()"><option value="0">None</option><option value="15">@ $15</option><option value="20">@ $20</option></select><input type="number" id="be-home-qty" class="bill-input-sm" value="0" placeholder="Qty" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Asurion Protection Total</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-asurion" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL FOR RATE PLAN</div><div class="bill-cost" id="be-total-rate">$0.00</div></div>
-                        </div>
-
-                        <div class="bill-section">
-                            <div class="bill-sec-title">Surcharges & Taxes</div>
-                            <div class="bill-calc-row"><div class="bill-label">Zip Code (for printout)</div><div class="bill-input-group"><input type="text" id="be-zip" class="bill-input-sm" style="width:80px;"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Estimated Govt Taxes & Fees</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-gov" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Surcharges & Other Items</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-other" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL SURCHARGES</div><div class="bill-cost" id="be-total-surch">$0.00</div></div>
-                        </div>
-
-                        <div class="bill-section">
-                            <div class="bill-sec-title">EasyPay Financing</div>
-                            <div class="bill-calc-row"><div class="bill-label">Device 1 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev1" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Device 2 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev2" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL EASYPAY</div><div class="bill-cost" id="be-total-dev">$0.00</div></div>
-                        </div>
-
-                        <div class="bill-section">
-                            <div class="bill-sec-title">Promotions & Credits</div>
-                            <div class="bill-calc-row"><div class="bill-label">Rate Plan Promo</div><div class="bill-input-group"><span style="color:#64748b;">-$</span><input type="number" id="be-cred-plan" class="bill-input-sm" value="0" oninput="calcBill()" placeholder="Auto"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">SIM Kit Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-sim" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Survey Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-survey" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL CREDITS</div><div class="bill-cost" id="be-total-cred">-$0.00</div></div>
-                        </div>
-
-                        <div class="bill-section">
-                            <div class="row">
-                                <div class="col"><label class="label">SmartFlex?</label><select id="be-opt-smart" class="select"><option>YES</option><option>NO</option></select></div>
-                                <div class="col"><label class="label">AARP/USAA?</label><select id="be-opt-aarp" class="select"><option>NO</option><option>YES</option></select></div>
-                                <div class="col"><label class="label">AutoPay?</label><select id="be-opt-auto" class="select"><option>NO</option><option>YES</option></select></div>
-                            </div>
-                        </div>
+                        <div class="discount-toggle"><input type="checkbox" id="be-apply-5-percent" onchange="calcBill()" style="width:20px; height:20px;"><label for="be-apply-5-percent">Apply 5% AARP/USAA Discount (Not valid on 'Unlimited for AARP')</label></div>
+                        <div class="bill-section"><div class="bill-sec-title">Monthly Rate Plan</div><div class="bill-calc-row"><div class="bill-label">Select Plan & Lines</div><div class="bill-input-group"><select id="be-quick-plan" class="bill-input-sm" style="width:160px;" onchange="updateBillFromQuick()"></select><select id="be-quick-lines" class="bill-input-sm" style="width:80px;" onchange="updateBillFromQuick()"><option value="1">1 Line</option><option value="2">2 Lines</option><option value="3">3 Lines</option><option value="4">4 Lines</option><option value="5">5 Lines</option><option value="6">6 Lines</option><option value="7">7 Lines</option></select></div></div><div class="bill-calc-row"><div class="bill-label">Base Plan Price</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-plan-price" class="bill-input-sm" value="0" readonly></div></div><div class="bill-calc-row"><div class="bill-label">Additional Standard Lines ($15 ea)</div><div class="bill-input-group"><input type="number" id="be-add-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Additional Unlimited Lines ($20 ea)</div><div class="bill-input-group"><input type="number" id="be-unl-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Smartwatch Lines ($5 ea)</div><div class="bill-input-group"><input type="number" id="be-watch-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Iris Ally Lines ($25 ea)</div><div class="bill-input-group"><input type="number" id="be-ally-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Home Phone Base Lines</div><div class="bill-input-group"><select id="be-home-type" class="bill-input-sm" style="width:80px;" onchange="calcBill()"><option value="0">None</option><option value="15">@ $15</option><option value="20">@ $20</option></select><input type="number" id="be-home-qty" class="bill-input-sm" value="0" placeholder="Qty" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Asurion Protection Total</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-asurion" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL FOR RATE PLAN</div><div class="bill-cost" id="be-total-rate">$0.00</div></div></div>
+                        <div class="bill-section"><div class="bill-sec-title">Surcharges & Taxes</div><div class="bill-calc-row"><div class="bill-label">Zip Code (for printout)</div><div class="bill-input-group"><input type="text" id="be-zip" class="bill-input-sm" style="width:80px;"></div></div><div class="bill-calc-row"><div class="bill-label">Estimated Govt Taxes & Fees</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-gov" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Surcharges & Other Items</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-other" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL SURCHARGES</div><div class="bill-cost" id="be-total-surch">$0.00</div></div></div>
+                        <div class="bill-section"><div class="bill-sec-title">EasyPay Financing</div><div class="bill-calc-row"><div class="bill-label">Device 1 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev1" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Device 2 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev2" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL EASYPAY</div><div class="bill-cost" id="be-total-dev">$0.00</div></div></div>
+                        <div class="bill-section"><div class="bill-sec-title">Promotions & Credits</div><div class="bill-calc-row"><div class="bill-label">Rate Plan Promo</div><div class="bill-input-group"><span style="color:#64748b;">-$</span><input type="number" id="be-cred-plan" class="bill-input-sm" value="0" oninput="calcBill()" placeholder="Auto"></div></div><div class="bill-calc-row"><div class="bill-label">SIM Kit Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-sim" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Survey Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-survey" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL CREDITS</div><div class="bill-cost" id="be-total-cred">-$0.00</div></div></div>
+                        <div class="bill-section"><div class="row"><div class="col"><label class="label">SmartFlex?</label><select id="be-opt-smart" class="select"><option>YES</option><option>NO</option></select></div><div class="col"><label class="label">AARP/USAA?</label><select id="be-opt-aarp" class="select"><option>NO</option><option>YES</option></select></div><div class="col"><label class="label">AutoPay?</label><select id="be-opt-auto" class="select"><option>NO</option><option>YES</option></select></div></div></div>
                         <div style="background:#fff7ed; color:#9a3412; padding:15px; border-radius:8px; border:1px solid #fed7aa; margin-bottom:20px; text-align:center; font-size:0.9rem; font-weight:600;">* Prices reflect AutoPay & E-Billing discount. Taxes and fees are additional.</div>
-                        <div style="background:#1e3a8a; color:white; padding:20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
-                            <div style="font-size:1.1rem; font-weight:600;">ESTIMATED MONTHLY TOTAL<br><span style="font-size:0.8rem; font-weight:400; opacity:0.8;">(Before Taxes & Fees)</span></div>
-                            <div style="font-size:1.8rem; font-weight:700;" id="be-grand-total">$0.00</div>
-                        </div>
+                        <div style="background:#1e3a8a; color:white; padding:20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;"><div style="font-size:1.1rem; font-weight:600;">ESTIMATED MONTHLY TOTAL<br><span style="font-size:0.8rem; font-weight:400; opacity:0.8;">(Before Taxes & Fees)</span></div><div style="font-size:1.8rem; font-weight:700;" id="be-grand-total">$0.00</div></div>
                     </div>
                 </div>
 
@@ -390,10 +327,7 @@
                 <div id="view-estimator" class="view-section">
                     <div class="card" style="max-width:1000px;">
                         <div class="card-header"><div class="card-title"><h2>Plan Estimator</h2><p>Find the right data fit based on customer habits.</p></div><div class="btn-group" id="print-plan-btn-group" style="display:none;"><button class="btn btn-primary" onclick="printPlan()">Print Plan Details</button></div></div>
-                        <div class="split-view"><div class="plan-list" id="plan-list-container"></div>
-                        <div class="plan-detail-view" id="plan-detail-container">
-                            <div style="text-align:center; padding-top:100px; color:#aaa;">Select a plan to view details</div>
-                        </div></div>
+                        <div class="split-view"><div class="plan-list" id="plan-list-container"></div><div class="plan-detail-view" id="plan-detail-container"><div style="text-align:center; padding-top:100px; color:#aaa;">Select a plan to view details</div></div></div>
                         <div class="data-reality-bar"><div class="dr-item"><strong>Email (Text)</strong>Almost free</div><div class="dr-item"><strong>Email (Photo)</strong>Few MB each</div><div class="dr-item"><strong>Music</strong>1-2 MB/min</div><div class="dr-item"><strong>Video (SD)</strong>0.5 - 1 GB/hr</div><div class="dr-item"><strong>Video (HD)</strong>1.5 - 3 GB/hr</div><div class="dr-item"><strong>Video Calls</strong>0.5 - 1.5 GB/hr</div></div>
                     </div>
                 </div>
@@ -402,16 +336,7 @@
                     <div class="card" style="max-width:1000px;">
                         <div class="card-header"><div class="card-title"><h2>Quick Fix & Troubleshoot</h2><p>Printable guides tailored for specific devices.</p></div></div>
                         <div class="ts-top-bar"><div class="ts-title-lg">Select Device Guide</div><div style="font-size:0.9rem; color:#64748b;">Click 'Print' for a customer handout</div></div>
-                        <div class="ts-controls">
-                            <input type="text" class="ts-search-bar" id="ts-search" placeholder="Type device name (e.g. 'iPhone 17', 'Razr')..." onkeyup="searchTroubleshoot()">
-                            <button class="ts-filter-btn active" onclick="filterTroubleshoot('all', this)">All</button>
-                            <button class="ts-filter-btn" onclick="filterTroubleshoot('apple', this)">Apple</button>
-                            <button class="ts-filter-btn" onclick="filterTroubleshoot('samsung', this)">Samsung</button>
-                            <button class="ts-filter-btn" onclick="filterTroubleshoot('moto', this)">Motorola</button>
-                            <button class="ts-filter-btn" onclick="filterTroubleshoot('pixel', this)">Google</button>
-                            <button class="ts-filter-btn" onclick="filterTroubleshoot('cc', this)">CC Devices</button>
-                            <button class="ts-filter-btn" onclick="filterTroubleshoot('tablet', this)">Tablet</button>
-                        </div>
+                        <div class="ts-controls"><input type="text" class="ts-search-bar" id="ts-search" placeholder="Type device name (e.g. 'iPhone 17', 'Razr')..." onkeyup="searchTroubleshoot()"><button class="ts-filter-btn active" onclick="filterTroubleshoot('all', this)">All</button><button class="ts-filter-btn" onclick="filterTroubleshoot('apple', this)">Apple</button><button class="ts-filter-btn" onclick="filterTroubleshoot('samsung', this)">Samsung</button><button class="ts-filter-btn" onclick="filterTroubleshoot('moto', this)">Motorola</button><button class="ts-filter-btn" onclick="filterTroubleshoot('pixel', this)">Google</button><button class="ts-filter-btn" onclick="filterTroubleshoot('cc', this)">CC Devices</button><button class="ts-filter-btn" onclick="filterTroubleshoot('tablet', this)">Tablet</button></div>
                         <div class="ts-grid" id="ts-grid-container"></div>
                         <div style="margin-top:40px; padding-top:20px; border-top:1px solid var(--border); color:var(--text-muted); font-size:0.9rem; text-align:center;"><strong>WHEN TO COME IN:</strong> "No Service" after resets, locked accounts, new phone activations, physical damage/heating issues. We are happy to help!</div>
                     </div>
@@ -476,14 +401,27 @@
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         if(viewId === 'view-home') document.getElementById('nav-home').classList.add('active');
         if(viewId === 'view-calc') document.getElementById('nav-calc').classList.add('active');
-        // REMOVED SETUP
-        // TAXES REMOVED
+        // TAXES/SETUP REMOVED
         if(viewId === 'view-estimator') document.getElementById('nav-estimator').classList.add('active');
         if(viewId === 'view-troubleshoot') document.getElementById('nav-troubleshoot').classList.add('active');
         if(viewId === 'view-contract') document.getElementById('nav-contract').classList.add('active');
         if(viewId === 'view-porting') document.getElementById('nav-porting').classList.add('active');
         if(viewId === 'view-support') document.getElementById('nav-support').classList.add('active');
         if(viewId === 'view-bill') document.getElementById('nav-bill').classList.add('active');
+    }
+
+    // CLOCK
+    function updateClock() {
+        const now = new Date();
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        document.getElementById('live-clock').innerText = now.toLocaleDateString('en-US', options);
+    }
+    setInterval(updateClock, 1000); updateClock();
+
+    // SIDEBAR TOGGLE
+    function toggleSidebar() {
+        const sb = document.getElementById('app-sidebar');
+        sb.classList.toggle('collapsed');
     }
 
     // --- BILL ESTIMATOR LOGIC ---
@@ -864,7 +802,6 @@
     function filterTroubleshoot(cat, btn) {
         document.querySelectorAll('.ts-filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
         const items = document.querySelectorAll('.ts-card');
         items.forEach(item => {
             if(cat === 'all' || item.dataset.category === cat || (cat === 'general' && item.dataset.category === 'general')) {
@@ -890,7 +827,7 @@
         let spam = item.spam ? `<div class="warning-box"><strong>⚠️ Spam Warning:</strong> ${item.spam}</div>` : '';
         let contentHtml = `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
         const win = window.open('', '_blank');
-        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:40px;color:#0f172a;-webkit-print-color-adjust:exact}.header{display:flex;justify-content:space-between;border-bottom:3px solid #ff7b00;padding-bottom:20px;margin-bottom:30px}.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1e3a8a}.title{font-size:2rem;font-weight:700;margin-bottom:20px;color:#1e3a8a;text-transform:capitalize}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.3rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:20px;border-radius:8px;margin-top:20px;font-size:1.1rem;border-left:6px solid #ea580c}.footer{margin-top:50px;text-align:center;color:#64748b;font-size:0.85rem;border-top:1px solid #e2e8f0;padding-top:20px}h3{color:#2563eb;margin-bottom:15px;font-size:1.6rem}</style></head><body><div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>${contentHtml}<div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div><script>window.print();<\/script></body></html>`);
+        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:40px;color:#0f172a;-webkit-print-color-adjust:exact}.header{display:flex;justify-content:space-between;border-bottom:3px solid #ff7b00;padding-bottom:20px;margin-bottom:30px}.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1e3a8a}.title{font-size:2rem;font-weight:700;margin-bottom:20px;color:#1e3a8a;text-transform:capitalize}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.3rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:20px;border-radius:8px;margin-top:20px;font-size:1.1rem;border-left:6px solid #ea580c}.footer{margin-top:50px;text-align:center;color:#64748b;font-size:0.8rem;border-top:1px solid #e2e8f0;padding-top:20px}h3{color:#2563eb;margin-bottom:15px;font-size:1.6rem}</style></head><body><div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>${contentHtml}<div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div><script>window.print();<\/script></body></html>`);
         win.document.close();
     }
     
@@ -902,7 +839,7 @@
             return `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
         }).join('');
         const win = window.open('', '_blank');
-        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:40px;color:#0f172a;-webkit-print-color-adjust:exact}.header{display:flex;justify-content:space-between;border-bottom:3px solid #ff7b00;padding-bottom:20px;margin-bottom:30px}.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1e3a8a}.title{font-size:2rem;font-weight:700;margin-bottom:20px;color:#1e3a8a;text-transform:capitalize}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.1rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:15px;border-radius:8px;margin-top:10px;font-size:1rem;border-left:5px solid #ea580c}.footer{margin-top:50px;text-align:center;color:#64748b;font-size:0.85rem;border-top:1px solid #e2e8f0;padding-top:20px}h3{color:#2563eb;margin-bottom:10px;font-size:1.4rem}</style></head><body><div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div><div class="title">${type.toUpperCase()} Quick Fix Guide</div>${contentHtml}<div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div><script>window.print();<\/script></body></html>`);
+        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:40px;color:#0f172a;-webkit-print-color-adjust:exact}.header{display:flex;justify-content:space-between;border-bottom:3px solid #ff7b00;padding-bottom:20px;margin-bottom:30px}.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1e3a8a}.title{font-size:2rem;font-weight:700;margin-bottom:20px;color:#1e3a8a;text-transform:capitalize}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.1rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:15px;border-radius:8px;margin-top:10px;font-size:1rem;border-left:5px solid #ea580c}.footer{margin-top:50px;text-align:center;color:#64748b;font-size:0.8rem;border-top:1px solid #e2e8f0;padding-top:20px}h3{color:#2563eb;margin-bottom:10px;font-size:1.4rem}</style></head><body><div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div><div class="title">${type.toUpperCase()} Quick Fix Guide</div>${contentHtml}<div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div><script>window.print();<\/script></body></html>`);
         win.document.close();
     }
 
