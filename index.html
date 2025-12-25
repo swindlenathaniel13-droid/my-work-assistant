@@ -3,197 +3,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V3.10.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>CC Desktop V4.0.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent-color: #ff7b00;
-            --accent-hover: #e66f00;
-            --bg-dark: #121212;
-            --text-light: #ffffff;
-            --text-dark: #333333;
-            --text-muted: #666666;
-            --border-color: #e0e0e0;
+            --accent: #ff7b00;
+            --accent-dark: #e66f00;
+            --bg-desktop: #2d2d2d; /* Dark gray desktop background */
+            --window-bg: #ffffff;
+            --taskbar-bg: #1a1a1a;
+            --text-color: #333;
         }
 
-        body { font-family: 'Roboto', sans-serif; margin: 0; height: 100vh; display: flex; background-color: #f4f4f4; overflow: hidden; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #000;
+            user-select: none; /* Feel more like an OS */
+        }
 
-        /* BANNER */
-        #banner-panel { flex: 4; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; padding: 40px; }
-        #hero-text { color: var(--text-light); font-size: 3rem; font-weight: bold; letter-spacing: 2px; text-align: center; }
+        /* --- 1. LOGIN SCREEN (Windows Style) --- */
+        #login-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #3a3a3a 0%, #121212 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
 
-        /* MAIN PANEL */
-        #interaction-panel { flex: 3; background-color: #fff; padding: 50px; display: flex; flex-direction: column; position: relative; }
+        .user-avatar {
+            width: 120px;
+            height: 120px;
+            background-color: #ddd;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: #555;
+            border: 4px solid rgba(255,255,255,0.1);
+        }
 
-        /* TOP BAR */
-        #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 10; }
-        #time-display { font-size: 1.1rem; font-weight: 500; color: var(--text-dark); }
-        .icon-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 8px; display: none; }
-        .icon-btn:hover { color: var(--accent-color); }
-        #logout-btn { display: none; padding: 8px 16px; background-color: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .login-name {
+            color: white;
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 25px;
+        }
 
-        /* LOGIN */
-        #login-section { display: flex; flex-direction: column; justify-content: center; height: 100%; max-width: 400px; margin: auto; width: 100%; }
-        .input-group { margin-bottom: 20px; }
-        .input-label { display: block; margin-bottom: 8px; font-weight: 500; }
-        .modern-input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
-        .modern-input:focus { outline: none; border-color: var(--accent-color); }
-        .login-btn { width: 100%; padding: 15px; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
-        #login-error { color: #d32f2f; background-color: #ffebee; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center; display: none; }
+        .login-input-group {
+            display: flex;
+            gap: 5px;
+        }
 
-        /* DASHBOARD */
-        #dashboard-section { display: none; flex-direction: column; height: 100%; justify-content: center; align-items: center; text-align: center; }
+        #password-input {
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: none;
+            font-size: 1rem;
+            width: 250px;
+            background: rgba(255,255,255,0.9);
+        }
 
-        /* MODAL */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background-color: white; padding: 30px; border-radius: 12px; width: 700px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.3); position: relative; }
-        .close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 1.5rem; color: #666; }
-        .toggle-container { display: flex; background: #f0f0f0; border-radius: 8px; padding: 4px; margin-top: 5px; }
-        .toggle-btn { flex: 1; padding: 8px; border: none; background: transparent; cursor: pointer; border-radius: 6px; font-weight: 500; }
-        .toggle-btn.active { background: white; color: var(--accent-color); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .action-btn { width: 100%; padding: 12px; background: var(--accent-color); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        #login-btn {
+            padding: 10px 15px;
+            background-color: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        #login-btn:hover {
+            background-color: rgba(255,255,255,0.4);
+        }
+
+        #login-error {
+            color: #ff6b6b;
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* --- 2. DESKTOP ENVIRONMENT --- */
+        #desktop {
+            display: none; /* Hidden until login */
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-desktop);
+            background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop'); /* Abstract dark wallpaper */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        /* Desktop Icons */
+        .desktop-icon {
+            width: 90px;
+            height: 100px;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.2s;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+
+        .desktop-icon:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .icon-img {
+            width: 48px;
+            height: 48px;
+            background-color: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .icon-label {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* Taskbar */
+        #taskbar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 48px;
+            background-color: rgba(20, 20, 20, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            z-index: 900;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        #start-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
         
+        #start-btn:hover { background-color: rgba(255,255,255,0.1); }
+
+        #clock-area {
+            color: white;
+            font-size: 0.9rem;
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        /* --- 3. WINDOW (APP) --- */
+        .window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 750px;
+            height: 600px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            display: none; /* Hidden by default */
+            border: 1px solid #444;
+            animation: popIn 0.2s ease-out;
+        }
+
+        @keyframes popIn {
+            from { transform: translate(-50%, -45%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
+
+        .title-bar {
+            height: 35px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            border-bottom: 1px solid #ccc;
+            user-select: none;
+        }
+
+        .title-text { font-size: 0.9rem; font-weight: 600; color: #333; }
+
+        .window-controls { display: flex; gap: 8px; }
+        
+        .win-btn {
+            width: 12px; height: 12px; border-radius: 50%; cursor: pointer;
+        }
+        .close { background-color: #ff5f56; }
+        .min { background-color: #ffbd2e; }
+        .max { background-color: #27c93f; }
+
+        .window-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        /* --- FORM STYLES (From Previous Version) --- */
         .two-col { display: flex; gap: 20px; }
         .col { flex: 1; }
+        
+        .input-group { margin-bottom: 15px; }
+        .input-label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; color: #444; }
+        .modern-input { 
+            width: 100%; padding: 8px 10px; 
+            border: 1px solid #ccc; border-radius: 4px; 
+            font-size: 0.95rem; box-sizing: border-box; 
+        }
+        .modern-input:focus { border-color: var(--accent); outline: none; }
+
+        .toggle-container { display: flex; background: #e0e0e0; border-radius: 6px; padding: 3px; }
+        .toggle-btn { flex: 1; padding: 6px; border: none; background: transparent; cursor: pointer; border-radius: 4px; font-weight: 600; color: #666; }
+        .toggle-btn.active { background: white; color: var(--accent); shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        .summary-box {
+            background: white; border: 1px solid #ddd; 
+            padding: 15px; border-radius: 6px; margin-top: 20px;
+        }
+        .sum-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
+        .total-row { border-top: 2px solid #eee; padding-top: 8px; margin-top: 8px; font-weight: bold; color: var(--accent); font-size: 1.1rem; }
+
+        .action-btn {
+            width: 100%; padding: 12px; background: var(--accent); color: white;
+            border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px;
+        }
+        .action-btn:hover { background-color: var(--accent-dark); }
+
     </style>
 </head>
 <body>
 
-    <div id="banner-panel"><div id="hero-text">WORK<br>PORTAL</div></div>
-
-    <div id="interaction-panel">
-        <div id="top-bar">
-            <div id="time-display">Loading...</div>
-            <button id="contract-btn" class="icon-btn" title="Create Contract">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            </button>
-            <button id="logout-btn">Log Out</button>
+    <div id="login-screen">
+        <div class="user-avatar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         </div>
-
-        <div id="login-section">
-            <h1 style="color:#333;">Welcome</h1>
-            <p class="subtitle">Enter access code.</p>
-            <div id="login-error">Incorrect password.</div>
-            <div class="input-group"><input type="password" id="password-input" class="modern-input" placeholder="Password"></div>
-            <button type="button" id="login-trigger" class="login-btn">Log In</button>
-            <p style="margin-top: 20px; text-align: center; color: #999; font-size: 0.8rem;">System v3.10.0</p>
-        </div>
-
-        <div id="dashboard-section">
-            <h1 style="color: var(--accent-color); font-size: 3rem;">Ready</h1>
-            <p style="font-size: 1.2rem; color: #666;">Click the Document icon to create a contract.</p>
-        </div>
+        <div class="login-name">Spokane Rep</div>
+        
+        <form id="login-form">
+            <div class="login-input-group">
+                <input type="password" id="password-input" placeholder="Password" autofocus>
+                <button type="submit" id="login-btn">➔</button>
+            </div>
+        </form>
+        <div id="login-error">Incorrect Password</div>
     </div>
 
-    <div id="contract-modal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-modal" id="close-contract">&times;</span>
-            <h2 style="margin-top:0; border-bottom:2px solid var(--accent-color); padding-bottom:10px;">Easy Pay Contract Generator</h2>
+    <div id="desktop">
+        
+        <div style="padding: 20px; display:flex; flex-direction:column; align-items:flex-start;">
+            <div class="desktop-icon" id="open-contract-app">
+                <div class="icon-img">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </div>
+                <div class="icon-label">Contract<br>Gen v3.10</div>
+            </div>
+        </div>
+
+        <div id="app-window" class="window">
+            <div class="title-bar">
+                <div class="window-controls">
+                    <div class="win-btn close" id="close-window"></div>
+                    <div class="win-btn min"></div>
+                    <div class="win-btn max"></div>
+                </div>
+                <div class="title-text">EasyPay Contract Generator</div>
+                <div style="width: 40px;"></div> </div>
             
-            <div class="two-col">
-                <div class="col">
-                    <h4 style="margin:0 0 10px 0; color:#666;">Buyer Information</h4>
-                    <div class="input-group"><label class="input-label">Full Name</label><input type="text" id="con-name" class="modern-input" placeholder="John Doe"></div>
-                    <div class="input-group"><label class="input-label">Street Address</label><input type="text" id="con-address" class="modern-input" placeholder="123 Maple St"></div>
-                    <div class="two-col">
-                        <div class="col"><label class="input-label">City</label><input type="text" id="con-city" class="modern-input" placeholder="Spokane"></div>
-                        <div class="col"><label class="input-label">State</label><input type="text" id="con-state" class="modern-input" placeholder="WA"></div>
-                        <div class="col"><label class="input-label">Zip</label><input type="text" id="con-zip" class="modern-input" placeholder="99201"></div>
+            <div class="window-body">
+                <div class="two-col">
+                    <div class="col">
+                        <h4 style="margin-top:0; color:#666;">Buyer Details</h4>
+                        <div class="input-group"><label class="input-label">Full Name</label><input type="text" id="con-name" class="modern-input" placeholder="John Doe"></div>
+                        <div class="input-group"><label class="input-label">Address</label><input type="text" id="con-address" class="modern-input" placeholder="123 Main St"></div>
+                        <div class="two-col">
+                            <div class="col"><label class="input-label">City</label><input type="text" id="con-city" class="modern-input" placeholder="Spokane"></div>
+                            <div class="col"><label class="input-label">Zip</label><input type="text" id="con-zip" class="modern-input" placeholder="99201"></div>
+                        </div>
+                        <div class="two-col">
+                            <div class="col"><label class="input-label">Account #</label><input type="text" id="con-acct" class="modern-input" placeholder="123456789"></div>
+                            <div class="col"><label class="input-label">State</label><input type="text" id="con-state" class="modern-input" placeholder="WA"></div>
+                        </div>
+                        <div class="input-group"><label class="input-label">Phone #</label><input type="text" id="con-phone" class="modern-input" placeholder="(555) 555-5555"></div>
                     </div>
-                    <div class="input-group"><label class="input-label">Account #</label><input type="text" id="con-acct" class="modern-input" placeholder="123456789"></div>
-                    <div class="input-group"><label class="input-label">Phone #</label><input type="text" id="con-phone" class="modern-input" placeholder="(555) 555-5555"></div>
+
+                    <div class="col">
+                        <h4 style="margin-top:0; color:#666;">Transaction</h4>
+                        <div class="input-group"><label class="input-label">Device Name</label><input type="text" id="con-item" class="modern-input" placeholder="iPhone 17"></div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">SKU (First 6 Digits)</label>
+                            <div style="display:flex;">
+                                <input type="text" id="con-sku" class="modern-input" placeholder="123456" maxlength="6" style="border-top-right-radius:0; border-bottom-right-radius:0;">
+                                <span style="padding:8px; background:#ddd; border:1px solid #ccc; border-left:none; border-radius:0 4px 4px 0; font-size:0.9rem;">236</span>
+                            </div>
+                        </div>
+
+                        <div class="input-group"><label class="input-label">Retail Price ($)</label><input type="number" id="con-price" class="modern-input" placeholder="0.00" step="0.01"></div>
+
+                        <div class="input-group">
+                            <label class="input-label">Type</label>
+                            <div class="toggle-container">
+                                <button class="toggle-btn active" id="con-mode-phone">Phone</button>
+                                <button class="toggle-btn" id="con-mode-watch">Watch</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-box">
+                            <div class="sum-row"><span>Tax (8.9%):</span><span id="disp-tax">$0.00</span></div>
+                            <div class="sum-row"><span>Down Pmt:</span><span id="disp-down">$0.00</span></div>
+                            <div class="sum-row total-row"><span>Due Today:</span><span id="con-due-today">$0.00</span></div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="col">
-                    <h4 style="margin:0 0 10px 0; color:#666;">Device Details</h4>
-                    <div class="input-group"><label class="input-label">Item Description</label><input type="text" id="con-item" class="modern-input" placeholder="iPhone 17"></div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">SKU (First 6 Digits)</label>
-                        <div style="display:flex; align-items:center;">
-                            <input type="text" id="con-sku" class="modern-input" placeholder="123456" maxlength="6" style="border-radius: 8px 0 0 8px; border-right: none;">
-                            <span style="background:#eee; border:1px solid var(--border-color); border-left:none; padding:12px; border-radius: 0 8px 8px 0; color:#666; font-family:monospace;">236</span>
-                        </div>
-                    </div>
-
-                    <div class="input-group"><label class="input-label">Retail Price ($)</label><input type="number" id="con-price" class="modern-input" placeholder="0.00" step="0.01"></div>
-                    
-                    <label class="input-label">Device Type</label>
-                    <div class="toggle-container">
-                        <button class="toggle-btn active" id="con-mode-phone">Phone</button>
-                        <button class="toggle-btn" id="con-mode-watch">Watch</button>
-                    </div>
-
-                    <div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-top:20px; font-size:0.9rem;">
-                        <div style="display:flex; justify-content:space-between;"><span>Tax (8.9%):</span><span id="disp-tax">$0.00</span></div>
-                        <div style="display:flex; justify-content:space-between;"><span>Down Pmt:</span><span id="disp-down">$0.00</span></div>
-                        <div style="display:flex; justify-content:space-between; margin-top:5px; padding-top:5px; border-top:1px solid #ddd; font-weight:bold; color:var(--accent-color);">
-                            <span>Due Today:</span><span id="con-due-today">$0.00</span>
-                        </div>
-                    </div>
-                </div>
+                <button id="generate-btn" class="action-btn">Print Contract</button>
             </div>
-
-            <button id="generate-btn" class="action-btn">Generate Contract PDF</button>
         </div>
+
+        <div id="taskbar">
+            <div id="start-btn" title="Log Out">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+            </div>
+            
+            <div id="clock-area">
+                <div id="clock-time" style="font-size:1.1rem; font-weight:bold;">12:00 PM</div>
+                <div id="clock-date" style="font-size:0.8rem; color:#aaa;">Dec 24, 2025</div>
+            </div>
+        </div>
+
     </div>
 
 <script>
-    // --- TIME ---
-    function updateTime() {
+    // --- CLOCK ---
+    function updateClock() {
         const now = new Date();
-        document.getElementById('time-display').innerText = now.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
+        document.getElementById('clock-time').innerText = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        document.getElementById('clock-date').innerText = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
-    setInterval(updateTime, 1000);
-    updateTime();
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    // --- ELEMENTS ---
+    // --- LOGIN LOGIC ---
+    const loginForm = document.getElementById('login-form');
     const passInput = document.getElementById('password-input');
-    const loginBtn = document.getElementById('login-trigger');
-    const loginSect = document.getElementById('login-section');
-    const dashSect = document.getElementById('dashboard-section');
-    const logoutBtn = document.getElementById('logout-btn');
-    const contractBtn = document.getElementById('contract-btn');
-    const loginError = document.getElementById('login-error');
-    const banner = document.getElementById('banner-panel');
+    const loginScreen = document.getElementById('login-screen');
+    const desktop = document.getElementById('desktop');
+    const errorMsg = document.getElementById('login-error');
 
-    // --- LOGIN ---
-    function tryLogin() {
-        if (passInput.value.toLowerCase() === "spokanecc") {
-            loginSect.style.display = 'none';
-            banner.style.display = 'none';
-            dashSect.style.display = 'flex';
-            logoutBtn.style.display = 'block';
-            contractBtn.style.display = 'block';
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if(passInput.value.toLowerCase() === "spokanecc") {
+            loginScreen.style.opacity = '0';
+            setTimeout(() => {
+                loginScreen.style.display = 'none';
+                desktop.style.display = 'block';
+            }, 500);
         } else {
-            loginError.style.display = 'block';
-            passInput.value = "";
-            setTimeout(() => loginError.style.display = 'none', 2000);
+            errorMsg.style.display = 'block';
+            passInput.value = '';
         }
-    }
-    loginBtn.addEventListener('click', tryLogin);
-    passInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') tryLogin(); });
-    logoutBtn.addEventListener('click', () => { location.reload(); });
-
-    // --- PHONE FORMATTING ---
-    const phoneInput = document.getElementById('con-phone');
-    phoneInput.addEventListener('input', function (e) {
-        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
     });
 
-    // --- CONTRACT LOGIC ---
-    const modal = document.getElementById('contract-modal');
-    const closeBtn = document.getElementById('close-contract');
+    // --- DESKTOP LOGIC ---
+    const startBtn = document.getElementById('start-btn');
+    startBtn.addEventListener('click', () => {
+        location.reload(); // Logout
+    });
+
+    // Window Management
+    const icon = document.getElementById('open-contract-app');
+    const windowEl = document.getElementById('app-window');
+    const closeWin = document.getElementById('close-window');
+
+    icon.addEventListener('click', () => { windowEl.style.display = 'flex'; });
+    closeWin.addEventListener('click', () => { windowEl.style.display = 'none'; });
+
+    // --- APP LOGIC (Math & PDF) ---
     const modePhone = document.getElementById('con-mode-phone');
     const modeWatch = document.getElementById('con-mode-watch');
     const priceInput = document.getElementById('con-price');
     const genBtn = document.getElementById('generate-btn');
     let isPhone = true;
-
-    contractBtn.addEventListener('click', () => { modal.style.display = 'flex'; priceInput.focus(); });
-    closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
-    window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
 
     modePhone.addEventListener('click', () => { isPhone = true; modePhone.classList.add('active'); modeWatch.classList.remove('active'); updateMath(); });
     modeWatch.addEventListener('click', () => { isPhone = false; modeWatch.classList.add('active'); modePhone.classList.remove('active'); updateMath(); });
@@ -208,21 +434,16 @@
 
         if (price > 0) {
             if (isPhone) {
-                // Phone: Round down monthly
                 monthly = Math.floor(price / 24);
                 down = price - (monthly * 24);
                 financed = monthly * 24;
             } else {
-                // Watch: Round up monthly
                 monthly = Math.ceil((price / 24) * 100) / 100;
                 down = 0;
                 financed = price; 
             }
         }
         
-        const totalPayments = monthly * 24;
-        const totalSalePrice = down + totalPayments;
-
         return {
             price: price,
             tax: tax,
@@ -230,8 +451,8 @@
             monthly: monthly,
             totalDue: down + tax,
             financed: financed,
-            totalPayments: totalPayments,
-            totalSalePrice: totalSalePrice
+            totalPayments: monthly * 24,
+            totalSalePrice: down + (monthly * 24)
         };
     }
 
@@ -242,6 +463,7 @@
         document.getElementById('con-due-today').innerText = "$" + m.totalDue.toFixed(2);
     }
 
+    // --- PDF GENERATOR (V3.10.0 EXACT MATCH) ---
     genBtn.addEventListener('click', () => {
         const m = getMath();
         const name = document.getElementById('con-name').value || "";
@@ -254,9 +476,7 @@
         const acct = document.getElementById('con-acct').value || "";
         const phone = document.getElementById('con-phone').value || "";
         const item = document.getElementById('con-item').value || "";
-        // SKU Logic: Append 236
-        const rawSku = document.getElementById('con-sku').value || "000000";
-        const sku = rawSku + "236";
+        const sku = (document.getElementById('con-sku').value || "000000") + "236";
         const date = new Date().toLocaleDateString();
 
         const win = window.open('', '_blank');
@@ -265,10 +485,7 @@
             <head>
                 <title>Installment Contract</title>
                 <style>
-                    @media print {
-                        body { margin: 0; padding: 25px; }
-                        .page-break { page-break-before: always; }
-                    }
+                    @media print { body { margin: 0; padding: 25px; } .page-break { page-break-before: always; } }
                     body { font-family: Arial, sans-serif; padding: 40px; font-size: 12.5pt; line-height: 1.5; color: #000; }
                     table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 12pt; }
                     td, th { border: 1px solid black; padding: 10px; vertical-align: top; text-align: left; }
@@ -283,128 +500,24 @@
             <body>
                 <div class="bold" style="font-size:14pt; margin-bottom:15px;">NOTICE TO CONSUMER</div>
                 <div class="small">By signing below, you consent to receipt of the included contract and Truth-in-Lending disclosures in an electronic form. You have a right to withdraw this consent and to receive this document in a non-electronic form. To withdraw consent and request this document in a non-electronic form, send a written request including your name, address and contact phone number to Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517. Your consent only applies to the included contract and Truth-in-Lending disclosures. To update the information needed to contact you electronically, contact Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517, call 800-686-4460 or manage your account online at www.ConsumerCellular.com.</div>
-                
                 <br>
-                <table class="no-border" style="margin-bottom:40px;">
-                    <tr><td width="10%"><strong>DATE:</strong></td><td>${date}</td></tr>
-                    <tr><td><strong>BUYER'S SIGNATURE:</strong></td><td>__________________________________________</td></tr>
-                    <tr><td colspan="2" class="small">(Please type your name in the box above to electronically sign this document)</td></tr>
-                </table>
-
+                <table class="no-border" style="margin-bottom:40px;"><tr><td width="10%"><strong>DATE:</strong></td><td>${date}</td></tr><tr><td><strong>BUYER'S SIGNATURE:</strong></td><td>__________________________________________</td></tr><tr><td colspan="2" class="small">(Please type your name in the box above to electronically sign this document)</td></tr></table>
                 <h3>CONSUMER CREDIT INSTALLMENT SALE CONTRACT</h3>
-
-                <table class="no-border" style="margin-bottom: 40px;">
-                    <tr>
-                        <td width="50%">
-                            <strong>Seller/Creditor:</strong><br>
-                            Consumer Cellular<br>
-                            12447 SW 69th Avenue<br>
-                            Portland, OR 97223-8517
-                        </td>
-                        <td>
-                            <strong>Buyer:</strong><br>
-                            ${name}<br>
-                            ${fullAddress}<br>
-                            Account: ${acct}<br>
-                            Phone: ${phone}
-                        </td>
-                    </tr>
-                </table>
-
-                <table style="border: 2px solid black; margin-bottom:40px;">
-                    <tr style="background:#f0f0f0;">
-                        <th>SKU Number</th><th>Item Description</th><th>Price</th><th>Down payment Paid today</th><th>Balance</th>
-                    </tr>
-                    <tr>
-                        <td>${sku}</td><td>${item}</td><td>$${m.price.toFixed(2)}</td><td>$${m.down.toFixed(2)}</td><td>$${m.financed.toFixed(2)}</td>
-                    </tr>
-                </table>
-
+                <table class="no-border" style="margin-bottom: 40px;"><tr><td width="50%"><strong>Seller/Creditor:</strong><br>Consumer Cellular<br>12447 SW 69th Avenue<br>Portland, OR 97223-8517</td><td><strong>Buyer:</strong><br>${name}<br>${fullAddress}<br>Account: ${acct}<br>Phone: ${phone}</td></tr></table>
+                <table style="border: 2px solid black; margin-bottom:40px;"><tr style="background:#f0f0f0;"><th>SKU Number</th><th>Item Description</th><th>Price</th><th>Down payment Paid today</th><th>Balance</th></tr><tr><td>${sku}</td><td>${item}</td><td>$${m.price.toFixed(2)}</td><td>$${m.down.toFixed(2)}</td><td>$${m.financed.toFixed(2)}</td></tr></table>
                 <div class="bold" style="margin-top:20px; font-size:14pt;">Federal Truth-in-Lending Disclosures</div>
-                <table style="border: 2px solid black; margin-bottom:40px;">
-                    <tr style="background:#f0f0f0;">
-                        <th width="15%">ANNUAL % RATE</th>
-                        <th width="15%">FINANCE CHARGE</th>
-                        <th width="20%">Amount Financed</th>
-                        <th width="20%">Total of Payments</th>
-                        <th width="30%">Total Sale Price</th>
-                    </tr>
-                    <tr class="small" style="height: 60px;">
-                        <td>The cost of your credit as a yearly rate.</td>
-                        <td>The dollar amount the credit will cost you.</td>
-                        <td>The amount of credit provided to you or on your behalf.</td>
-                        <td>The amount you will have paid after you have made all payments as scheduled.</td>
-                        <td>The total cost of your purchase on credit, including your down payment of $${m.down.toFixed(2)}.</td>
-                    </tr>
-                    <tr class="bold" style="font-size:13pt;">
-                        <td>0%</td>
-                        <td>$0.00</td>
-                        <td>$${m.financed.toFixed(2)}</td>
-                        <td>$${m.totalPayments.toFixed(2)}</td>
-                        <td>$${m.totalSalePrice.toFixed(2)}</td>
-                    </tr>
-                </table>
-
+                <table style="border: 2px solid black; margin-bottom:40px;"><tr style="background:#f0f0f0;"><th width="15%">ANNUAL % RATE</th><th width="15%">FINANCE CHARGE</th><th width="20%">Amount Financed</th><th width="20%">Total of Payments</th><th width="30%">Total Sale Price</th></tr><tr class="small" style="height: 60px;"><td>The cost of your credit as a yearly rate.</td><td>The dollar amount the credit will cost you.</td><td>The amount of credit provided to you or on your behalf.</td><td>The amount you will have paid after you have made all payments as scheduled.</td><td>The total cost of your purchase on credit, including your down payment of $${m.down.toFixed(2)}.</td></tr><tr class="bold" style="font-size:13pt;"><td>0%</td><td>$0.00</td><td>$${m.financed.toFixed(2)}</td><td>$${m.totalPayments.toFixed(2)}</td><td>$${m.totalSalePrice.toFixed(2)}</td></tr></table>
                 <div style="margin-top:20px; font-size:13pt;"><strong>Your Payment Schedule will be:</strong></div>
-                <table style="border: 2px solid black;">
-                    <tr style="background:#f0f0f0;">
-                        <th>SKU Number</th><th>Number of Payments</th><th>Amount of Payments</th><th>When Payments are Due</th>
-                    </tr>
-                    <tr>
-                        <td>${sku}</td><td>24</td><td>$${m.monthly.toFixed(2)}</td><td>Monthly, beginning on Next Bill Cycle</td>
-                    </tr>
-                </table>
-
+                <table style="border: 2px solid black;"><tr style="background:#f0f0f0;"><th>SKU Number</th><th>Number of Payments</th><th>Amount of Payments</th><th>When Payments are Due</th></tr><tr><td>${sku}</td><td>24</td><td>$${m.monthly.toFixed(2)}</td><td>Monthly, beginning on Next Bill Cycle</td></tr></table>
                 <div class="small">See your Wireless Customer Agreement for any additional information about nonpayment, default, any required repayment in full before the scheduled date, and prepayment refunds and penalties.</div>
-                
                 <div class="page-break"></div>
-
                 <div style="margin-top:40px; font-weight: bold; font-size: 14pt;">Itemization of the Amount Financed of $${m.financed.toFixed(2)}</div>
-                <table class="no-border" style="width:100%; margin-top: 20px; margin-bottom: 40px; font-size: 13pt;">
-                    <tr><td>Cash Price</td><td>$${m.price.toFixed(2)}</td></tr>
-                    <tr><td>Sales Tax (8.9%)</td><td>$${m.tax.toFixed(2)}</td></tr>
-                    <tr><td>Total Cash Price plus Sales Tax</td><td>$${(m.price + m.tax).toFixed(2)}</td></tr>
-                    <tr><td>Cash Down payment</td><td>$${m.down.toFixed(2)}</td></tr>
-                    <tr><td>Sales Tax paid at time of sale</td><td>$${m.tax.toFixed(2)}</td></tr>
-                    <tr><td>Unpaid Balance of Cash Price/Unpaid Balance</td><td>$${m.financed.toFixed(2)}</td></tr>
-                    <tr><td>Prepaid FINANCE CHARGE</td><td>$0.00</td></tr>
-                    <tr><td style="border-top:2px solid black; padding-top: 15px;"><strong>Amount Financed</strong></td><td style="border-top:2px solid black; padding-top: 15px;"><strong>$${m.financed.toFixed(2)}</strong></td></tr>
-                </table>
-
-                <div class="small" style="margin-top:30px; text-align:justify; line-height: 1.6;">
-                    <strong>Agreement to Purchase and Make Payments:</strong> The Buyer ("you" or "Buyer") agrees to purchase from the Seller ("we", "us", "our", or "Seller") the items described above on the terms set forth in this contract. You agree to make payments according to the payment schedule above. The Federal Truth-in-Lending Disclosures above are part of this contract. Items payable under this contract will appear on the monthly billing statements for your plan. Payments will first be applied to any past due balances and then, in order, to any deposit due, payments due under this contract, current service charges for your plan and then to any other charges for your service plan. Partial payments may result in the suspension or cancellation of your plan service and in equipment not operating on our network. You may prepay this contract in full or make additional payments in increments of $ at any time.
-                    <br><br>
-                    <strong>Consumer Cellular, Incorporated Wireless Customer Agreement ("WCA"):</strong> You have been provided with a copy of the WCA. The WCA also applies to this transaction, but if the WCA is inconsistent with anything stated in this contract, this contract will prevail. Provisions of the WCA that are prohibited by law will not apply. Manufacturer warranty information, if any, is provided with the items sold.
-                    <br><br>
-                    <strong>Default:</strong> Except where prohibited by law, if you commit any substantial default under this contract, we may declare the remaining unpaid balance of the contract immediately due and payable. You agree to maintain Service for any device purchased under this contract, and any termination of that Service will be a substantial default under this contract.
-                    <br><br>
-                    <strong>NOTICE:</strong> ANY HOLDER OF THIS CONSUMER CREDIT CONTRACT IS SUBJECT TO ALL CLAIMS AND DEFENSES WHICH THE DEBTOR COULD ASSERT AGAINST THE SELLER OF GOODS OR SERVICES OBTAINED PURSUANT HERETO OR WITH THE PROCEEDS HEREOF. RECOVERY HEREUNDER BY THE DEBTOR SHALL NOT EXCEED AMOUNTS PAID BY THE DEBTOR HEREUNDER.
-                </div>
-
+                <table class="no-border" style="width:100%; margin-top: 20px; margin-bottom: 40px; font-size: 13pt;"><tr><td>Cash Price</td><td>$${m.price.toFixed(2)}</td></tr><tr><td>Sales Tax (8.9%)</td><td>$${m.tax.toFixed(2)}</td></tr><tr><td>Total Cash Price plus Sales Tax</td><td>$${(m.price + m.tax).toFixed(2)}</td></tr><tr><td>Cash Down payment</td><td>$${m.down.toFixed(2)}</td></tr><tr><td>Sales Tax paid at time of sale</td><td>$${m.tax.toFixed(2)}</td></tr><tr><td>Unpaid Balance of Cash Price/Unpaid Balance</td><td>$${m.financed.toFixed(2)}</td></tr><tr><td>Prepaid FINANCE CHARGE</td><td>$0.00</td></tr><tr><td style="border-top:2px solid black; padding-top: 15px;"><strong>Amount Financed</strong></td><td style="border-top:2px solid black; padding-top: 15px;"><strong>$${m.financed.toFixed(2)}</strong></td></tr></table>
+                <div class="small" style="margin-top:30px; text-align:justify; line-height: 1.6;"><strong>Agreement to Purchase and Make Payments:</strong> The Buyer ("you" or "Buyer") agrees to purchase from the Seller ("we", "us", "our", or "Seller") the items described above on the terms set forth in this contract. You agree to make payments according to the payment schedule above. The Federal Truth-in-Lending Disclosures above are part of this contract. Items payable under this contract will appear on the monthly billing statements for your plan. Payments will first be applied to any past due balances and then, in order, to any deposit due, payments due under this contract, current service charges for your plan and then to any other charges for your service plan. Partial payments may result in the suspension or cancellation of your plan service and in equipment not operating on our network. You may prepay this contract in full or make additional payments in increments of $ at any time.<br><br><strong>Consumer Cellular, Incorporated Wireless Customer Agreement ("WCA"):</strong> You have been provided with a copy of the WCA. The WCA also applies to this transaction, but if the WCA is inconsistent with anything stated in this contract, this contract will prevail. Provisions of the WCA that are prohibited by law will not apply. Manufacturer warranty information, if any, is provided with the items sold.<br><br><strong>Default:</strong> Except where prohibited by law, if you commit any substantial default under this contract, we may declare the remaining unpaid balance of the contract immediately due and payable. You agree to maintain Service for any device purchased under this contract, and any termination of that Service will be a substantial default under this contract.<br><br><strong>NOTICE:</strong> ANY HOLDER OF THIS CONSUMER CREDIT CONTRACT IS SUBJECT TO ALL CLAIMS AND DEFENSES WHICH THE DEBTOR COULD ASSERT AGAINST THE SELLER OF GOODS OR SERVICES OBTAINED PURSUANT HERETO OR WITH THE PROCEEDS HEREOF. RECOVERY HEREUNDER BY THE DEBTOR SHALL NOT EXCEED AMOUNTS PAID BY THE DEBTOR HEREUNDER.</div>
                 <div style="margin-top:30px; font-weight: bold; font-size: 12pt;">You acknowledge receipt of the Consumer Cellular, Incorporated WCA You also acknowledge receipt of a completely filled in copy of this contract when you signed it.</div>
-
-                <br><br><br>
-                <table class="no-border">
-                    <tr><td width="50%"><strong>BUYER'S SIGNATURE:</strong></td><td><strong>SELLER'S SIGNATURE:</strong></td></tr>
-                    <tr>
-                        <td style="border-bottom:2px solid black; height:50px;"></td>
-                        <td style="vertical-align:bottom;">CONSUMER CELLULAR, INCORPORATED</td>
-                    </tr>
-                    <tr>
-                        <td class="small">(Please type your name in the box above to electronically sign this document)</td>
-                        <td></td>
-                    </tr>
-                </table>
-
+                <br><br><br><table class="no-border"><tr><td width="50%"><strong>BUYER'S SIGNATURE:</strong></td><td><strong>SELLER'S SIGNATURE:</strong></td></tr><tr><td style="border-bottom:2px solid black; height:50px;"></td><td style="vertical-align:bottom;">CONSUMER CELLULAR, INCORPORATED</td></tr><tr><td class="small">(Please type your name in the box above to electronically sign this document)</td><td></td></tr></table>
                 <div class="page-break"></div>
-
-                <br><br><br>
-                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 50vh;">
-                    <div style="font-size: 24pt; font-weight: bold; font-family: Arial, sans-serif; text-align: center;">
-                        Account Number: <span style="font-weight:normal;">${acct}</span><br><br>
-                        Phone Number: <span style="font-weight:normal;">${phone}</span>
-                    </div>
-                </div>
+                <br><br><br><div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 50vh;"><div style="font-size: 24pt; font-weight: bold; font-family: Arial, sans-serif; text-align: center;">Account Number: <span style="font-weight:normal;">${acct}</span><br><br>Phone Number: <span style="font-weight:normal;">${phone}</span></div></div>
             </body>
             </html>
         `);
