@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V13.1.0</title>
+    <title>Work Portal V13.2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -175,7 +175,8 @@
         .bill-cost { width: 80px; text-align: right; font-weight: 600; color: var(--text-dark); }
         .bill-section { margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
         .bill-sec-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--primary); margin-bottom: 15px; letter-spacing: 0.5px; }
-
+        .discount-toggle { background: #fff7ed; border: 1px solid #fed7aa; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: #9a3412; font-weight: 600; }
+        
         /* HOME */
         .welcome-box { text-align: center; padding: 80px 20px; color: var(--text-muted); }
         .welcome-icon { width: 80px; height: 80px; background: #eff6ff; color: var(--primary); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 25px; }
@@ -227,7 +228,7 @@
         </div>
 
         <div class="main-content">
-            <div class="header"><div class="header-title">Work Portal v13.1</div><div></div></div>
+            <div class="header"><div class="header-title">Work Portal v13.2</div><div></div></div>
             <div class="scroll-area">
                 
                 <div id="view-home" class="view-section active">
@@ -244,38 +245,118 @@
                             <div class="card-title"><h2>First Bill Estimator</h2><p>Calculate and print the estimated first invoice.</p></div>
                             <div class="btn-group"><button class="btn btn-outline" onclick="resetBill()">Clear</button><button class="btn btn-primary" onclick="generateBillPDF()">Generate Bill PDF</button></div>
                         </div>
+
+                        <div class="discount-toggle">
+                            <input type="checkbox" id="be-apply-5-percent" onchange="calcBill()" style="width:20px; height:20px;">
+                            <label for="be-apply-5-percent">Apply 5% AARP/USAA Discount (Not valid on 'Unlimited for AARP')</label>
+                        </div>
+
                         <div class="bill-section">
                             <div class="bill-sec-title">Monthly Rate Plan</div>
-                            <div class="bill-calc-row"><div class="bill-label">Select Plan & Lines</div><div class="bill-input-group"><select id="be-quick-plan" class="bill-input-sm" style="width:160px;" onchange="updateBillFromQuick()"></select><select id="be-quick-lines" class="bill-input-sm" style="width:80px;" onchange="updateBillFromQuick()"><option value="1">1 Line</option><option value="2">2 Lines</option><option value="3">3 Lines</option><option value="4">4 Lines</option><option value="5">5 Lines</option><option value="6">6 Lines</option><option value="7">7 Lines</option></select></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Base Plan Price</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-plan-price" class="bill-input-sm" value="0" readonly></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Additional Standard Lines ($15 ea)</div><div class="bill-input-group"><input type="number" id="be-add-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Additional Unlimited Lines ($20 ea)</div><div class="bill-input-group"><input type="number" id="be-unl-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Smartwatch Lines ($5 ea)</div><div class="bill-input-group"><input type="number" id="be-watch-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Iris Ally Lines ($25 ea)</div><div class="bill-input-group"><input type="number" id="be-ally-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Home Phone Base Lines</div><div class="bill-input-group"><select id="be-home-type" class="bill-input-sm" style="width:80px;" onchange="calcBill()"><option value="0">None</option><option value="15">@ $15</option><option value="20">@ $20</option></select><input type="number" id="be-home-qty" class="bill-input-sm" value="0" placeholder="Qty" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Asurion Protection Total</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-asurion" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL FOR RATE PLAN</div><div class="bill-cost" id="be-total-rate">$0.00</div></div>
+                            
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Select Plan & Lines</div>
+                                <div class="bill-input-group">
+                                    <select id="be-quick-plan" class="bill-input-sm" style="width:160px;" onchange="updateBillFromQuick()"></select>
+                                    <select id="be-quick-lines" class="bill-input-sm" style="width:80px;" onchange="updateBillFromQuick()">
+                                        <option value="1">1 Line</option><option value="2">2 Lines</option><option value="3">3 Lines</option><option value="4">4 Lines</option><option value="5">5 Lines</option><option value="6">6 Lines</option><option value="7">7 Lines</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Base Plan Price</div>
+                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-plan-price" class="bill-input-sm" value="0" readonly></div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Additional Standard Lines ($15 ea)</div>
+                                <div class="bill-input-group"><input type="number" id="be-add-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Additional Unlimited Lines ($20 ea)</div>
+                                <div class="bill-input-group"><input type="number" id="be-unl-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Smartwatch Lines ($5 ea)</div>
+                                <div class="bill-input-group"><input type="number" id="be-watch-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Iris Ally Lines ($25 ea)</div>
+                                <div class="bill-input-group"><input type="number" id="be-ally-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Home Phone Base Lines</div>
+                                <div class="bill-input-group">
+                                    <select id="be-home-type" class="bill-input-sm" style="width:80px;" onchange="calcBill()"><option value="0">None</option><option value="15">@ $15</option><option value="20">@ $20</option></select>
+                                    <input type="number" id="be-home-qty" class="bill-input-sm" value="0" placeholder="Qty" oninput="calcBill()">
+                                </div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Asurion Protection Total</div>
+                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-asurion" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row" style="border:none; padding-top:10px;">
+                                <div class="bill-label" style="font-weight:700;">TOTAL FOR RATE PLAN</div>
+                                <div class="bill-cost" id="be-total-rate">$0.00</div>
+                            </div>
                         </div>
+
                         <div class="bill-section">
                             <div class="bill-sec-title">Surcharges & Taxes</div>
-                            <div class="bill-calc-row"><div class="bill-label">Zip Code (for printout)</div><div class="bill-input-group"><input type="text" id="be-zip" class="bill-input-sm" style="width:80px;"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Estimated Govt Taxes & Fees</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-gov" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Surcharges & Other Items</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-other" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL SURCHARGES</div><div class="bill-cost" id="be-total-surch">$0.00</div></div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Zip Code (for printout)</div>
+                                <div class="bill-input-group"><input type="text" id="be-zip" class="bill-input-sm" style="width:80px;"></div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Estimated Govt Taxes & Fees</div>
+                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-gov" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Surcharges & Other Items</div>
+                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-other" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row" style="border:none; padding-top:10px;">
+                                <div class="bill-label" style="font-weight:700;">TOTAL SURCHARGES</div>
+                                <div class="bill-cost" id="be-total-surch">$0.00</div>
+                            </div>
                         </div>
+
                         <div class="bill-section">
                             <div class="bill-sec-title">EasyPay Financing</div>
-                            <div class="bill-calc-row"><div class="bill-label">Device 1 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev1" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Device 2 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev2" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL EASYPAY</div><div class="bill-cost" id="be-total-dev">$0.00</div></div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Device 1 Monthly</div>
+                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev1" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Device 2 Monthly</div>
+                                <div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev2" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row" style="border:none; padding-top:10px;">
+                                <div class="bill-label" style="font-weight:700;">TOTAL EASYPAY</div>
+                                <div class="bill-cost" id="be-total-dev">$0.00</div>
+                            </div>
                         </div>
+
                         <div class="bill-section">
                             <div class="bill-sec-title">Promotions & Credits</div>
-                            <div class="bill-calc-row"><div class="bill-label">Rate Plan Promo</div><div class="bill-input-group"><span style="color:#64748b;">-$</span><input type="number" id="be-cred-plan" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">SIM Kit Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-sim" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row"><div class="bill-label">Survey Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-survey" class="bill-input-sm" value="0" oninput="calcBill()"></div></div>
-                            <div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL CREDITS</div><div class="bill-cost" id="be-total-cred">-$0.00</div></div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Rate Plan Promo</div>
+                                <div class="bill-input-group"><span style="color:#64748b;">-$</span><input type="number" id="be-cred-plan" class="bill-input-sm" value="0" oninput="calcBill()" placeholder="Auto"></div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">SIM Kit Credits ($10 ea)</div>
+                                <div class="bill-input-group"><input type="number" id="be-cred-sim" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row">
+                                <div class="bill-label">Survey Credits ($10 ea)</div>
+                                <div class="bill-input-group"><input type="number" id="be-cred-survey" class="bill-input-sm" value="0" oninput="calcBill()"></div>
+                            </div>
+                            <div class="bill-calc-row" style="border:none; padding-top:10px;">
+                                <div class="bill-label" style="font-weight:700;">TOTAL CREDITS</div>
+                                <div class="bill-cost" id="be-total-cred">-$0.00</div>
+                            </div>
                         </div>
+
                         <div class="bill-section">
                             <div class="row">
                                 <div class="col"><label class="label">SmartFlex?</label><select id="be-opt-smart" class="select"><option>YES</option><option>NO</option></select></div>
@@ -283,11 +364,16 @@
                                 <div class="col"><label class="label">AutoPay?</label><select id="be-opt-auto" class="select"><option>NO</option><option>YES</option></select></div>
                             </div>
                         </div>
-                        <div style="background:#fff7ed; color:#9a3412; padding:15px; border-radius:8px; border:1px solid #fed7aa; margin-bottom:20px; text-align:center; font-size:0.9rem; font-weight:600;">* Prices reflect AutoPay & E-Billing discount. Taxes and fees are additional.</div>
+                        
+                        <div style="background:#fff7ed; color:#9a3412; padding:15px; border-radius:8px; border:1px solid #fed7aa; margin-bottom:20px; text-align:center; font-size:0.9rem; font-weight:600;">
+                            * Prices reflect AutoPay & E-Billing discount. Taxes and fees are additional.
+                        </div>
+
                         <div style="background:#1e3a8a; color:white; padding:20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
                             <div style="font-size:1.1rem; font-weight:600;">ESTIMATED MONTHLY TOTAL<br><span style="font-size:0.8rem; font-weight:400; opacity:0.8;">(Before Taxes & Fees)</span></div>
                             <div style="font-size:1.8rem; font-weight:700;" id="be-grand-total">$0.00</div>
                         </div>
+
                     </div>
                 </div>
 
@@ -455,6 +541,15 @@
              document.getElementById('be-unl-lines').value = extra;
         }
 
+        // AARP TOGGLE CHECK
+        const discountToggle = document.getElementById('be-apply-5-percent');
+        if(plan.name === "Unlimited for AARP") {
+            discountToggle.checked = false;
+            discountToggle.disabled = true;
+        } else {
+            discountToggle.disabled = false;
+        }
+
         calcBill();
     }
 
@@ -482,6 +577,14 @@
         const devTotal = dev1 + dev2;
         document.getElementById('be-total-dev').innerText = "$" + devTotal.toFixed(2);
 
+        // 5% DISCOUNT LOGIC
+        let ratePromo = 0;
+        const discountActive = document.getElementById('be-apply-5-percent').checked;
+        if(discountActive) {
+            ratePromo = rateTotal * 0.05;
+        }
+        document.getElementById('be-cred-plan').value = ratePromo.toFixed(2);
+
         const credPlan = getVal('be-cred-plan');
         const credSim = getVal('be-cred-sim') * 10;
         const credSurvey = getVal('be-cred-survey') * 10;
@@ -491,15 +594,17 @@
         const grandTotal = rateTotal + surchTotal + devTotal - credTotal;
         document.getElementById('be-grand-total').innerText = "$" + grandTotal.toFixed(2);
         
-        return { planPrice, addLines, unlLines, watchLines, allyLines, homeTotal, asurion, rateTotal, taxGov, taxOther, surchTotal, dev1, dev2, devTotal, credPlan, credSim, credSurvey, credTotal, grandTotal };
+        return { planPrice, addLines, unlLines, watchLines, allyLines, homeTotal, asurion, rateTotal, taxGov, taxOther, surchTotal, dev1, dev2, devTotal, credPlan, credSim, credSurvey, credTotal, grandTotal, discountActive };
     }
 
     function generateBillPDF() {
         const d = calcBill();
         const zip = document.getElementById('be-zip').value;
         const sf = document.getElementById('be-opt-smart').value;
-        const aarp = document.getElementById('be-opt-aarp').value;
+        // Auto-set AARP to YES if discount is active
+        const aarp = d.discountActive ? 'YES' : document.getElementById('be-opt-aarp').value;
         const auto = document.getElementById('be-opt-auto').value;
+        
         const addLineQty = getVal('be-add-lines');
         const unlLineQty = getVal('be-unl-lines');
         const watchQty = getVal('be-watch-lines');
@@ -577,6 +682,11 @@
         const detail = document.getElementById('plan-detail-container');
         const exampleList = plan.examples.map(ex => `<li style="margin-bottom:8px;">${ex}</li>`).join('');
         
+        // Disable AARP Checkbox if AARP plan is selected
+        const isAARP = plan.name === "Unlimited for AARP";
+        const checkboxState = isAARP ? 'disabled' : '';
+        const checkboxNote = isAARP ? '(Already included)' : '';
+        
         let html = `
             <div style="font-size:2rem; font-weight:700; color:#1e3a8a; margin-bottom:5px;">${plan.name}</div>
             <div style="font-size:1.2rem; color:#2563eb; font-weight:600; margin-bottom:20px;">$${plan.price} <span style="color:#64748b; font-size:1rem; font-weight:400;">(${plan.data})</span></div>
@@ -598,6 +708,12 @@
                         <option value="6">6 Lines</option>
                         <option value="7">7 Lines</option>
                     </select>
+                </div>
+                <div class="est-row">
+                     <label style="font-weight:500; display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" id="pe-apply-5-percent" onchange="updateEstPrice()" ${checkboxState}> 
+                        Apply 5% AARP/USAA Discount ${checkboxNote}
+                     </label>
                 </div>
                 <div class="est-price-display" id="est-price-val">$${plan.price}.00</div>
                 <div class="est-disclaimer">ESTIMATED MONTHLY TOTAL (Pre-Tax)<br>This is an estimate for service lines only. Not a formal quote. Taxes & fees not included.</div>
@@ -636,6 +752,12 @@
         } else if (plan.family === '50plus') {
              // 50+ Solo (1 Line). Base 40. Add'l 20
             total = plan.price + ((lines - 1) * 20);
+        }
+        
+        // 5% Discount
+        const disc = document.getElementById('pe-apply-5-percent');
+        if(disc && disc.checked && !disc.disabled) {
+            total = total * 0.95;
         }
         
         document.getElementById('est-price-val').innerText = "$" + total.toFixed(2);
