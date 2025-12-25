@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V14.1.0</title>
+    <title>Work Portal V14.2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -41,8 +41,8 @@
             top: 0; 
             left: 0; 
             z-index: 2000; 
-            background: inherit; /* Uses body background */
-            backdrop-filter: blur(5px); /* Slight blur for login focus */
+            background: inherit; 
+            backdrop-filter: blur(5px); 
             transition: opacity 0.5s ease; 
         }
 
@@ -89,7 +89,6 @@
 
         #login-error { color: #fca5a5; margin-top: 20px; font-size: 0.9rem; display: none; text-align: center; font-weight: 500; }
 
-
         /* --- DASHBOARD LAYOUT --- */
         #dashboard-view { display: none; height: 100vh; width: 100%; }
         
@@ -104,7 +103,6 @@
             backdrop-filter: blur(10px);
         }
         
-        /* Collapsed Sidebar State */
         .sidebar.collapsed { width: 80px; padding: 20px 10px; }
         .sidebar.collapsed .brand-text { display: none; }
         .sidebar.collapsed .nav-text { display: none; }
@@ -239,6 +237,7 @@
         .modal-icon { width: 60px; height: 60px; background: #eff6ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
         .modal-title { font-size: 1.4rem; font-weight: 700; color: #1e3a8a; margin-bottom: 10px; }
         .modal-msg { color: #475569; font-size: 1rem; line-height: 1.5; margin-bottom: 25px; }
+        .modal-msg strong { color: #0f172a; }
         .modal-actions { display: flex; gap: 10px; justify-content: center; }
 
     </style>
@@ -327,7 +326,10 @@
                 <div id="view-estimator" class="view-section">
                     <div class="card" style="max-width:1000px;">
                         <div class="card-header"><div class="card-title"><h2>Plan Estimator</h2><p>Find the right data fit based on customer habits.</p></div><div class="btn-group" id="print-plan-btn-group" style="display:none;"><button class="btn btn-primary" onclick="printPlan()">Print Plan Details</button></div></div>
-                        <div class="split-view"><div class="plan-list" id="plan-list-container"></div><div class="plan-detail-view" id="plan-detail-container"><div style="text-align:center; padding-top:100px; color:#aaa;">Select a plan to view details</div></div></div>
+                        <div class="split-view"><div class="plan-list" id="plan-list-container"></div>
+                        <div class="plan-detail-view" id="plan-detail-container">
+                            <div style="text-align:center; padding-top:100px; color:#aaa;">Select a plan to view details</div>
+                        </div></div>
                         <div class="data-reality-bar"><div class="dr-item"><strong>Email (Text)</strong>Almost free</div><div class="dr-item"><strong>Email (Photo)</strong>Few MB each</div><div class="dr-item"><strong>Music</strong>1-2 MB/min</div><div class="dr-item"><strong>Video (SD)</strong>0.5 - 1 GB/hr</div><div class="dr-item"><strong>Video (HD)</strong>1.5 - 3 GB/hr</div><div class="dr-item"><strong>Video Calls</strong>0.5 - 1.5 GB/hr</div></div>
                     </div>
                 </div>
@@ -336,7 +338,16 @@
                     <div class="card" style="max-width:1000px;">
                         <div class="card-header"><div class="card-title"><h2>Quick Fix & Troubleshoot</h2><p>Printable guides tailored for specific devices.</p></div></div>
                         <div class="ts-top-bar"><div class="ts-title-lg">Select Device Guide</div><div style="font-size:0.9rem; color:#64748b;">Click 'Print' for a customer handout</div></div>
-                        <div class="ts-controls"><input type="text" class="ts-search-bar" id="ts-search" placeholder="Type device name (e.g. 'iPhone 17', 'Razr')..." onkeyup="searchTroubleshoot()"><button class="ts-filter-btn active" onclick="filterTroubleshoot('all', this)">All</button><button class="ts-filter-btn" onclick="filterTroubleshoot('apple', this)">Apple</button><button class="ts-filter-btn" onclick="filterTroubleshoot('samsung', this)">Samsung</button><button class="ts-filter-btn" onclick="filterTroubleshoot('moto', this)">Motorola</button><button class="ts-filter-btn" onclick="filterTroubleshoot('pixel', this)">Google</button><button class="ts-filter-btn" onclick="filterTroubleshoot('cc', this)">CC Devices</button><button class="ts-filter-btn" onclick="filterTroubleshoot('tablet', this)">Tablet</button></div>
+                        <div class="ts-controls">
+                            <input type="text" class="ts-search-bar" id="ts-search" placeholder="Type device name (e.g. 'iPhone 17', 'Razr')..." onkeyup="searchTroubleshoot()">
+                            <button class="ts-filter-btn active" onclick="filterTroubleshoot('all', this)">All</button>
+                            <button class="ts-filter-btn" onclick="filterTroubleshoot('apple', this)">Apple</button>
+                            <button class="ts-filter-btn" onclick="filterTroubleshoot('samsung', this)">Samsung</button>
+                            <button class="ts-filter-btn" onclick="filterTroubleshoot('moto', this)">Motorola</button>
+                            <button class="ts-filter-btn" onclick="filterTroubleshoot('pixel', this)">Google</button>
+                            <button class="ts-filter-btn" onclick="filterTroubleshoot('cc', this)">CC Devices</button>
+                            <button class="ts-filter-btn" onclick="filterTroubleshoot('tablet', this)">Tablet</button>
+                        </div>
                         <div class="ts-grid" id="ts-grid-container"></div>
                         <div style="margin-top:40px; padding-top:20px; border-top:1px solid var(--border); color:var(--text-muted); font-size:0.9rem; text-align:center;"><strong>WHEN TO COME IN:</strong> "No Service" after resets, locked accounts, new phone activations, physical damage/heating issues. We are happy to help!</div>
                     </div>
@@ -401,7 +412,7 @@
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         if(viewId === 'view-home') document.getElementById('nav-home').classList.add('active');
         if(viewId === 'view-calc') document.getElementById('nav-calc').classList.add('active');
-        // TAXES/SETUP REMOVED
+        // TAXES REMOVED
         if(viewId === 'view-estimator') document.getElementById('nav-estimator').classList.add('active');
         if(viewId === 'view-troubleshoot') document.getElementById('nav-troubleshoot').classList.add('active');
         if(viewId === 'view-contract') document.getElementById('nav-contract').classList.add('active');
@@ -595,7 +606,7 @@
             <div class="section"><div class="sec-title">Promotions and Other Credits</div><div class="line-row"><div class="lr-label">Rate Plan Promotion</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">-$</span>${d.credPlan.toFixed(2)}</div></div>${simQty > 0 ? `<div class="line-row"><div class="lr-label"># of SIM Kit Credit(s): ${simQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(simQty*10).toFixed(2)}</div></div>` : ''}${surveyQty > 0 ? `<div class="line-row"><div class="lr-label"># of Customer Service Surveys: ${surveyQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(surveyQty*10).toFixed(2)}</div></div>` : ''}</div><div class="total-bar"><div>TOTAL CREDITS FOR PROMOTIONS</div><div>-$${d.credTotal.toFixed(2)}</div></div>
             <div style="margin-top:20px;"><div class="check-row"><div>Do You Have SmartFlex Turned On?</div><div class="check-opts"><div>${checkNo(sf)} NO</div><div>${checkYes(sf)} YES</div></div></div><div style="padding:0 40px; font-size:10px; font-style:italic; color:#F15A22; margin-bottom:10px;">Totals will change if data limits are exceeded and the plan is flexed up.</div><div class="check-row"><div>AARP or USAA Member ID Added?</div><div class="check-opts"><div>${checkNo(aarp)} NO</div><div>${checkYes(aarp)} YES</div></div></div><div class="check-row"><div>AutoPay and E-Billing Active?</div><div class="check-opts"><div>${checkNo(auto)} NO</div><div>${checkYes(auto)} YES</div></div></div></div>
             <div class="grand-total-box"><div class="gt-label">GRAND TOTAL OF FIRST MONTH INVOICE</div><div class="gt-amount">$${d.grandTotal.toFixed(2)}</div></div>
-            <div class="footer">Estimate Provided By<br>© 2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025<br>Date: ${new Date().toLocaleDateString()}</div></div>
+            <div class="footer">Estimate Provided By<br>© 2025 Consumer Cellular, Inc. "Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025<br>Date: ${new Date().toLocaleDateString()}</div></div>
             <script>window.print();<\/script></body></html>`);
         win.document.close();
     }
@@ -802,6 +813,7 @@
     function filterTroubleshoot(cat, btn) {
         document.querySelectorAll('.ts-filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+
         const items = document.querySelectorAll('.ts-card');
         items.forEach(item => {
             if(cat === 'all' || item.dataset.category === cat || (cat === 'general' && item.dataset.category === 'general')) {
