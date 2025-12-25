@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V12.0.0</title>
+    <title>Work Portal V12.2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -139,16 +139,16 @@
         .ts-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
         .ts-title-lg { font-size: 1.8rem; font-weight: 700; color: #1e3a8a; }
         .ts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .ts-card { border: 1px solid var(--border); border-radius: 12px; background: white; padding: 20px; transition: transform 0.2s, box-shadow 0.2s; }
+        .ts-card { border: 1px solid var(--border); border-radius: 12px; background: white; padding: 20px; transition: transform 0.2s, box-shadow 0.2s; display:flex; flex-direction:column; justify-content:space-between; }
         .ts-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .ts-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
         .ts-icon { width: 40px; height: 40px; border-radius: 8px; background: #eff6ff; color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; }
         .ts-name { font-weight: 700; color: var(--text-dark); font-size: 1.1rem; }
-        .ts-print-btn { width: 100%; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: white; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: all 0.2s; }
+        .ts-print-btn { width: 100%; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: white; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .ts-print-btn:hover { background: var(--primary); color: white; }
-        .ts-details { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px; }
-        .ts-spam-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 0.9rem; }
-        .ts-spam-title { font-weight: 700; color: #ea580c; margin-bottom: 5px; text-transform: uppercase; font-size: 0.8rem; }
+        .ts-details { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 15px; flex:1; white-space: pre-wrap; }
+        .ts-spam-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 0.85rem; }
+        .ts-spam-title { font-weight: 700; color: #ea580c; margin-bottom: 4px; text-transform: uppercase; font-size: 0.75rem; }
         .ts-print-bar { display: flex; gap: 10px; margin-bottom: 25px; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid var(--border); align-items: center; }
         .ts-print-label { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-right: 10px; }
         .ts-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
@@ -217,7 +217,7 @@
         </div>
 
         <div class="main-content">
-            <div class="header"><div class="header-title">Work Portal v12.0</div><div></div></div>
+            <div class="header"><div class="header-title">Work Portal v12.2</div><div></div></div>
             <div class="scroll-area">
                 
                 <div id="view-home" class="view-section active">
@@ -512,25 +512,18 @@
         
         // Add Line Logic
         if(plan.name === "Unlimited for AARP") {
-             // 2 lines included in base $55. Add lines start at 3rd.
-             // Line 3,4,5,6,7 are added at $20 ea (Unlimited rate).
              const extra = Math.max(0, lineCount - 2);
              document.getElementById('be-add-lines').value = 0;
              document.getElementById('be-unl-lines').value = extra;
         } else if (plan.family === 'connect') {
-            // Line 1 in base. Lines 2-7 are $15 ea.
             const extra = Math.max(0, lineCount - 1);
             document.getElementById('be-add-lines').value = extra;
             document.getElementById('be-unl-lines').value = 0;
         } else if (plan.family === 'unlimited') {
-             // Line 1 in base. Lines 2-7 are $20 ea.
              const extra = Math.max(0, lineCount - 1);
              document.getElementById('be-add-lines').value = 0;
              document.getElementById('be-unl-lines').value = extra;
         } else if (plan.family === '50plus' && plan.name !== "Unlimited for AARP") {
-             // 50+ Solo (1 Line). Adding lines makes it standard unlimited?
-             // Usually 50+ 1-line is specific. If they add lines, it effectively becomes standard Unlimited Shared.
-             // For estimator simplicity: Base $40 + $20/line.
              const extra = Math.max(0, lineCount - 1);
              document.getElementById('be-add-lines').value = 0;
              document.getElementById('be-unl-lines').value = extra;
@@ -590,146 +583,53 @@
         const simQty = getVal('be-cred-sim');
         const surveyQty = getVal('be-cred-survey');
         
-        // --- CUSTOM CHECKBOXES ---
-        const chkYes = (val) => val === 'YES' ? 
-            `<span style="display:inline-block; width:12px; height:12px; background:#102B4A; border:1px solid #102B4A; margin-right:4px;"></span>` : 
-            `<span style="display:inline-block; width:12px; height:12px; border:1px solid #102B4A; margin-right:4px;"></span>`;
-            
-        const chkNo = (val) => val === 'NO' ? 
-            `<span style="display:inline-block; width:12px; height:12px; background:#102B4A; border:1px solid #102B4A; margin-right:4px;"></span>` : 
-            `<span style="display:inline-block; width:12px; height:12px; border:1px solid #102B4A; margin-right:4px;"></span>`;
+        const check = (val) => val === 'YES' ? '☒' : '☐';
+        const uncheck = (val) => val === 'NO' ? '☒' : '☐';
+        const checkYes = (val) => val === 'YES' ? `☒` : `☐`;
+        const checkNo = (val) => val === 'NO' ? `☒` : `☐`;
+        
+        // Asurion logic: if value > 0 show YES checked
+        const asurYes = d.asurion > 0 ? '☒' : '☐';
+        const asurNo = d.asurion > 0 ? '☐' : '☒';
+
+        // Home Phone logic
+        const hp15 = (homeCost === 15 && homeQty > 0) ? '☒' : '☐';
+        const hp20 = (homeCost === 20 && homeQty > 0) ? '☒' : '☐';
 
         const win = window.open('', '_blank');
         win.document.write(`
-            <html>
-            <head>
-                <title>Estimated First Bill</title>
-                <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
-                    body { font-family: 'Inter', sans-serif; padding: 0; margin: 0; color: #102B4A; -webkit-print-color-adjust: exact; }
-                    .container { width: 100%; max-width: 8.5in; margin: 0 auto; }
-                    
-                    /* HEADER */
-                    .header-bar { background-color: #102B4A; color: white; padding: 25px 40px; display: flex; justify-content: space-between; align-items: center; }
-                    .header-title { font-family: 'Oswald', sans-serif; font-size: 42px; text-transform: uppercase; letter-spacing: 1px; line-height: 1; }
-                    .logo-square { background-color: #F15A22; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; text-align: center; color: white; font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1; font-size: 16px; padding: 5px; box-sizing: border-box; }
-                    
-                    /* SECTIONS */
-                    .section { padding: 20px 40px 10px; }
-                    .sec-title { color: #F15A22; font-weight: 800; font-size: 16px; margin-bottom: 10px; text-transform: uppercase; }
-                    
-                    /* ROWS */
-                    .line-row { display: flex; align-items: flex-end; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
-                    .lr-label { flex: 0 0 auto; padding-right: 10px; }
-                    .lr-fill { flex: 1 1 auto; border-bottom: 1px solid #D3DCE5; margin-bottom: 4px; }
-                    .lr-price { flex: 0 0 100px; text-align: right; font-size: 14px; font-weight: 700; }
-                    .orange-sym { color: #F15A22; }
-
-                    /* TOTAL BARS */
-                    .total-bar { background-color: #102B4A; color: white; padding: 8px 15px; margin: 10px 40px 20px; font-weight: 700; display: flex; justify-content: space-between; font-size: 14px; }
-                    
-                    /* BOXES */
-                    .check-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 13px; font-weight: 600; padding: 0 40px; }
-                    .check-opts { display: flex; gap: 20px; }
-                    .check-item { display: flex; align-items: center; }
-                    
-                    .grand-total-box { border: 4px solid #102B4A; margin: 20px 40px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-                    .gt-label { font-size: 18px; font-weight: 800; text-transform: uppercase; }
-                    .gt-amount { font-size: 28px; font-weight: 800; color: #102B4A; }
-
-                    .footer { font-size: 10px; color: #90A2B1; text-align: center; padding: 20px 40px; margin-top: 20px; border-top: 1px solid #E3E6EA; }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <div class="header-bar">
-                        <div class="header-title">ESTIMATED<br>FIRST BILL</div>
-                        <div class="logo-square">Consumer<br>Cellular</div>
-                    </div>
-
-                    <div class="section">
-                        <div class="sec-title">Monthly Rate Plan</div>
-                        <div class="line-row"><div class="lr-label">Base Plan Price</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.planPrice.toFixed(2)}</div></div>
-                        ${addLineQty > 0 ? `<div class="line-row"><div class="lr-label">${addLineQty} Additional Lines (x $15)</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.addLines.toFixed(2)}</div></div>` : ''}
-                        ${unlLineQty > 0 ? `<div class="line-row"><div class="lr-label">${unlLineQty} Add'l Unlimited Lines (x $20)</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.unlLines.toFixed(2)}</div></div>` : ''}
-                        ${watchQty > 0 ? `<div class="line-row"><div class="lr-label">${watchQty} Smartwatch Lines (x $5)</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.watchLines.toFixed(2)}</div></div>` : ''}
-                        ${allyQty > 0 ? `<div class="line-row"><div class="lr-label">${allyQty} IRIS Ally Lines (x $25)</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.allyLines.toFixed(2)}</div></div>` : ''}
-                        ${homeQty > 0 ? `<div class="line-row"><div class="lr-label">${homeQty} Home Phone Base (x $${homeCost})</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.homeTotal.toFixed(2)}</div></div>` : ''}
-                        <div class="line-row"><div class="lr-label">Asurion Protection</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.asurion.toFixed(2)}</div></div>
-                    </div>
-                    <div class="total-bar"><div>TOTAL FOR RATE PLAN</div><div>$${d.rateTotal.toFixed(2)}</div></div>
-
-                    <div class="section">
-                        <div class="sec-title">Surcharges and Other Items (Estimate)</div>
-                        <div class="line-row"><div class="lr-label">Zip Code Entered: ${zip}</div><div class="lr-fill"></div><div class="lr-price"></div></div>
-                        <div class="line-row"><div class="lr-label">Government Taxes & Fees</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.taxGov.toFixed(2)}</div></div>
-                        <div class="line-row"><div class="lr-label">Surcharges & Other Items</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.taxOther.toFixed(2)}</div></div>
-                    </div>
-                    <div class="total-bar"><div>TOTAL FOR SURCHARGES</div><div>$${d.surchTotal.toFixed(2)}</div></div>
-
-                    <div class="section">
-                        <div class="sec-title">EasyPay Interest-Free Financing</div>
-                        <div class="line-row"><div class="lr-label">Device 1 Monthly Fee</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.dev1.toFixed(2)}</div></div>
-                        <div class="line-row"><div class="lr-label">Device 2 Monthly Fee</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.dev2.toFixed(2)}</div></div>
-                    </div>
-                    <div class="total-bar"><div>TOTAL FOR EASYPAY</div><div>$${d.devTotal.toFixed(2)}</div></div>
-
-                    <div class="section">
-                        <div class="sec-title">Promotions and Other Credits</div>
-                        <div class="line-row"><div class="lr-label">Rate Plan Promotion</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">-$</span>${d.credPlan.toFixed(2)}</div></div>
-                        ${simQty > 0 ? `<div class="line-row"><div class="lr-label">${simQty} SIM Kit Credit(s)</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">-$</span>${(simQty*10).toFixed(2)}</div></div>` : ''}
-                        ${surveyQty > 0 ? `<div class="line-row"><div class="lr-label">${surveyQty} Survey Credit(s)</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">-$</span>${(surveyQty*10).toFixed(2)}</div></div>` : ''}
-                    </div>
-                    <div class="total-bar"><div>TOTAL CREDITS</div><div>-$${d.credTotal.toFixed(2)}</div></div>
-
-                    <div style="margin-top:30px;">
-                        <div class="check-row">
-                            <div>Do You Have SmartFlex Turned On?<br><span style="font-size:10px; font-weight:400; color:#F15A22; font-style:italic;">Totals will change if data limits are exceeded and plan is flexed up.</span></div>
-                            <div class="check-opts">
-                                <div class="check-item">${checkNo(sf)} NO</div>
-                                <div class="check-item">${checkYes(sf)} YES</div>
-                            </div>
-                        </div>
-                        <div class="check-row">
-                            <div>AARP or USAA Member ID Added?</div>
-                            <div class="check-opts">
-                                <div class="check-item">${checkNo(aarp)} NO</div>
-                                <div class="check-item">${checkYes(aarp)} YES</div>
-                            </div>
-                        </div>
-                        <div class="check-row">
-                            <div>AutoPay and E-Billing Active?</div>
-                            <div class="check-opts">
-                                <div class="check-item">${checkNo(auto)} NO</div>
-                                <div class="check-item">${checkYes(auto)} YES</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grand-total-box">
-                        <div class="gt-label">GRAND TOTAL OF FIRST MONTH INVOICE</div>
-                        <div class="gt-amount">$${d.grandTotal.toFixed(2)}</div>
-                    </div>
-
-                    <div class="footer">
-                        Estimate Provided By Consumer Cellular, Inc. | ${new Date().toLocaleDateString()}<br>
-                        *Exact charges may vary due to your billing cycle, applicable proration and other varying fees.
-                    </div>
-                </div>
-                <script>window.print();<\/script>
-            </body>
-            </html>
-        `);
+            <html><head><title>Estimated First Bill</title><style>
+                @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+                body { font-family: 'Inter', sans-serif; padding: 0; margin: 0; color: #102B4A; -webkit-print-color-adjust: exact; }
+                .container { width: 100%; max-width: 8.5in; margin: 0 auto; }
+                .header-bar { background-color: #102B4A; color: white; padding: 25px 40px; display: flex; justify-content: space-between; align-items: center; }
+                .header-title { font-family: 'Oswald', sans-serif; font-size: 42px; text-transform: uppercase; letter-spacing: 1px; line-height: 1; }
+                .logo-square { background-color: #F15A22; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; text-align: center; color: white; font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1; font-size: 16px; padding: 5px; box-sizing: border-box; }
+                .section { padding: 20px 40px 10px; }
+                .sec-title { color: #F15A22; font-weight: 800; font-size: 16px; margin-bottom: 10px; text-transform: uppercase; }
+                .line-row { display: flex; align-items: flex-end; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
+                .lr-label { flex: 0 0 auto; padding-right: 10px; }
+                .lr-fill { flex: 1 1 auto; border-bottom: 1px solid #D3DCE5; margin-bottom: 4px; }
+                .lr-price { flex: 0 0 100px; text-align: right; font-size: 14px; font-weight: 700; }
+                .orange-sym { color: #F15A22; }
+                .total-bar { background-color: #102B4A; color: white; padding: 8px 15px; margin: 10px 40px 20px; font-weight: 700; display: flex; justify-content: space-between; font-size: 14px; }
+                .check-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 13px; font-weight: 600; padding: 0 40px; }
+                .check-opts { display: flex; gap: 20px; }
+                .grand-total-box { border: 4px solid #102B4A; margin: 20px 40px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+                .gt-label { font-size: 18px; font-weight: 800; text-transform: uppercase; }
+                .gt-amount { font-size: 28px; font-weight: 800; color: #102B4A; }
+                .footer { font-size: 10px; color: #90A2B1; text-align: center; padding: 20px 40px; margin-top: 20px; border-top: 1px solid #E3E6EA; }
+            </style></head><body><div class="container"><div class="header-bar"><div class="header-title">ESTIMATED<br>FIRST BILL</div><div class="logo-square">Consumer<br>Cellular</div></div>
+            <div class="section"><div class="sec-title">Monthly Rate Plan</div><div class="line-row"><div class="lr-label">Plan</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.planPrice.toFixed(2)}</div></div><div class="line-row"><div class="lr-label">Line 1 Included in Plan</div><div class="lr-fill"></div><div class="lr-price"></div></div><div class="line-row"><div class="lr-label"># of Additional Lines: ${addLineQty}</div><div class="lr-fill"></div><div class="lr-price">x $15 <span class="orange-sym">$</span>${d.addLines.toFixed(2)}</div></div><div class="line-row"><div class="lr-label"># of Additional Unlimited Lines: ${unlLineQty}</div><div class="lr-fill"></div><div class="lr-price">x $20 <span class="orange-sym">$</span>${d.unlLines.toFixed(2)}</div></div><div class="line-row"><div class="lr-label"># of Smartwatch Lines: ${watchQty}</div><div class="lr-fill"></div><div class="lr-price">x $5 <span class="orange-sym">$</span>${d.watchLines.toFixed(2)}</div></div><div class="line-row"><div class="lr-label"># of IRIS Ally Lines: ${allyQty}</div><div class="lr-fill"></div><div class="lr-price">x $25 <span class="orange-sym">$</span>${d.allyLines.toFixed(2)}</div></div><div class="line-row"><div class="lr-label"># of Home Phone Base Lines: ${homeQty} &nbsp;&nbsp; ${hp15} x $15 &nbsp; ${hp20} x $20</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.homeTotal.toFixed(2)}</div></div><div class="line-row"><div class="lr-label">Asurion Protection &nbsp;&nbsp; ${asurNo} NO &nbsp; ${asurYes} YES</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.asurion.toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL FOR RATE PLAN</div><div>$${d.rateTotal.toFixed(2)}</div></div>
+            <div class="section"><div class="sec-title">Surcharges and Other Items Estimate</div><div class="line-row"><div class="lr-label">Zip Code Entered: ${zip}</div><div class="lr-fill"></div><div class="lr-price"></div></div><div class="line-row"><div class="lr-label">Surcharges and Other Items</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.taxOther.toFixed(2)}</div></div><div class="line-row"><div class="lr-label">Government Taxes and Fees</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.taxGov.toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL FOR SURCHARGES AND FEES</div><div>$${d.surchTotal.toFixed(2)}</div></div>
+            <div class="section"><div class="sec-title">EASYPAY Interest-Free Device Financing</div><div class="line-row"><div class="lr-label">Device 1 Monthly Fee</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.dev1.toFixed(2)}</div></div><div class="line-row"><div class="lr-label">Device 2 Monthly Fee</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.dev2.toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL FOR EASY PAY</div><div>$${d.devTotal.toFixed(2)}</div></div>
+            <div class="section"><div class="sec-title">Promotions and Other Credits</div><div class="line-row"><div class="lr-label">Rate Plan Promotion</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">-$</span>${d.credPlan.toFixed(2)}</div></div><div class="line-row"><div class="lr-label"># of SIM Kit Credit(s): ${simQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(simQty*10).toFixed(2)}</div></div><div class="line-row"><div class="lr-label"># of Customer Service Surveys: ${surveyQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(surveyQty*10).toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL CREDITS FOR PROMOTIONS</div><div>-$${d.credTotal.toFixed(2)}</div></div>
+            <div style="margin-top:20px;"><div class="check-row"><div>Do You Have SmartFlex Turned On?</div><div class="check-opts"><div>${checkNo(sf)} NO</div><div>${checkYes(sf)} YES</div></div></div><div style="padding:0 40px; font-size:10px; font-style:italic; color:#F15A22; margin-bottom:10px;">Totals will change if data limits are exceeded and the plan is flexed up.</div><div class="check-row"><div>AARP or USAA Member ID Added?</div><div class="check-opts"><div>${checkNo(aarp)} NO</div><div>${checkYes(aarp)} YES</div></div></div><div class="check-row"><div>AutoPay and E-Billing Active?</div><div class="check-opts"><div>${checkNo(auto)} NO</div><div>${checkYes(auto)} YES</div></div></div></div>
+            <div class="grand-total-box"><div class="gt-label">GRAND TOTAL OF FIRST MONTH INVOICE</div><div class="gt-amount">$${d.grandTotal.toFixed(2)}</div></div>
+            <div class="footer">Estimate Provided By<br>2025 Consumer Cellular, Inc. "Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025<br>Date: ${new Date().toLocaleDateString()}</div></div>
+            <script>window.print();<\/script></body></html>`);
         win.document.close();
     }
-    
-    // Checkbox helpers for the print string
-    const checkYes = (val) => val === 'YES' ? 
-        `<span style="display:inline-block; width:14px; height:14px; background:#102B4A; border:1px solid #102B4A; margin-right:5px;"></span>` : 
-        `<span style="display:inline-block; width:14px; height:14px; border:1px solid #102B4A; margin-right:5px;"></span>`;
-    const checkNo = (val) => val === 'NO' ? 
-        `<span style="display:inline-block; width:14px; height:14px; background:#102B4A; border:1px solid #102B4A; margin-right:5px;"></span>` : 
-        `<span style="display:inline-block; width:14px; height:14px; border:1px solid #102B4A; margin-right:5px;"></span>`;
 
     // --- PLAN ESTIMATOR LOGIC ---
     function initEstimator() {
@@ -788,6 +688,7 @@
                 <div class="ts-card-header"><div class="ts-icon">${iconLetter}</div><div class="ts-name">${item.title}</div></div>
                 <div class="ts-details">${item.content}</div>
                 ${spamHtml}
+                <button class="ts-print-btn" onclick="printSingleTS('${item.title}')">🖨️ Print Guide</button>
             `;
             container.appendChild(div);
         });
@@ -800,7 +701,7 @@
         const items = document.querySelectorAll('.ts-card');
         items.forEach(item => {
             if(cat === 'all' || item.dataset.category === cat || (cat === 'general' && item.dataset.category === 'general')) {
-                item.style.display = 'block';
+                item.style.display = 'flex';
             } else {
                 item.style.display = 'none';
             }
@@ -823,10 +724,10 @@
                 .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #1e3a8a; }
                 .title { font-size: 2rem; font-weight: 700; margin-bottom: 20px; color: #1e3a8a; text-transform: capitalize; }
                 .step-box { margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; page-break-inside: avoid; }
-                .step-text { white-space: pre-wrap; line-height: 1.6; }
-                .warning-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 15px; border-radius: 8px; margin-top: 10px; font-size: 0.9rem; }
+                .step-text { white-space: pre-wrap; line-height: 1.6; font-size: 1.1rem; }
+                .warning-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 15px; border-radius: 8px; margin-top: 10px; font-size: 1rem; border-left: 5px solid #ea580c; }
                 .footer { margin-top: 50px; text-align: center; color: #64748b; font-size: 0.85rem; border-top: 1px solid #e2e8f0; padding-top: 20px; }
-                h3 { color: #2563eb; margin-bottom: 10px; }
+                h3 { color: #2563eb; margin-bottom: 10px; font-size: 1.4rem; }
             </style></head><body>
                 <div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>
                 <div class="title">${type.toUpperCase()} Quick Fix Guide</div>
@@ -837,8 +738,34 @@
         `);
         win.document.close();
     }
-
-    initTroubleshoot();
+    
+    function printSingleTS(title) {
+        const item = troubleshootData.find(i => i.title === title);
+        if(!item) return;
+        let spam = item.spam ? `<div class="warning-box"><strong>⚠️ Spam Warning:</strong> ${item.spam}</div>` : '';
+        let contentHtml = `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
+        const win = window.open('', '_blank');
+        win.document.write(`
+            <html><head><title>Quick Guide</title><style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+                body { font-family: 'Inter', sans-serif; padding: 40px; color: #0f172a; -webkit-print-color-adjust: exact; }
+                .header { display: flex; justify-content: space-between; border-bottom: 3px solid #ff7b00; padding-bottom: 20px; margin-bottom: 30px; }
+                .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #1e3a8a; }
+                .title { font-size: 2rem; font-weight: 700; margin-bottom: 20px; color: #1e3a8a; text-transform: capitalize; }
+                .step-box { margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; page-break-inside: avoid; }
+                .step-text { white-space: pre-wrap; line-height: 1.6; font-size: 1.3rem; }
+                .warning-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 20px; border-radius: 8px; margin-top: 20px; font-size: 1.1rem; border-left: 6px solid #ea580c; }
+                .footer { margin-top: 50px; text-align: center; color: #64748b; font-size: 0.85rem; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+                h3 { color: #2563eb; margin-bottom: 15px; font-size: 1.6rem; }
+            </style></head><body>
+                <div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>
+                ${contentHtml}
+                <div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div>
+                <script>window.print();<\/script>
+            </body></html>
+        `);
+        win.document.close();
+    }
 
     const carriers = [
         {name: "011 Communications", contact: "866-624-3948", details: ""},
