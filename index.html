@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V7.8.0</title>
+    <title>Work Portal V8.0.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,6 +14,9 @@
             --primary: #2563eb;
             --border: #e2e8f0;
             --hover-bg: #f8fafc;
+            --danger-bg: #fef2f2;
+            --danger-text: #991b1b;
+            --danger-border: #fecaca;
         }
 
         body {
@@ -52,7 +55,7 @@
         @media (max-width: 900px) { #login-view { flex-direction: column; } .login-right { width: 100%; height: 60%; } .login-left { height: 40%; } }
 
         /* =========================================
-           2. DASHBOARD VIEW
+           2. DASHBOARD
            ========================================= */
         #dashboard-view { display: none; height: 100vh; width: 100%; }
 
@@ -61,7 +64,6 @@
             width: 260px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
             display: flex; flex-direction: column; padding: 25px 20px; box-sizing: border-box;
         }
-        
         .brand {
             display: flex; align-items: center; gap: 12px; margin-bottom: 40px; font-weight: 700; font-size: 1.3rem; color: #1e3a8a;
         }
@@ -69,7 +71,6 @@
             width: 36px; height: 36px; background: linear-gradient(135deg, #1e3a8a, #3b82f6); 
             border-radius: 8px; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; 
         }
-
         .nav-menu { list-style: none; padding: 0; margin: 0; flex: 1; }
         .nav-item {
             padding: 12px 15px; border-radius: 8px; color: var(--text-muted); cursor: pointer; margin-bottom: 8px;
@@ -77,23 +78,18 @@
         }
         .nav-item:hover { background-color: var(--hover-bg); color: var(--text-dark); }
         .nav-item.active { background-color: #eff6ff; color: var(--primary); font-weight: 600; }
-        
         .nav-section { margin-top: 30px; }
         .nav-label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 15px; padding-left: 15px; }
 
         /* MAIN CONTENT */
         .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-
         .header {
             height: 70px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between; padding: 0 40px;
         }
         .header-title { font-weight: 600; color: #1e293b; font-size: 1.1rem; }
-        
-        /* SCROLL AREA */
         .scroll-area { flex: 1; overflow-y: auto; padding: 40px; }
 
-        /* VIEWS */
         .view-section { display: none; animation: fadeIn 0.3s ease-out; }
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -110,7 +106,6 @@
         .card-title h2 { margin: 0 0 5px 0; font-size: 1.5rem; font-weight: 700; color: var(--text-dark); }
         .card-title p { margin: 0; color: var(--text-muted); font-size: 0.95rem; }
 
-        /* BUTTONS */
         .btn-group { display: flex; gap: 12px; }
         .btn { padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; border: 1px solid transparent; transition: all 0.2s; }
         .btn-outline { background: white; border-color: var(--border); color: var(--text-dark); }
@@ -134,25 +129,56 @@
         .calc-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; color: var(--text-muted); }
         .calc-total { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); font-weight: 700; color: var(--text-dark); font-size: 1.2rem; display: flex; justify-content: space-between; }
 
-        /* STANDALONE CALCULATOR STYLE */
-        .big-calc-display {
-            background-color: var(--primary); color: white; padding: 30px; border-radius: 12px; margin-top: 20px;
-            display: flex; justify-content: space-around; text-align: center;
-        }
-        .big-calc-item div:first-child { font-size: 0.9rem; opacity: 0.9; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .big-calc-item div:last-child { font-size: 2.5rem; font-weight: 700; }
+        /* PORTING */
+        .alert-box { background-color: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger-text); padding: 15px 20px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; line-height: 1.5; }
+        .port-search-bar { width: 100%; padding: 14px 18px; margin-bottom: 25px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; transition: all 0.2s; }
+        .port-search-bar:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        .port-list { list-style: none; padding: 0; margin: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        .port-item { border-bottom: 1px solid var(--border); background: white; cursor: pointer; transition: background 0.1s; }
+        .port-item:last-child { border-bottom: none; }
+        .port-item:hover { background: #f8fafc; }
+        .port-header { padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; }
+        .port-name { font-weight: 600; color: var(--text-dark); font-size: 1rem; }
+        .port-contact { font-size: 0.9rem; color: var(--text-muted); text-align: right; }
+        .port-details { display: none; padding: 20px 25px; background: #f1f5f9; border-top: 1px solid var(--border); font-size: 0.9rem; color: #334155; line-height: 1.6; white-space: pre-wrap; }
+        .port-item.expanded .port-details { display: block; }
+        .port-item.expanded .port-header { background: #eff6ff; }
+        .port-item.expanded .port-name { color: var(--primary); }
 
-        /* LISTS */
+        /* LISTS (Support) */
         .list-group { list-style: none; padding: 0; margin: 0; }
         .list-item { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .list-item:last-child { border-bottom: none; }
         .list-name { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
         .list-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
-        .list-action { color: var(--primary); font-weight: 600; font-size: 0.9rem; text-decoration: none; }
+        .list-action a { color: var(--primary); font-weight: 600; font-size: 0.9rem; text-decoration: none; }
+        .list-action a:hover { text-decoration: underline; }
 
-        /* HOME WELCOME */
-        .welcome-box { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-        .welcome-icon { width: 64px; height: 64px; background: #e0f2fe; color: var(--primary); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        /* HOME */
+        .welcome-box { text-align: center; padding: 80px 20px; color: var(--text-muted); }
+        .welcome-icon { width: 80px; height: 80px; background: #eff6ff; color: var(--primary); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 25px; }
+
+        /* MODAL (High Value) */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 3000;
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-box {
+            background: white; width: 450px; padding: 30px; border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3); text-align: center;
+            border: 2px solid var(--primary);
+        }
+        .modal-icon {
+            width: 60px; height: 60px; background: #eff6ff; color: var(--primary);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .modal-title { font-size: 1.4rem; font-weight: 700; color: #1e3a8a; margin-bottom: 10px; }
+        .modal-msg { color: #475569; font-size: 1rem; line-height: 1.5; margin-bottom: 25px; }
+        .modal-msg strong { color: #0f172a; }
+        .modal-actions { display: flex; gap: 10px; justify-content: center; }
 
     </style>
 </head>
@@ -176,7 +202,6 @@
             <ul class="nav-menu">
                 <li class="nav-item active" id="nav-home" onclick="switchView('view-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Home</li>
                 <li class="nav-item" id="nav-contract" onclick="switchView('view-contract')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Contract Generator</li>
-                <li class="nav-item" id="nav-calculator" onclick="switchView('view-calculator')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> EasyPay Calculator</li>
                 <li class="nav-item" id="nav-porting" onclick="switchView('view-porting')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Porting Contact List</li>
             </ul>
             <div class="nav-section">
@@ -189,7 +214,7 @@
         </div>
 
         <div class="main-content">
-            <div class="header"><div class="header-title">Work Portal v7.8</div><div></div></div>
+            <div class="header"><div class="header-title">Work Portal v8.0</div><div></div></div>
             <div class="scroll-area">
                 
                 <div id="view-home" class="view-section active">
@@ -204,7 +229,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title"><h2>New Agreement</h2><p>Generate a compliant EasyPay installment contract.</p></div>
-                            <div class="btn-group"><button class="btn btn-outline" onclick="resetForm()">Clear</button><button class="btn btn-primary" id="generate-btn">Generate PDF</button></div>
+                            <div class="btn-group"><button class="btn btn-outline" onclick="resetForm()">Clear</button><button class="btn btn-primary" id="trigger-gen">Generate PDF</button></div>
                         </div>
                         <div class="section-label">Customer Information</div>
                         <div class="row"><div class="col"><label class="label">Full Name</label><input type="text" id="con-name" class="input" placeholder="John Doe"></div><div class="col"><label class="label">Account Number</label><input type="text" id="con-acct" class="input" placeholder="123456789"></div></div>
@@ -218,61 +243,23 @@
                     </div>
                 </div>
 
-                <div id="view-calculator" class="view-section">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title"><h2>Quick Calculator</h2><p>Calculate installment payments and down payments instantly.</p></div>
-                            <div class="btn-group"><button class="btn btn-outline" onclick="document.getElementById('calc-price').value=''; updateCalcTool();">Reset</button></div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <label class="label">Retail Price ($)</label>
-                                <input type="number" id="calc-price" class="input" placeholder="0.00" step="0.01" oninput="updateCalcTool()">
-                            </div>
-                            <div class="col">
-                                <label class="label">Device Type</label>
-                                <div class="radio-group" style="padding-top:10px;">
-                                    <label class="radio-item"><input type="radio" name="calcDevType" id="calc-mode-phone" checked onchange="updateCalcTool()"> Phone</label>
-                                    <label class="radio-item"><input type="radio" name="calcDevType" id="calc-mode-watch" onchange="updateCalcTool()"> Watch</label>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="big-calc-display">
-                            <div class="big-calc-item">
-                                <div>Monthly Payment</div>
-                                <div id="calc-result-monthly">$0.00</div>
-                            </div>
-                            <div class="big-calc-item">
-                                <div>Total Due Today</div>
-                                <div id="calc-result-today">$0.00</div>
-                            </div>
-                        </div>
-
-                        <div class="calc-panel">
-                            <div class="calc-row"><span>Sales Tax (8.9%)</span><span id="calc-result-tax">$0.00</span></div>
-                            <div class="calc-row"><span>Down Payment</span><span id="calc-result-down">$0.00</span></div>
-                        </div>
-                    </div>
-                </div>
-
                 <div id="view-porting" class="view-section">
                     <div class="card">
-                        <div class="card-header"><div class="card-title"><h2>Porting Contacts</h2><p>Carrier transfer center numbers.</p></div></div>
-                        <ul class="list-group">
-                            <li class="list-item"><div><div class="list-name">Verizon</div><div class="list-sub">Port Center</div></div><div class="list-action">Coming Soon</div></li>
-                            <li class="list-item"><div><div class="list-name">AT&T</div><div class="list-sub">Port Center</div></div><div class="list-action">Coming Soon</div></li>
-                            <li class="list-item"><div><div class="list-name">T-Mobile</div><div class="list-sub">Port Center</div></div><div class="list-action">Coming Soon</div></li>
-                        </ul>
+                        <div class="card-header"><div class="card-title"><h2>Porting Contacts</h2><p>Carrier rules, contacts, and PIN requirements.</p></div></div>
+                        <div class="alert-box"><strong>ESCALATION RULE:</strong> If a carrier requires email support: 1) Submit ConnEx ticket. 2) If unresolved, email seniorlead@consumercellular.com.</div>
+                        <input type="text" class="port-search-bar" id="port-search" placeholder="Type to search carriers (e.g. Mint, Verizon, CenturyLink)..." onkeyup="filterCarriers()">
+                        <ul class="port-list" id="port-list-container"></ul>
                     </div>
                 </div>
 
                 <div id="view-support" class="view-section">
                     <div class="card">
-                        <div class="card-header"><div class="card-title"><h2>Support Directory</h2><p>Internal and external support lines.</p></div></div>
+                        <div class="card-header"><div class="card-title"><h2>Support Directory</h2><p>Quick access to essential contacts.</p></div></div>
                         <ul class="list-group">
-                            <li class="list-item"><div><div class="list-name">IT Helpdesk</div><div class="list-sub">Internal</div></div><div class="list-action">Pending</div></li>
-                            <li class="list-item"><div><div class="list-name">Sales Support</div><div class="list-sub">Internal</div></div><div class="list-action">Pending</div></li>
+                            <li class="list-item"><div><div class="list-name">CC Customer Service</div><div class="list-sub">General Support</div></div><div class="list-action"><a href="tel:8883455509">(888) 345-5509</a></div></li>
+                            <li class="list-item"><div><div class="list-name">CC Billing</div><div class="list-sub">Finance Dept</div></div><div class="list-action"><a href="tel:8885494789">(888) 549-4789</a></div></li>
+                            <li class="list-item"><div><div class="list-name">CC Direct Line</div><div class="list-sub">Internal Priority</div></div><div class="list-action"><a href="tel:8778640344">(877) 864-0344</a></div></li>
+                            <li class="list-item"><div><div class="list-name">CC EasyPay Credit</div><div class="list-sub">Approvals & Overrides</div></div><div class="list-action"><a href="tel:8778030176">(877) 803-0176</a></div></li>
                         </ul>
                     </div>
                 </div>
@@ -281,15 +268,30 @@
         </div>
     </div>
 
+    <div id="hv-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
+            <div class="modal-title">High-Value Approval</div>
+            <div class="modal-msg">
+                This transaction exceeds <strong>$700.00</strong>.
+                <br><br>
+                Please confirm you have called <strong>CC EasyPay Credit</strong> at <strong>(877) 803-0176</strong> for authorization before proceeding.
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeHvModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmHv()">I Have Called</button>
+            </div>
+        </div>
+    </div>
+
 <script>
+    // LOGIN
     const loginForm = document.getElementById('login-form');
     const passInput = document.getElementById('password-input');
     const loginView = document.getElementById('login-view');
     const dashboardView = document.getElementById('dashboard-view');
     const errorMsg = document.getElementById('login-error');
-
     dashboardView.style.display = 'none';
-
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
         if(passInput.value.toLowerCase() === "spokanecc") {
@@ -297,43 +299,190 @@
             setTimeout(() => { loginView.style.display = 'none'; dashboardView.style.display = 'flex'; }, 500);
         } else { errorMsg.style.display = 'block'; passInput.value = ''; }
     });
-
     document.getElementById('logout-btn').addEventListener('click', () => location.reload());
 
+    // NAV
     function switchView(viewId) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         if(viewId === 'view-home') document.getElementById('nav-home').classList.add('active');
         if(viewId === 'view-contract') document.getElementById('nav-contract').classList.add('active');
-        if(viewId === 'view-calculator') document.getElementById('nav-calculator').classList.add('active');
         if(viewId === 'view-porting') document.getElementById('nav-porting').classList.add('active');
         if(viewId === 'view-support') document.getElementById('nav-support').classList.add('active');
     }
+    function resetForm() { document.querySelectorAll('input').forEach(input => input.value = ''); updateMath(); }
 
-    function resetForm() { document.querySelectorAll('#view-contract input').forEach(input => input.value = ''); updateMath(); }
+    // PORTING DATA
+    const carriers = [
+        {name:"CenturyLink (Port IN)",contact:"Port Out: 866-434-2555",details:"CRITICAL: NO MODIFICATIONS ALLOWED.\n- Any Resolution Required = CANCEL + RESUBMIT (do not update).\n- Must use physical service address (no PO Box).\n- Do NOT activate SIM until confirmed. If active, RTS required to reuse SIM."},
+        {name:"Mint Mobile",contact:"Care: 800-683-7392",details:"Type: T-Mobile MVNO\nAcct# & PIN: Required via Chat/App.\n\nSteps:\n1. Open App/Web Chat\n2. Type 'Account Number'\n3. Fox Bot -> Select 'To Port Out'\n4. Agent sends SMS code\n5. Provide code to get Acct/PIN."},
+        {name:"011 Communications",contact:"866-624-3948",details:""},
+        {name:"Access Wireless",contact:"866-594-3644",details:""},
+        {name:"Adams Telephone",contact:"866-220-6867",details:""},
+        {name:"Affinity Cellular",contact:"CS: 833-679-1090 | Port: 866-488-8717",details:"PIN: last 4 digits of MDN (default)"},
+        {name:"Airvoice Wireless",contact:"888-944-2355",details:"Type: AT&T MVNO\nSPID: 6214 | Sub-SPID: 987C\nAccount #: 20-digit SIM #\nPIN: possible\nResponse time: within 24 hours"},
+        {name:"Alta Fiber (Cincinnati Bell)",contact:"513-565-2532",details:"Account #: yes\nPIN: 3-digit customer code (provided by carrier)\nResponse time: 24 hours\nNotes: ConnEX/TMO escalation may be required if provider doesn't recognize SPID."},
+        {name:"Altice Mobile",contact:"866-200-7186",details:"Type: T-Mobile MVNO (Optimum/Lightpath)\nIVR path: 1 -> 1 -> 2 -> 2\nAccount #: required match\nZIP: required match\nPIN: 6 digits (customer must request; valid 7 days; sent via SMS + email)"},
+        {name:"Appalachian Wireless",contact:"800-438-2355",details:"Note: customer must call to get porting info\nHours (EST): M-F 7a–7p; Sat 9a–2p"},
+        {name:"Assurance Wireless",contact:"888-898-4888",details:"Account #: yes (numbers/alphanumeric)\nPIN: default letters+number combo or 6-digit DOB\nResponse time: 1–4 hours"},
+        {name:"Assist Wireless",contact:"855-420-2445",details:"Note: Lifeline service"},
+        {name:"Astound",contact:"800-427-8686",details:""},
+        {name:"AT&T Wireless",contact:"Port: 877-844-5584 | Biz: 800-331-0500",details:"Port-out PIN: required for Postpaid/Business (not same as account PIN). Get via *PORT (7678). Valid 4 days.\nPrepaid: No NTP; AT&T sends text verification; resubmit leaving NTP empty."},
+        {name:"AT&T Landline",contact:"Digital Port: 844-266-3011",details:"PIN: Standard Landline not required; U-Verse required."},
+        {name:"Bandwidth.com",contact:"800-808-5150",details:"See Google Voice if relevant."},
+        {name:"Basic Talk",contact:"866-382-3770",details:""},
+        {name:"Ben Lomand Connect",contact:"800-974-7779",details:"Account #: 8–9 digits\nPIN: customer calls to receive PIN"},
+        {name:"Birch (Cbeyond)",contact:"888-772-4724",details:""},
+        {name:"Bluegrass Cellular",contact:"270-765-6361",details:""},
+        {name:"Bluepeak Fiber",contact:"888-745-2888",details:"Account #: yes (on bill)\nPIN: yes (same as account PIN)"},
+        {name:"Blue Ridge Mobile",contact:"800-222-5377",details:""},
+        {name:"Blue Ridge Residential",contact:"610-377-2250",details:"PIN: Number Transfer PIN required for all landlines"},
+        {name:"Boom Mobile",contact:"800-767-5599",details:"Account #: yes\nPIN: yes (call; generally last 4 of phone #)\nZIP: required"},
+        {name:"Boost Mobile",contact:"Port: 833-642-6678",details:"Account #: yes (call/chat)\nPIN: yes (6 digits; expires 4–7 days)\nNote: each MDN requires its own NTP\nResponse time: within 24 hours"},
+        {name:"Breezeline Mobile",contact:"855-811-5188",details:"Account #: yes (Account Reference Number)\nPIN: yes\nZIP: yes"},
+        {name:"Breezeline Telecom",contact:"888-745-9457",details:"Account #: yes (16 digits)\nNTP: not needed"},
+        {name:"Brightspeed",contact:"833-692-7773",details:"Account #: yes (upper right online account / top of billing)"},
+        {name:"Buckeye Broadband",contact:"419-724-9800",details:"Account #: yes\nPIN: yes (call CS)"},
+        {name:"Cavalier Telephone",contact:"800-347-1991",details:""},
+        {name:"Cellcom",contact:"800-236-0055",details:"PIN: NTP required (not same as account PIN)"},
+        {name:"Cellular One",contact:"800-730-2351",details:""},
+        {name:"Charity Mobile",contact:"877-474-3662",details:""},
+        {name:"Charter / Spectrum",contact:"Port: 833-889-0571",details:"See Spectrum entry."},
+        {name:"Claro (Puerto Rico)",contact:"Prepaid: 787-751-1995",details:""},
+        {name:"Clear Rate",contact:"877-877-4799",details:""},
+        {name:"Community Phone",contact:"833-779-2345 opt 5",details:"Account #: 9 digits\nPIN: 6 digits\nResponse time: 5 mins"},
+        {name:"Comporium",contact:"803-324-9011",details:"Account #: required; listed on bill"},
+        {name:"Consolidated Comm.",contact:"844-968-7224",details:""},
+        {name:"Cox Mobile",contact:"877-756-9400",details:"Account #: last 9 digits\nPIN: 4-digit NTP (different from account PIN); call 800-969-6587"},
+        {name:"Cricket Wireless",contact:"800-274-2538",details:"SPID: 6214\nAccount #: 9 digits\nNTP: required; valid 5 days; get via *PORT (7678) or App"},
+        {name:"Cross Wireless",contact:"800-828-6567",details:""},
+        {name:"C-Spire",contact:"Carrier: 601-487-7950",details:"Customer must request port out and reply by text within 8 hours."},
+        {name:"Dialpad",contact:"855-342-5723",details:""},
+        {name:"Easy Wireless",contact:"877-476-3451",details:"Account #: 7 digits\nPIN: customer-set security PIN"},
+        {name:"Everything Wireless",contact:"310-315-1300",details:""},
+        {name:"Fidium",contact:"844-434-3486",details:""},
+        {name:"FirstNet",contact:"800-574-7000",details:"Critical: must convert FirstNet to AT&T Consumer at store before porting out."},
+        {name:"FTC Wireless",contact:"888-218-5050",details:""},
+        {name:"Flash Mobile",contact:"866-735-3324",details:"Account #: in online account\nPIN: 4-digit security PIN"},
+        {name:"Flash Wireless",contact:"888-226-2141",details:"Account/PIN: online account"},
+        {name:"FreedomPop",contact:"None",details:"Account/PIN: via online account port-out page"},
+        {name:"Frontier",contact:"888-608-8023",details:"PIN: 5-digit passcode (not bill PIN); online under My Profile"},
+        {name:"GCI",contact:"800-800-4800",details:"NTP: customer requests online/phone; valid 7 days"},
+        {name:"Gen Mobile",contact:"833-528-1380",details:"Account #: customer IMEI\nPIN: call CS for NTP"},
+        {name:"Google Fi",contact:"844-825-5234",details:"Customer must unlock number via Google steps."},
+        {name:"Google Voice",contact:"866-777-7550",details:"Account #: 10-digit number\nPIN: Voicemail PIN\nUnlock: $3 fee unless originally ported in."},
+        {name:"Go Smart",contact:"877-582-7788",details:"Type: T-Mobile reseller"},
+        {name:"GTC Communications",contact:"800-486-4030",details:""},
+        {name:"GVTC",contact:"800-367-4882",details:"Account #: 10-digit MDN\nPIN: none"},
+        {name:"H2O Wireless",contact:"800-643-4917",details:"Account #: 8 digits\nPIN: last 4 of SIM"},
+        {name:"Hawaiian Telcom",contact:"877-482-3322",details:""},
+        {name:"HTC",contact:"843-369-8442",details:""},
+        {name:"HughesNet",contact:"866-347-3292",details:"Ask for Tier 4 PIN"},
+        {name:"Inland Cellular",contact:"800-248-8822",details:""},
+        {name:"iWireless",contact:"303-854-2515",details:""},
+        {name:"Jolt Mobile",contact:"888-833-3110",details:""},
+        {name:"Liberty Puerto Rico",contact:"800-331-0500",details:"Can only assist porting OUT to Liberty."},
+        {name:"Life Wireless",contact:"770-818-3919",details:"Lifeline service"},
+        {name:"Limitless Mobile",contact:"888-249-8030",details:""},
+        {name:"Lingo",contact:"866-405-4646",details:"NTP: customer must call; does not expire"},
+        {name:"Lively (Jitterbug)",contact:"800-733-6632",details:"Account #: 6 or 7 digits\nPIN: call to get (letters/numbers)\nResponse: 24h"},
+        {name:"MagicJack",contact:"800-624-4252",details:"Account #: my.magicJack.com\nPIN: password (8 digits recommended)"},
+        {name:"Mediacom",contact:"866-746-7303",details:""},
+        {name:"MetroPCS",contact:"800-518-7518",details:"Account #: 9 digits\nPIN: 6 digits (via MyMetro/611)"},
+        {name:"Midco",contact:"800-888-1300",details:"Account #: 9 digits\nNTP: not required"},
+        {name:"Mid-Texas Cellular",contact:"800-695-0150",details:""},
+        {name:"Mobi PCS",contact:"808-723-1019",details:""},
+        {name:"Nextech Wireless",contact:"877-621-2600",details:""},
+        {name:"NorthWest Missouri",contact:"800-331-6341",details:"Service ending; must port by 12/31/2024"},
+        {name:"NTS Communications",contact:"None",details:"Escalate via email"},
+        {name:"OnStar",contact:"877-865-7864",details:""},
+        {name:"Ooma",contact:"888-711-6662",details:"Account #: phone number\nPIN: Y1234"},
+        {name:"Optimum Mobile",contact:"866-200-7186",details:"Account #: 7 digits\nPIN: required (email/text, valid 7 days)"},
+        {name:"PagePlus",contact:"800-550-2436",details:"See Tracfone"},
+        {name:"Patriot Mobile",contact:"877-367-7524",details:"PIN: 6 digits"},
+        {name:"Pioneer Cooperative",contact:"405-375-6969",details:""},
+        {name:"PNG",contact:"800-860-9495",details:""},
+        {name:"Previ",contact:"801-437-0620",details:""},
+        {name:"Prine TIME",contact:"541-447-9840",details:""},
+        {name:"PureTalk",contact:"770-818-3919",details:"Acct/PIN: Call to obtain. PIN expires 10 days."},
+        {name:"RCN",contact:"800-746-4726",details:""},
+        {name:"Reach Mobile",contact:"844-445-3665",details:"PIN: call CS to receive email with info"},
+        {name:"Ready Mobile",contact:"877-878-6738",details:""},
+        {name:"Red Pocket",contact:"888-993-3888",details:"Disable Port Out Blocker online to get info."},
+        {name:"RingCentral",contact:"888-898-4591",details:""},
+        {name:"Rise Broadband",contact:"877-910-6207",details:""},
+        {name:"Selectel",contact:"877-218-5744",details:"Account #: phone number\nPIN: last 4 of phone"},
+        {name:"Shentel",contact:"800-743-6835",details:""},
+        {name:"Simple Mobile",contact:"See Tracfone",details:"Account #: Last 15 of SIM if BYOD"},
+        {name:"Skype",contact:"Online",details:"Account #: maybe username or phone+SSN\nPIN: last 4 SSN or 0000"},
+        {name:"Sonic",contact:"877-970-7771",details:"Account #: no\nPIN: no"},
+        {name:"Southeast Nebraska",contact:"None",details:"Escalate via email"},
+        {name:"Southern California Tel",contact:"800-840-6673",details:"Account #: top of bill\nPIN: last 4 of MDN"},
+        {name:"Southern Linc",contact:"205-257-1995",details:"Account #: required\nPIN: 0000"},
+        {name:"Spectrum Mobile",contact:"833-224-6603",details:"Account #: online (billing tab)\nPIN: 6-digit NTP via App/Online (valid 72h)"},
+        {name:"Spectrum Landline",contact:"833-889-0571",details:"Account #: 9 digits (highlighted blue on bill)\nPIN: 4-digit security code"},
+        {name:"Speedtalk Mobile",contact:"310-707-0000",details:""},
+        {name:"StandUp Wireless",contact:"800-544-4441",details:"Acct/PIN: Call to get"},
+        {name:"Suddenlink",contact:"877-794-2724",details:""},
+        {name:"Tag Mobile",contact:"800-986-5670",details:"Account #: 6 digits\nPIN: 4 digits (call)"},
+        {name:"TDS Telecom",contact:"888-225-5837",details:""},
+        {name:"Tello",contact:"866-377-0294",details:"Acct/PIN: online account"},
+        {name:"Thumb Cellular",contact:"800-443-5057",details:""},
+        {name:"Ting",contact:"855-846-4389",details:"Acct/PIN: ting.com settings"},
+        {name:"T-Mobile",contact:"Port: 877-789-3106",details:"Postpaid: PIN via App/Web (valid 4 days)\nPrepaid: 6-digit NTP"},
+        {name:"Tracfone Family",contact:"800-327-2077",details:"Includes: Straight Talk, Net10, Total, Simple, Walmart Family.\nAccount #: IMEI or Last 15 SIM\nPIN: NTP via Text/Online (valid 7 days)"},
+        {name:"TruConnect",contact:"844-701-8980",details:"PIN: Security PIN"},
+        {name:"True Wireless",contact:"833-733-8524",details:""},
+        {name:"Ultra Mobile",contact:"888-777-0446",details:"Account #: required (call)\nPIN: last 4 of MDN"},
+        {name:"Union Wireless",contact:"888-926-2273",details:"PIN: customer passcode (case sensitive)"},
+        {name:"US Cellular",contact:"888-900-7678",details:"Account #: 9 digits\nPIN: 6 digits (call/store)"},
+        {name:"US Mobile",contact:"878-205-0088",details:"PIN: each line needs own PIN (valid 7 days)"},
+        {name:"Verizon Wireless",contact:"888-844-7095",details:"Postpaid: NTP via #PORT (7678), valid 7 days.\nPrepaid: Now requires NTP too."},
+        {name:"Verizon Landline",contact:"888-636-5317",details:"PIN: Not required for standard; FiOS required."},
+        {name:"Viero Mobile",contact:"877-484-2376",details:"Account #: 4 digits\nPIN: required"},
+        {name:"Visible",contact:"Chat/App",details:"Account: online\nPIN: request via App"},
+        {name:"VoiPly",contact:"844-486-4759",details:"AI answers; they contact customer"},
+        {name:"VoIPo",contact:"Closed",details:"Ceased operations Aug 2025"},
+        {name:"Vonage",contact:"732-944-0000",details:"PIN: only if set\nResponse: 24-72h"},
+        {name:"Vyve Broadcast",contact:"855-367-8983",details:""},
+        {name:"Windstream",contact:"866-215-6844",details:"Match name exactly."},
+        {name:"Wireless Works",contact:"800-747-9977",details:""},
+        {name:"Xfinity Mobile",contact:"Port: 877-547-7230",details:"PIN: NTP ONLY via App/Online. Agents cannot provide."},
+        {name:"Ziply",contact:"866-699-4759",details:"Account/PIN: on bill"}
+    ];
 
-    // --- SHARED MATH LOGIC ---
-    function calculateEasyPay(price, isPhone) {
-        const tax = price * 0.089;
-        let monthly = 0, down = 0;
-        if (price > 0) {
-            if (isPhone) {
-                monthly = Math.floor(price / 24);
-                down = price - (monthly * 24);
-            } else {
-                monthly = Math.ceil((price / 24) * 100) / 100;
-                down = 0;
-            }
-        }
-        return { tax, down, monthly, totalDue: down + tax, financed: monthly * 24 };
+    function initPorting() {
+        const list = document.getElementById('port-list-container');
+        list.innerHTML = "";
+        carriers.forEach(c => {
+            const item = document.createElement('li');
+            item.className = 'port-item';
+            item.innerHTML = `
+                <div class="port-header" onclick="this.parentElement.classList.toggle('expanded')">
+                    <div class="port-name">${c.name}</div>
+                    <div class="port-contact">${c.contact}</div>
+                </div>
+                <div class="port-details">${c.details || "No special instructions."}</div>
+            `;
+            list.appendChild(item);
+        });
     }
 
-    // --- CONTRACT GENERATOR LOGIC ---
+    function filterCarriers() {
+        const term = document.getElementById('port-search').value.toLowerCase();
+        document.querySelectorAll('.port-item').forEach(item => {
+            const text = item.innerText.toLowerCase();
+            item.style.display = text.includes(term) ? 'block' : 'none';
+        });
+    }
+
+    initPorting();
+
+    // --- CONTRACT LOGIC ---
     const modePhone = document.getElementById('mode-phone');
     const modeWatch = document.getElementById('mode-watch');
     const priceInput = document.getElementById('con-price');
-    const genBtn = document.getElementById('generate-btn');
     let isPhone = true;
 
     modePhone.addEventListener('change', () => { isPhone = true; updateMath(); });
@@ -345,30 +494,49 @@
         e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
     });
 
-    function updateMath() {
+    function getMath() {
         const price = parseFloat(priceInput.value) || 0;
-        const res = calculateEasyPay(price, isPhone);
-        document.getElementById('disp-tax').innerText = "$" + res.tax.toFixed(2);
-        document.getElementById('disp-down').innerText = "$" + res.down.toFixed(2);
-        document.getElementById('disp-monthly').innerText = "$" + res.monthly.toFixed(2);
-        document.getElementById('con-due-today').innerText = "$" + res.totalDue.toFixed(2);
+        const tax = price * 0.089;
+        let monthly = 0, down = 0, financed = 0;
+
+        if (price > 0) {
+            if (isPhone) {
+                monthly = Math.floor(price / 24);
+                down = price - (monthly * 24);
+                financed = monthly * 24;
+            } else {
+                monthly = Math.ceil((price / 24) * 100) / 100;
+                down = 0;
+                financed = price; 
+            }
+        }
+        return { price, tax, down, monthly, totalDue: down + tax, financed, totalPayments: monthly * 24, totalSalePrice: down + (monthly * 24) };
     }
 
-    // --- INDEPENDENT CALCULATOR TOOL LOGIC ---
-    function updateCalcTool() {
-        const price = parseFloat(document.getElementById('calc-price').value) || 0;
-        const isCalcPhone = document.getElementById('calc-mode-phone').checked;
-        const res = calculateEasyPay(price, isCalcPhone);
-        
-        document.getElementById('calc-result-monthly').innerText = "$" + res.monthly.toFixed(2);
-        document.getElementById('calc-result-today').innerText = "$" + res.totalDue.toFixed(2);
-        document.getElementById('calc-result-tax').innerText = "$" + res.tax.toFixed(2);
-        document.getElementById('calc-result-down').innerText = "$" + res.down.toFixed(2);
+    function updateMath() {
+        const m = getMath();
+        document.getElementById('disp-tax').innerText = "$" + m.tax.toFixed(2);
+        document.getElementById('disp-down').innerText = "$" + m.down.toFixed(2);
+        document.getElementById('disp-monthly').innerText = "$" + m.monthly.toFixed(2);
+        document.getElementById('con-due-today').innerText = "$" + m.totalDue.toFixed(2);
     }
 
-    // --- PDF GENERATOR (Exact Layout Preserved) ---
-    genBtn.addEventListener('click', () => {
-        const m = calculateEasyPay(parseFloat(priceInput.value)||0, isPhone);
+    // --- HIGH VALUE SAFEGUARD ---
+    const hvModal = document.getElementById('hv-modal');
+    document.getElementById('trigger-gen').addEventListener('click', () => {
+        const price = parseFloat(priceInput.value) || 0;
+        if(price > 700) {
+            hvModal.style.display = 'flex';
+        } else {
+            generatePDF();
+        }
+    });
+
+    function closeHvModal() { hvModal.style.display = 'none'; }
+    function confirmHv() { hvModal.style.display = 'none'; generatePDF(); }
+
+    function generatePDF() {
+        const m = getMath();
         const name = document.getElementById('con-name').value || "";
         const address = document.getElementById('con-address').value || "";
         const city = document.getElementById('con-city').value || "";
@@ -383,22 +551,48 @@
 
         const win = window.open('', '_blank');
         win.document.write(`
-            <html><head><title>Installment Contract</title><style>@media print { body { margin: 0; padding: 25px; } .page-break { page-break-before: always; } } body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.4; color: #000; padding: 40px; } table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 11pt; } td, th { border: 1px solid black; padding: 6px; vertical-align: top; text-align: left; } .no-border td { border: none; padding: 4px; } .bold { font-weight: bold; } .small { font-size: 9pt; } .legal-large { font-size: 12pt; text-align: justify; line-height: 1.4; } h3 { text-align: center; font-weight: bold; font-size: 14pt; margin: 20px 0; }</style></head><body>
-                <div class="bold" style="font-size:12pt; margin-bottom:10px;">NOTICE TO CONSUMER</div><div class="legal-large">By signing below, you consent to receipt of the included contract and Truth-in-Lending disclosures in an electronic form. You have a right to withdraw this consent and to receive this document in a non-electronic form. To withdraw consent and request this document in a non-electronic form, send a written request including your name, address and contact phone number to Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517. Your consent only applies to the included contract and Truth-in-Lending disclosures. To update the information needed to contact you electronically, contact Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517, call 800-686-4460 or manage your account online at www.ConsumerCellular.com.</div><br><table class="no-border"><tr><td width="10%"><strong>DATE:</strong></td><td>${date}</td></tr><tr><td><strong>BUYER'S SIGNATURE:</strong></td><td>__________________________________________</td></tr><tr><td colspan="2" class="small">(Please type your name in the box above to electronically sign this document)</td></tr></table>
-                <h3>CONSUMER CREDIT INSTALLMENT SALE CONTRACT</h3><table class="no-border" style="margin-bottom: 20px;"><tr><td width="50%"><strong>Seller/Creditor:</strong><br>Consumer Cellular<br>12447 SW 69th Avenue<br>Portland, OR 97223-8517</td><td><strong>Buyer:</strong><br>${name}<br>${fullAddress}</td></tr></table><table style="border: 2px solid black; margin-bottom:20px;"><tr style="background:#f0f0f0;"><th>SKU Number</th><th>Item Description</th><th>Price</th><th>Down payment Paid today</th><th>Balance</th></tr><tr><td>${sku}</td><td>${item}</td><td>$${m.price.toFixed(2)}</td><td>$${m.down.toFixed(2)}</td><td>$${m.financed.toFixed(2)}</td></tr></table>
-                <div class="bold" style="margin-top:20px; font-size:12pt;">Federal Truth-in-Lending Disclosures</div><table style="border: 2px solid black; margin-bottom:20px;"><tr style="background:#f0f0f0;"><th width="15%">ANNUAL % RATE</th><th width="15%">FINANCE CHARGE</th><th width="20%">Amount Financed</th><th width="20%">Total of Payments</th><th width="30%">Total Sale Price</th></tr><tr class="small" style="height: 50px;"><td>The cost of your credit as a yearly rate.</td><td>The dollar amount the credit will cost you.</td><td>The amount of credit provided to you or on your behalf.</td><td>The amount you will have paid after you have made all payments as scheduled.</td><td>The total cost of your purchase on credit, including your down payment of $${m.down.toFixed(2)}.</td></tr><tr class="bold" style="font-size:12pt;"><td>0%</td><td>$0.00</td><td>$${m.financed.toFixed(2)}</td><td>$${(m.financed).toFixed(2)}</td><td>$${(m.down + m.financed).toFixed(2)}</td></tr></table>
-                <div style="margin-top:20px; font-size:12pt;"><strong>Your Payment Schedule will be:</strong></div><table style="border: 2px solid black;"><tr style="background:#f0f0f0;"><th>SKU Number</th><th>Number of Payments</th><th>Amount of Payments</th><th>When Payments are Due</th></tr><tr><td>${sku}</td><td>24</td><td>$${m.monthly.toFixed(2)}</td><td>Monthly, beginning on Next Bill Cycle</td></tr></table><div class="small" style="margin-top:20px;">See your Wireless Customer Agreement for any additional information about nonpayment, default, any required repayment in full before the scheduled date, and prepayment refunds and penalties.</div>
+            <html>
+            <head>
+                <title>Installment Contract</title>
+                <style>
+                    @media print { body { margin: 0; padding: 25px; } .page-break { page-break-before: always; } }
+                    body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.4; color: #000; padding: 40px; }
+                    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11pt; }
+                    td, th { border: 1px solid black; padding: 8px; vertical-align: top; text-align: left; }
+                    .no-border td { border: none; padding: 4px; }
+                    .bold { font-weight: bold; }
+                    .small { font-size: 9pt; }
+                    .legal-large { font-size: 12pt; text-align: justify; line-height: 1.4; }
+                    h3 { text-align: center; font-weight: bold; font-size: 14pt; margin: 20px 0; }
+                </style>
+            </head>
+            <body>
+                <div class="bold" style="font-size:12pt; margin-bottom:10px;">NOTICE TO CONSUMER</div>
+                <div class="legal-large">By signing below, you consent to receipt of the included contract and Truth-in-Lending disclosures in an electronic form. You have a right to withdraw this consent and to receive this document in a non-electronic form. To withdraw consent and request this document in a non-electronic form, send a written request including your name, address and contact phone number to Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517. Your consent only applies to the included contract and Truth-in-Lending disclosures. To update the information needed to contact you electronically, contact Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517, call 800-686-4460 or manage your account online at www.ConsumerCellular.com.</div>
+                <br><table class="no-border"><tr><td width="10%"><strong>DATE:</strong></td><td>${date}</td></tr><tr><td><strong>BUYER'S SIGNATURE:</strong></td><td>__________________________________________</td></tr><tr><td colspan="2" class="small">(Please type your name in the box above to electronically sign this document)</td></tr></table>
+                <h3>CONSUMER CREDIT INSTALLMENT SALE CONTRACT</h3>
+                <table class="no-border" style="margin-bottom: 30px;"><tr><td width="50%"><strong>Seller/Creditor:</strong><br>Consumer Cellular<br>12447 SW 69th Avenue<br>Portland, OR 97223-8517</td><td><strong>Buyer:</strong><br>${name}<br>${fullAddress}</td></tr></table>
+                <table style="border: 2px solid black; margin-bottom:30px;"><tr style="background:#f0f0f0;"><th>SKU Number</th><th>Item Description</th><th>Price</th><th>Down payment Paid today</th><th>Balance</th></tr><tr><td>${sku}</td><td>${item}</td><td>$${m.price.toFixed(2)}</td><td>$${m.down.toFixed(2)}</td><td>$${m.financed.toFixed(2)}</td></tr></table>
+                <div class="bold" style="margin-top:20px; font-size:12pt;">Federal Truth-in-Lending Disclosures</div>
+                <table style="border: 2px solid black; margin-bottom:30px;"><tr style="background:#f0f0f0;"><th width="15%">ANNUAL % RATE</th><th width="15%">FINANCE CHARGE</th><th width="20%">Amount Financed</th><th width="20%">Total of Payments</th><th width="30%">Total Sale Price</th></tr><tr class="small" style="height: 50px;"><td>The cost of your credit as a yearly rate.</td><td>The dollar amount the credit will cost you.</td><td>The amount of credit provided to you or on your behalf.</td><td>The amount you will have paid after you have made all payments as scheduled.</td><td>The total cost of your purchase on credit, including your down payment of $${m.down.toFixed(2)}.</td></tr><tr class="bold" style="font-size:12pt;"><td>0%</td><td>$0.00</td><td>$${m.financed.toFixed(2)}</td><td>$${m.totalPayments.toFixed(2)}</td><td>$${m.totalSalePrice.toFixed(2)}</td></tr></table>
+                <div style="margin-top:20px; font-size:12pt;"><strong>Your Payment Schedule will be:</strong></div>
+                <table style="border: 2px solid black;"><tr style="background:#f0f0f0;"><th>SKU Number</th><th>Number of Payments</th><th>Amount of Payments</th><th>When Payments are Due</th></tr><tr><td>${sku}</td><td>24</td><td>$${m.monthly.toFixed(2)}</td><td>Monthly, beginning on Next Bill Cycle</td></tr></table>
+                <div class="small" style="margin-top:20px;">See your Wireless Customer Agreement for any additional information about nonpayment, default, any required repayment in full before the scheduled date, and prepayment refunds and penalties.</div>
                 <br><div class="bold" style="font-size:12pt;">Itemization of the Amount Financed of $${m.financed.toFixed(2)}</div>
                 <div class="page-break"></div>
-                <table class="no-border" style="width:100%; margin-top: 10px; margin-bottom: 20px; font-size: 11pt;"><tr><td>Cash Price</td><td>$${m.price.toFixed(2)}</td></tr><tr><td>Sales Tax (8.9%)</td><td>$${m.tax.toFixed(2)}</td></tr><tr><td>Total Cash Price plus Sales Tax</td><td>$${(m.price + m.tax).toFixed(2)}</td></tr><tr><td>Cash Down payment</td><td>$${m.down.toFixed(2)}</td></tr><tr><td>Sales Tax paid at time of sale</td><td>$${m.tax.toFixed(2)}</td></tr><tr><td>Unpaid Balance of Cash Price/Unpaid Balance</td><td>$${m.financed.toFixed(2)}</td></tr><tr><td>Prepaid FINANCE CHARGE</td><td>$0.00</td></tr><tr><td style="border-top:2px solid black; padding-top: 10px;"><strong>Amount Financed</strong></td><td style="border-top:2px solid black; padding-top: 10px;"><strong>$${m.financed.toFixed(2)}</strong></td></tr></table>
+                
+                <table class="no-border" style="width:100%; margin-top: 10px; margin-bottom: 30px; font-size: 11pt;"><tr><td>Cash Price</td><td>$${m.price.toFixed(2)}</td></tr><tr><td>Sales Tax (8.9%)</td><td>$${m.tax.toFixed(2)}</td></tr><tr><td>Total Cash Price plus Sales Tax</td><td>$${(m.price + m.tax).toFixed(2)}</td></tr><tr><td>Cash Down payment</td><td>$${m.down.toFixed(2)}</td></tr><tr><td>Sales Tax paid at time of sale</td><td>$${m.tax.toFixed(2)}</td></tr><tr><td>Unpaid Balance of Cash Price/Unpaid Balance</td><td>$${m.financed.toFixed(2)}</td></tr><tr><td>Prepaid FINANCE CHARGE</td><td>$0.00</td></tr><tr><td style="border-top:2px solid black; padding-top: 10px;"><strong>Amount Financed</strong></td><td style="border-top:2px solid black; padding-top: 10px;"><strong>$${m.financed.toFixed(2)}</strong></td></tr></table>
                 <div class="legal-large"><strong>Agreement to Purchase and Make Payments:</strong> The Buyer ("you" or "Buyer") agrees to purchase from the Seller ("we", "us", "our", or "Seller") the items described above on the terms set forth in this contract. You agree to make payments according to the payment schedule above. The Federal Truth-in-Lending Disclosures above are part of this contract. Items payable under this contract will appear on the monthly billing statements for your plan. Payments will first be applied to any past due balances and then, in order, to any deposit due, payments due under this contract, current service charges for your plan and then to any other charges for your service plan. Partial payments may result in the suspension or cancellation of your plan service and in equipment not operating on our network. You may prepay this contract in full or make additional payments in increments of $ at any time.<br><br><strong>Consumer Cellular, Incorporated Wireless Customer Agreement ("WCA"):</strong> You have been provided with a copy of the WCA. The WCA also applies to this transaction, but if the WCA is inconsistent with anything stated in this contract, this contract will prevail. Provisions of the WCA that are prohibited by law will not apply. Manufacturer warranty information, if any, is provided with the items sold.<br><br><strong>Default:</strong> Except where prohibited by law, if you commit any substantial default under this contract, we may declare the remaining unpaid balance of the contract immediately due and payable. You agree to maintain Service for any device purchased under this contract, and any termination of that Service will be a substantial default under this contract.<br><br><strong>NOTICE:</strong> ANY HOLDER OF THIS CONSUMER CREDIT CONTRACT IS SUBJECT TO ALL CLAIMS AND DEFENSES WHICH THE DEBTOR COULD ASSERT AGAINST THE SELLER OF GOODS OR SERVICES OBTAINED PURSUANT HERETO OR WITH THE PROCEEDS HEREOF. RECOVERY HEREUNDER BY THE DEBTOR SHALL NOT EXCEED AMOUNTS PAID BY THE DEBTOR HEREUNDER.</div>
-                <div style="margin-top:20px; font-weight: bold; font-size: 12pt;">You acknowledge receipt of the Consumer Cellular, Incorporated WCA You also acknowledge receipt of a completely filled in copy of this contract when you signed it.</div><br><br><table class="no-border"><tr><td width="50%"><strong>BUYER'S SIGNATURE:</strong></td><td><strong>SELLER'S SIGNATURE:</strong></td></tr><tr><td style="border-bottom:2px solid black; height:40px;"></td><td style="vertical-align:bottom;">CONSUMER CELLULAR, INCORPORATED</td></tr><tr><td class="small">(Please type your name in the box above to electronically sign this document)</td><td></td></tr></table>
+                <div style="margin-top:20px; font-weight: bold; font-size: 12pt;">You acknowledge receipt of the Consumer Cellular, Incorporated WCA You also acknowledge receipt of a completely filled in copy of this contract when you signed it.</div>
+                <br><br><table class="no-border"><tr><td width="50%"><strong>BUYER'S SIGNATURE:</strong></td><td><strong>SELLER'S SIGNATURE:</strong></td></tr><tr><td style="border-bottom:2px solid black; height:40px;"></td><td style="vertical-align:bottom;">CONSUMER CELLULAR, INCORPORATED</td></tr><tr><td class="small">(Please type your name in the box above to electronically sign this document)</td><td></td></tr></table>
                 <div class="page-break"></div>
-                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh;"><div style="font-size: 12pt; font-weight: bold; font-family: Arial, sans-serif; text-align: center;">Account Number: <span style="font-weight:normal;">${acct}</span><br>Phone Number: <span style="font-weight:normal;">${phone}</span></div></div>
-            </body></html>
+                
+                <br><br><br><div style="font-size: 12pt; font-weight: bold; font-family: Arial, sans-serif; text-align: center; margin-top:50px; line-height: 2;">Account Number: <span style="font-weight:normal;">${acct}</span><br>Phone Number: <span style="font-weight:normal;">${phone}</span></div>
+            </body>
+            </html>
         `);
         win.document.close();
-    });
+    }
 </script>
 </body>
 </html>
