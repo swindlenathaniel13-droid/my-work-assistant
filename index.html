@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Work Assistant</title>
+    <title>My Work Assistant V3.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent-color: #ff7b00; /* Orange Accent */
+            --accent-color: #ff7b00; /* Consumer Cellular Orange */
             --accent-hover: #e66f00;
             --bg-dark: #121212;
             --text-light: #ffffff;
@@ -81,6 +81,22 @@
             color: var(--text-dark);
         }
 
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+        }
+        
+        .icon-btn:hover {
+            color: var(--accent-color);
+        }
+
         /* Log Out Button */
         #logout-btn {
             display: none;
@@ -97,6 +113,13 @@
         #logout-btn:hover {
             background-color: var(--accent-color);
             color: white;
+        }
+
+        #nav-tools {
+            display: none; /* Hidden until login */
+            gap: 10px;
+            border-right: 1px solid #ddd;
+            padding-right: 15px;
         }
 
         /* --- LOGIN SECTION --- */
@@ -183,7 +206,7 @@
             max-width: 1000px;
             width: 100%;
             margin: 0 auto;
-            align-items: center; /* Center content for empty state */
+            align-items: center;
             justify-content: center;
         }
 
@@ -191,6 +214,84 @@
             text-align: center;
             color: var(--text-muted);
         }
+
+        /* --- MODAL STYLES --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        .toggle-container {
+            display: flex;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            padding: 4px;
+            margin-top: 5px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .toggle-btn.active {
+            background-color: white;
+            color: var(--accent-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        .action-btn:hover { background-color: var(--accent-hover); }
 
     </style>
 </head>
@@ -206,6 +307,13 @@
                 <div id="date-display">Loading...</div>
                 <div id="time-display"></div>
             </div>
+            
+            <div id="nav-tools">
+                <button id="contract-btn" class="icon-btn" title="Create Contract">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </button>
+            </div>
+
             <button id="logout-btn">Log Out</button>
         </div>
 
@@ -224,18 +332,72 @@
             </form>
             
              <p style="margin-top: 20px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
-                System v3.0.0 | Personal Use
+                System v3.1.0 | Personal Use
             </p>
         </div>
 
         <div id="dashboard-section">
             <div class="dashboard-placeholder">
                 <h1 style="color: var(--accent-color); font-size: 3rem;">Ready</h1>
-                <p style="font-size: 1.2rem;">Select a tool to begin.</p>
-                <p style="font-size: 0.9rem; margin-top: 20px;">(No tools loaded yet)</p>
+                <p style="font-size: 1.2rem;">Click the Document icon (top right) to create a contract.</p>
             </div>
         </div>
+    </div>
 
+    <div id="contract-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" id="close-contract">&times;</span>
+            <div class="modal-header">
+                <h2 style="margin:0;">Easy Pay Contract</h2>
+            </div>
+            
+            <div style="display:flex; gap:15px;">
+                <div style="flex:1;">
+                    <div class="input-group">
+                        <label class="input-label">Buyer Name</label>
+                        <input type="text" id="con-name" class="modern-input" placeholder="John Doe">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Account #</label>
+                        <input type="text" id="con-acct" class="modern-input" placeholder="123456789">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Phone #</label>
+                        <input type="text" id="con-phone" class="modern-input" placeholder="555-555-5555">
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <div class="input-group">
+                        <label class="input-label">Item Description</label>
+                        <input type="text" id="con-item" class="modern-input" placeholder="iPhone 17 128GB">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Retail Price ($)</label>
+                        <input type="number" id="con-price" class="modern-input" placeholder="0.00" step="0.01">
+                    </div>
+                    
+                    <label class="input-label">Device Type</label>
+                    <div class="toggle-container">
+                        <button class="toggle-btn active" id="con-mode-phone">Phone</button>
+                        <button class="toggle-btn" id="con-mode-watch">Watch</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background-color:#f9f9f9; padding:15px; border-radius:8px; margin-top:10px; font-size:0.9rem; line-height: 1.6;">
+                <div><strong>Retail Price:</strong> <span id="disp-price">$0.00</span></div>
+                <div><strong>Sales Tax (8.9%):</strong> <span id="disp-tax">$0.00</span></div>
+                <div><strong>Down Payment:</strong> <span id="disp-down">$0.00</span></div>
+                <div style="margin-top:5px; padding-top:5px; border-top:1px solid #ddd;">
+                    <strong>Total Due Today:</strong> <span id="con-due-today" style="color:var(--accent-color); font-weight:bold; font-size:1.1rem;">$0.00</span>
+                </div>
+                <div style="margin-top:5px;">
+                    <strong>Monthly Installment:</strong> <span id="disp-monthly">$0.00</span>
+                </div>
+            </div>
+
+            <button id="generate-btn" class="action-btn">Generate Printable Contract</button>
+        </div>
     </div>
 
 <script>
@@ -244,7 +406,6 @@
         const now = new Date();
         const timeString = now.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
         const dateString = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        
         document.getElementById('date-display').innerText = dateString;
         document.getElementById('time-display').innerText = timeString;
     }
@@ -258,40 +419,124 @@
     const dashboardSection = document.getElementById('dashboard-section');
     const loginError = document.getElementById('login-error');
     const logoutBtn = document.getElementById('logout-btn');
+    const navTools = document.getElementById('nav-tools');
     const bannerPanel = document.getElementById('banner-panel');
 
     // --- 3. LOGIN LOGIC ---
     loginForm.addEventListener('submit', function(event) {
         event.preventDefault(); 
-        
-        // Password Check (Case Insensitive)
-        // Change "spokanecc" below to whatever you want your password to be
         if (passwordInput.value.toLowerCase() === "spokanecc") {
-            // Success: Switch to Dashboard
             loginSection.style.display = 'none';
-            bannerPanel.style.display = 'none'; // Hide banner to go full screen
+            bannerPanel.style.display = 'none';
             dashboardSection.style.display = 'flex';
             logoutBtn.style.display = 'block'; 
+            navTools.style.display = 'flex';
         } else {
-            // Error
             loginError.style.display = 'block';
             passwordInput.value = "";
-            setTimeout(() => {
-                loginError.style.display = 'none';
-            }, 3000);
+            setTimeout(() => { loginError.style.display = 'none'; }, 3000);
         }
     });
 
     // --- 4. LOGOUT LOGIC ---
     logoutBtn.addEventListener('click', function() {
-        // Reset to Login Screen
         dashboardSection.style.display = 'none';
         bannerPanel.style.display = 'flex';
         loginSection.style.display = 'flex';
         logoutBtn.style.display = 'none';
+        navTools.style.display = 'none';
         passwordInput.value = "";
     });
 
-</script>
-</body>
-</html>
+    // --- 5. CONTRACT LOGIC ---
+    const contractBtn = document.getElementById('contract-btn');
+    const contractModal = document.getElementById('contract-modal');
+    const closeContract = document.getElementById('close-contract');
+    const conModePhone = document.getElementById('con-mode-phone');
+    const conModeWatch = document.getElementById('con-mode-watch');
+    const conPrice = document.getElementById('con-price');
+    const generateBtn = document.getElementById('generate-btn');
+
+    let conMode = 'phone';
+
+    contractBtn.addEventListener('click', () => { contractModal.style.display = 'flex'; conPrice.focus(); });
+    closeContract.addEventListener('click', () => { contractModal.style.display = 'none'; });
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+        if (event.target == contractModal) {
+            contractModal.style.display = "none";
+        }
+    }
+
+    conModePhone.addEventListener('click', () => {
+        conMode = 'phone';
+        conModePhone.classList.add('active');
+        conModeWatch.classList.remove('active');
+        updateContractTotals();
+    });
+
+    conModeWatch.addEventListener('click', () => {
+        conMode = 'watch';
+        conModeWatch.classList.add('active');
+        conModePhone.classList.remove('active');
+        updateContractTotals();
+    });
+
+    conPrice.addEventListener('input', updateContractTotals);
+
+    function getContractMath() {
+        const price = parseFloat(conPrice.value);
+        if (isNaN(price) || price <= 0) {
+            return { price: 0, salesTax: 0, monthly: 0, downPrincipal: 0, totalDown: 0, financed: 0 };
+        }
+
+        const taxRate = 0.089;
+        const salesTax = price * taxRate;
+        
+        let monthly = 0;
+        let downPrincipal = 0;
+
+        if (conMode === 'phone') {
+            monthly = Math.floor(price / 24);
+            const financedAmount = monthly * 24;
+            downPrincipal = price - financedAmount;
+        } else {
+            // Watch Logic: Round UP to nearest penny
+            monthly = Math.ceil((price / 24) * 100) / 100;
+            downPrincipal = 0;
+        }
+        
+        const financed = monthly * 24;
+        const totalDown = downPrincipal + salesTax;
+        
+        return { price, salesTax, monthly, downPrincipal, totalDown, financed };
+    }
+
+    function updateContractTotals() {
+        const math = getContractMath();
+        document.getElementById('disp-price').innerText = "$" + math.price.toFixed(2);
+        document.getElementById('disp-tax').innerText = "$" + math.salesTax.toFixed(2);
+        document.getElementById('disp-down').innerText = "$" + math.downPrincipal.toFixed(2);
+        document.getElementById('con-due-today').innerText = "$" + math.totalDown.toFixed(2);
+        document.getElementById('disp-monthly').innerText = "$" + math.monthly.toFixed(2);
+    }
+
+    generateBtn.addEventListener('click', () => {
+        const math = getContractMath();
+        const buyerName = document.getElementById('con-name').value || "________________";
+        const accountNum = document.getElementById('con-acct').value || "________________";
+        const phoneNum = document.getElementById('con-phone').value || "________________";
+        const itemDesc = document.getElementById('con-item').value || "Device";
+        const date = new Date().toLocaleDateString();
+
+        const printWindow = window.open('', '_blank');
+        
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Installment Contract</title>
+                <style>
+                    body { font-family: "Times New Roman", serif; padding: 40px; font-size: 12pt; line-height: 1.2; }
+                    h1, h2, h3 { text-align: center; margin-bottom: 10px; font-weight: bold; }
+                    .header { text-align: center; margin-bottom: 20px; font
