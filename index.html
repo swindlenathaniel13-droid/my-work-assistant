@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V3.5.0</title>
+    <title>Work Portal V3.6.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -76,7 +76,7 @@
             <div id="login-error">Incorrect password.</div>
             <div class="input-group"><input type="password" id="password-input" class="modern-input" placeholder="Password"></div>
             <button type="button" id="login-trigger" class="login-btn">Log In</button>
-            <p style="margin-top: 20px; text-align: center; color: #999; font-size: 0.8rem;">System v3.5.0</p>
+            <p style="margin-top: 20px; text-align: center; color: #999; font-size: 0.8rem;">System v3.6.0</p>
         </div>
 
         <div id="dashboard-section">
@@ -201,11 +201,10 @@
                 // Watch: Round up monthly, down is 0
                 monthly = Math.ceil((price / 24) * 100) / 100;
                 down = 0;
-                financed = price; // Watch logic usually finances the full price
+                financed = price; 
             }
         }
         
-        // TILA Box Maths
         const totalPayments = monthly * 24;
         const totalSalePrice = down + totalPayments;
 
@@ -247,22 +246,22 @@
         win.document.write(`
             <html>
             <head>
-                <title>Contract</title>
+                <title>Installment Contract</title>
                 <style>
-                    body { font-family: "Times New Roman", serif; padding: 40px; font-size: 11pt; line-height: 1.3; color: black; }
-                    table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-                    td, th { border: 1px solid black; padding: 5px; vertical-align: top; }
+                    body { font-family: "Arial", sans-serif; padding: 40px; font-size: 9pt; line-height: 1.3; color: #000; }
+                    table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 10pt; }
+                    td, th { border: 1px solid black; padding: 4px; vertical-align: top; text-align: left; }
                     .no-border td { border: none; }
                     .center { text-align: center; }
                     .bold { font-weight: bold; }
                     .box { border: 1px solid black; padding: 5px; margin: 10px 0; }
-                    .small { font-size: 9pt; }
+                    .small { font-size: 8pt; }
                     .page-break { page-break-after: always; }
-                    h3 { text-align: center; font-weight: bold; margin: 10px 0; }
+                    h3 { text-align: center; font-weight: bold; margin: 10px 0; font-size: 12pt; }
                 </style>
             </head>
             <body>
-                <div class="bold">NOTICE TO CONSUMER</div>
+                <div class="bold" style="font-size:11pt;">NOTICE TO CONSUMER</div>
                 <div class="small">By signing below, you consent to receipt of the included contract and Truth-in-Lending disclosures in an electronic form. You have a right to withdraw this consent and to receive this document in a non-electronic form. To withdraw consent and request this document in a non-electronic form, send a written request including your name, address and contact phone number to Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517. Your consent only applies to the included contract and Truth-in-Lending disclosures. To update the information needed to contact you electronically, contact Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517, call 800-686-4460 or manage your account online at www.ConsumerCellular.com.</div>
                 
                 <br>
@@ -285,13 +284,15 @@
                         <td>
                             <strong>Buyer:</strong><br>
                             ${name}<br>
-                            ${fullAddress}
+                            ${fullAddress}<br>
+                            Account: ${acct}<br>
+                            Phone: ${phone}
                         </td>
                     </tr>
                 </table>
 
                 <table>
-                    <tr>
+                    <tr style="background:#f0f0f0;">
                         <th>SKU Number</th><th>Item Description</th><th>Price</th><th>Down payment Paid today</th><th>Balance</th>
                     </tr>
                     <tr>
@@ -301,7 +302,7 @@
 
                 <div class="bold" style="margin-top:10px;">Federal Truth-in-Lending Disclosures</div>
                 <table>
-                    <tr>
+                    <tr style="background:#f0f0f0;">
                         <th width="15%">ANNUAL % RATE</th>
                         <th width="15%">FINANCE CHARGE</th>
                         <th width="20%">Amount Financed</th>
@@ -315,7 +316,7 @@
                         <td>The amount you will have paid after you have made all payments as scheduled.</td>
                         <td>The total cost of your purchase on credit, including your down payment of $${m.down.toFixed(2)}.</td>
                     </tr>
-                    <tr class="bold">
+                    <tr class="bold" style="font-size:11pt;">
                         <td>0%</td>
                         <td>$0.00</td>
                         <td>$${m.financed.toFixed(2)}</td>
@@ -326,7 +327,7 @@
 
                 <div style="margin-top:10px;"><strong>Your Payment Schedule will be:</strong></div>
                 <table>
-                    <tr>
+                    <tr style="background:#f0f0f0;">
                         <th>SKU Number</th><th>Number of Payments</th><th>Amount of Payments</th><th>When Payments are Due</th>
                     </tr>
                     <tr>
@@ -339,7 +340,7 @@
                 <div class="page-break"></div>
 
                 <div style="margin-top:20px;"><strong>Itemization of the Amount Financed of $${m.financed.toFixed(2)}</strong></div>
-                <table class="no-border" style="width:70%">
+                <table class="no-border" style="width:80%">
                     <tr><td>Cash Price</td><td>$${m.price.toFixed(2)}</td></tr>
                     <tr><td>Sales Tax (8.9%)</td><td>$${m.tax.toFixed(2)}</td></tr>
                     <tr><td>Total Cash Price plus Sales Tax</td><td>$${(m.price + m.tax).toFixed(2)}</td></tr>
@@ -347,10 +348,10 @@
                     <tr><td>Sales Tax paid at time of sale</td><td>$${m.tax.toFixed(2)}</td></tr>
                     <tr><td>Unpaid Balance of Cash Price/Unpaid Balance</td><td>$${m.financed.toFixed(2)}</td></tr>
                     <tr><td>Prepaid FINANCE CHARGE</td><td>$0.00</td></tr>
-                    <tr><td><strong>Amount Financed</strong></td><td><strong>$${m.financed.toFixed(2)}</strong></td></tr>
+                    <tr><td style="border-top:1px solid black;"><strong>Amount Financed</strong></td><td style="border-top:1px solid black;"><strong>$${m.financed.toFixed(2)}</strong></td></tr>
                 </table>
 
-                <div class="small" style="margin-top:15px;">
+                <div class="small" style="margin-top:15px; text-align:justify;">
                     <strong>Agreement to Purchase and Make Payments:</strong> The Buyer ("you" or "Buyer") agrees to purchase from the Seller ("we", "us", "our", or "Seller") the items described above on the terms set forth in this contract. You agree to make payments according to the payment schedule above. The Federal Truth-in-Lending Disclosures above are part of this contract. Items payable under this contract will appear on the monthly billing statements for your plan. Payments will first be applied to any past due balances and then, in order, to any deposit due, payments due under this contract, current service charges for your plan and then to any other charges for your service plan. Partial payments may result in the suspension or cancellation of your plan service and in equipment not operating on our network. You may prepay this contract in full or make additional payments in increments of $ at any time.
                     <br><br>
                     <strong>Consumer Cellular, Incorporated Wireless Customer Agreement ("WCA"):</strong> You have been provided with a copy of the WCA. The WCA also applies to this transaction, but if the WCA is inconsistent with anything stated in this contract, this contract will prevail. Provisions of the WCA that are prohibited by law will not apply. Manufacturer warranty information, if any, is provided with the items sold.
@@ -362,19 +363,20 @@
 
                 <div style="margin-top:15px;">You acknowledge receipt of the Consumer Cellular, Incorporated WCA You also acknowledge receipt of a completely filled in copy of this contract when you signed it.</div>
 
-                <br>
+                <br><br>
                 <table class="no-border">
-                    <tr><td><strong>BUYER'S SIGNATURE:</strong></td><td>__________________________________________</td></tr>
+                    <tr><td width="15%"><strong>BUYER'S SIGNATURE:</strong></td><td style="border-bottom:1px solid black;"></td></tr>
                     <tr><td colspan="2" class="small">(Please type your name in the box above to electronically sign this document)</td></tr>
+                    <tr><td colspan="2">&nbsp;</td></tr>
                     <tr><td><strong>SELLER'S SIGNATURE:</strong></td><td>CONSUMER CELLULAR, INCORPORATED</td></tr>
                 </table>
 
                 <div class="page-break"></div>
 
                 <br><br><br>
-                <div style="font-size: 14pt; font-weight: bold;">
-                    Account Number: ${acct}<br><br>
-                    Phone Number: ${phone}
+                <div style="font-size: 14pt; font-weight: bold; font-family: Arial, sans-serif;">
+                    Account Number: <span style="font-weight:normal;">${acct}</span><br><br>
+                    Phone Number: <span style="font-weight:normal;">${phone}</span>
                 </div>
             </body>
             </html>
