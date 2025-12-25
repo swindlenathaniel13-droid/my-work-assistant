@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V10.1.0</title>
+    <title>Work Portal V10.2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -20,8 +20,6 @@
             --info-bg: #eff6ff;
             --info-text: #1e40af;
             --info-border: #bfdbfe;
-            --success-bg: #f0fdf4;
-            --success-text: #166534;
         }
 
         body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--main-bg); color: var(--text-dark); height: 100vh; overflow: hidden; }
@@ -82,19 +80,27 @@
         .label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; color: var(--text-dark); }
         .input, .select { width: 100%; padding: 12px 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; color: var(--text-dark); background: white; box-sizing: border-box; transition: all 0.2s; font-family: 'Inter', sans-serif; }
         .input:focus, .select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
-        
-        /* SPECIFIC TO TAXES */
+        .radio-group { display: flex; gap: 20px; padding-top: 5px; }
+        .radio-item { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; cursor: pointer; }
+        .radio-item input { accent-color: var(--primary); width: 18px; height: 18px; }
+
+        /* CALC BOX */
+        .calc-panel { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-top: 10px; }
+        .calc-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; color: var(--text-muted); }
+        .calc-total { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); font-weight: 700; color: var(--text-dark); font-size: 1.2rem; display: flex; justify-content: space-between; }
+
+        /* TAXES */
         .tax-results-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 30px; }
         .tax-summary-header { background: #eff6ff; padding: 20px; border-bottom: 1px solid #bfdbfe; display: flex; justify-content: space-between; align-items: center; }
         .tax-grand-total { font-size: 1.5rem; font-weight: 800; color: #1e3a8a; }
         .tax-detail-row { display: flex; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
         .tax-detail-row:last-child { border-bottom: none; }
-        .tax-sub { font-weight: 600; background: #fff; color: var(--text-dark); }
         .tax-item-name { color: var(--text-muted); }
 
         /* PORTING */
         .alert-box { background-color: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger-text); padding: 15px 20px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; line-height: 1.5; }
         .port-search-bar { width: 100%; padding: 14px 18px; margin-bottom: 25px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; transition: all 0.2s; }
+        .port-search-bar:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
         .port-list { list-style: none; padding: 0; margin: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
         .port-item { border-bottom: 1px solid var(--border); background: white; cursor: pointer; transition: background 0.1s; }
         .port-item:hover { background: #f8fafc; }
@@ -103,7 +109,17 @@
         .port-contact { font-size: 0.9rem; color: var(--text-muted); text-align: right; }
         .port-details { display: none; padding: 20px 25px; background: #f1f5f9; border-top: 1px solid var(--border); font-size: 0.9rem; color: #334155; line-height: 1.6; white-space: pre-wrap; }
         .port-item.expanded .port-details { display: block; }
-        
+        .port-item.expanded .port-header { background: #eff6ff; }
+        .port-item.expanded .port-name { color: var(--primary); }
+
+        /* LISTS (Support) */
+        .list-group { list-style: none; padding: 0; margin: 0; }
+        .list-item { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .list-item:last-child { border-bottom: none; }
+        .list-name { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
+        .list-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+        .list-action span { color: var(--primary); font-weight: 600; font-size: 1rem; }
+
         /* PLAN ESTIMATOR */
         .split-view { display: flex; gap: 30px; height: 600px; }
         .plan-list { flex: 1; border: 1px solid var(--border); border-radius: 12px; overflow-y: auto; background: white; }
@@ -168,7 +184,7 @@
         </div>
 
         <div class="main-content">
-            <div class="header"><div class="header-title">Work Portal v10.1</div><div></div></div>
+            <div class="header"><div class="header-title">Work Portal v10.2</div><div></div></div>
             <div class="scroll-area">
                 
                 <div id="view-home" class="view-section active">
