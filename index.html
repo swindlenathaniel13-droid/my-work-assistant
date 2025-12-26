@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V15.3.0</title>
+    <title>Work Portal V15.4.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -41,8 +41,8 @@
             top: 0; 
             left: 0; 
             z-index: 2000; 
-            /* Login Background */
-            background: linear-gradient(rgba(30, 58, 138, 0.85), rgba(30, 58, 138, 0.9)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000&auto=format&fit=crop');
+            /* Login Background - Matching Dashboard */
+            background: linear-gradient(rgba(30, 58, 138, 0.85), rgba(30, 58, 138, 0.9)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             transition: opacity 0.5s ease; 
@@ -191,7 +191,7 @@
             border-bottom: 1px solid var(--border);
         }
         
-        /* UPDATED: Navy Arrow Total Bar (Web Preview) */
+        /* UPDATED: Navy Arrow Total Bar */
         .bill-total-bar {
             background-color: var(--primary);
             color: white;
@@ -591,6 +591,7 @@
         const hp15 = (homeCost === 15 && homeQty > 0) ? '☒' : '☐';
         const hp20 = (homeCost === 20 && homeQty > 0) ? '☒' : '☐';
 
+        // PRINT STYLES REUSED HERE
         const win = window.open('', '_blank');
         win.document.write(`
             <html><head><title>Estimated First Bill</title><style>
@@ -601,25 +602,13 @@
                 .header-title { font-family: 'Oswald', sans-serif; font-size: 36px; text-transform: uppercase; letter-spacing: 1px; line-height: 1; }
                 .logo-square { background-color: #F15A22; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; text-align: center; color: white; font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1; font-size: 16px; padding: 5px; box-sizing: border-box; }
                 .section { padding: 20px 40px 10px; }
-                .sec-title { color: #F15A22; font-weight: 800; font-size: 16px; margin-bottom: 10px; text-transform: uppercase; }
+                .sec-title { background-color: #102B4A; color: white; padding: 5px 15px; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; font-size: 14px; clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%); -webkit-print-color-adjust: exact; width: fit-content; min-width: 200px; }
                 .line-row { display: flex; align-items: flex-end; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
                 .lr-label { flex: 0 0 auto; padding-right: 10px; }
                 .lr-fill { flex: 1 1 auto; border-bottom: 1px solid #D3DCE5; margin-bottom: 4px; }
                 .lr-price { flex: 0 0 100px; text-align: right; font-size: 14px; font-weight: 700; }
                 .orange-sym { color: #F15A22; }
-                /* ARROW TOTAL BAR PDF STYLE */
-                .total-bar { 
-                    background-color: #102B4A; 
-                    color: white; 
-                    padding: 8px 30px 8px 15px; 
-                    margin: 10px 40px 20px; 
-                    font-weight: 700; 
-                    display: flex; 
-                    justify-content: space-between; 
-                    font-size: 14px; 
-                    -webkit-print-color-adjust: exact; 
-                    clip-path: polygon(0% 0%, 96% 0%, 100% 50%, 96% 100%, 0% 100%);
-                }
+                .total-bar { background-color: #102B4A; color: white; padding: 8px 15px; margin: 10px 40px 20px; font-weight: 700; display: flex; justify-content: space-between; font-size: 14px; -webkit-print-color-adjust: exact; }
                 .check-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 13px; font-weight: 600; padding: 0 40px; }
                 .check-opts { display: flex; gap: 20px; }
                 .grand-total-box { border: 4px solid #102B4A; margin: 20px 40px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
@@ -635,123 +624,6 @@
             <div class="grand-total-box"><div class="gt-label">GRAND TOTAL OF FIRST MONTH INVOICE</div><div class="gt-amount">$${d.grandTotal.toFixed(2)}</div></div>
             <div class="footer">Estimate Provided By<br>© 2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025<br>Date: ${new Date().toLocaleDateString()}</div></div>
             <script>window.print();<\/script></body></html>`);
-        win.document.close();
-    }
-
-    // --- PLAN ESTIMATOR LOGIC ---
-    function initEstimator() {
-        const container = document.getElementById('plan-list-container');
-        container.innerHTML = "";
-        const addHeader = (text) => { const h = document.createElement('div'); h.innerText = text; h.style.padding = "15px 20px 5px"; h.style.color = "#94a3b8"; h.style.fontSize = "0.75rem"; h.style.fontWeight = "700"; h.style.textTransform = "uppercase"; container.appendChild(h); }
-        addHeader("Data Plans ($15 add-line)"); plans.filter(p => p.family === 'connect').forEach(renderPlanBtn);
-        addHeader("Unlimited Plans ($20 add-line)"); plans.filter(p => p.family === 'unlimited').forEach(renderPlanBtn);
-        addHeader("50+ Unlimited"); plans.filter(p => p.family === '50plus').forEach(renderPlanBtn);
-    }
-    function renderPlanBtn(plan) { const btn = document.createElement('div'); btn.className = 'plan-btn'; btn.innerHTML = `<div class="plan-name">${plan.name}</div><div class="plan-price">$${plan.price} / mo</div>`; btn.onclick = () => showPlanDetails(plan, btn); document.getElementById('plan-list-container').appendChild(btn); }
-    
-    // NEW EST CALC LOGIC
-    let currentSelectedPlan = null;
-    
-    function showPlanDetails(plan, btnElement) {
-        currentSelectedPlan = plan; 
-        document.getElementById('print-plan-btn-group').style.display = 'block';
-        document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('active')); btnElement.classList.add('active');
-        
-        const detail = document.getElementById('plan-detail-container');
-        const exampleList = plan.examples.map(ex => `<li style="margin-bottom:8px;">${ex}</li>`).join('');
-        
-        // Disable AARP Checkbox if AARP plan is selected
-        const isAARP = plan.name === "Unlimited for AARP";
-        const checkboxState = isAARP ? 'disabled' : '';
-        const checkboxNote = isAARP ? '(Already included)' : '';
-        
-        let html = `
-            <div style="font-size:2rem; font-weight:700; color:#1e3a8a; margin-bottom:5px;">${plan.name}</div>
-            <div style="font-size:1.2rem; color:#2563eb; font-weight:600; margin-bottom:20px;">$${plan.price} <span style="color:#64748b; font-size:1rem; font-weight:400;">(${plan.data})</span></div>
-            <div style="background:#f8fafc; padding:15px; border-radius:8px; margin-bottom:20px; border:1px solid #e2e8f0;">
-                <div style="font-weight:600; color:#0f172a; margin-bottom:5px;">Best For:</div>
-                <div style="color:#334155;">${plan.bestFor}</div>
-            </div>
-            
-            <div class="est-calc-box">
-                <div class="bill-sec-title">Quick Quote</div>
-                <div class="est-row">
-                    <label style="font-weight:500;">Number of Lines:</label>
-                    <select id="est-lines-count" class="select" style="width:100px;" onchange="updateEstPrice()">
-                        <option value="1">1 Line</option>
-                        <option value="2">2 Lines</option>
-                        <option value="3">3 Lines</option>
-                        <option value="4">4 Lines</option>
-                        <option value="5">5 Lines</option>
-                        <option value="6">6 Lines</option>
-                        <option value="7">7 Lines</option>
-                    </select>
-                </div>
-                <div class="est-row">
-                     <label style="font-weight:500; display:flex; align-items:center; gap:8px;">
-                        <input type="checkbox" id="pe-apply-5-percent" onchange="updateEstPrice()" ${checkboxState}> 
-                        Apply 5% AARP/USAA Discount ${checkboxNote}
-                     </label>
-                </div>
-                <div class="est-price-display" id="est-price-val">$${plan.price}.00</div>
-                <div class="est-disclaimer">ESTIMATED MONTHLY TOTAL (Pre-Tax)<br>This is an estimate for service lines only. Not a formal quote. Taxes & fees not included.</div>
-            </div>
-            
-            <h3 style="font-size:1rem; margin-bottom:10px; margin-top:30px;">Details</h3>
-            <ul style="padding-left:20px; color:#475569; line-height:1.5;">${exampleList}</ul>`;
-            
-        if (plan.family === 'connect') html += `<div class="smartflex-box"><div class="smartflex-title"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>SmartFlex Included</div>CCI sends alerts at 50% and 75% usage. If the customer exceeds the limit, they are <strong>automatically flexed up</strong> to the next plan to maintain speed.<br><br>Customers can flex back down anytime via Customer Service (coming soon to MyAccount). Opting out results in <strong>slower speeds</strong> for the remainder of the cycle.</div>`;
-        
-        detail.innerHTML = html;
-        updateEstPrice(); // Trigger initial calc
-    }
-
-    function updateEstPrice() {
-        if(!currentSelectedPlan) return;
-        const plan = currentSelectedPlan;
-        let lines = parseInt(document.getElementById('est-lines-count').value);
-        let total = plan.price;
-
-        if (plan.name === "Unlimited for AARP") {
-            if(lines < 2) {
-                // If AARP plan selected but user picks 1 line, force 2 or just show base 55
-                // Let's force UI to show 2 minimum effectively or just charge base 55
-                if(lines === 1) total = 55; // Base covers 2
-            } else {
-                // Lines 3+ are +20
-                total = 55 + ((lines - 2) * 20);
-            }
-        } else if (plan.family === 'connect') {
-            // Line 1 base, add'l 15
-            total = plan.price + ((lines - 1) * 15);
-        } else if (plan.family === 'unlimited') {
-            // Line 1 base, add'l 20
-            total = plan.price + ((lines - 1) * 20);
-        } else if (plan.family === '50plus') {
-             // 50+ Solo (1 Line). Base 40. Add'l 20
-            total = plan.price + ((lines - 1) * 20);
-        }
-        
-        // 5% Discount
-        const disc = document.getElementById('pe-apply-5-percent');
-        if(disc && disc.checked && !disc.disabled) {
-            total = total * 0.95;
-        }
-        
-        document.getElementById('est-price-val').innerText = "$" + total.toFixed(2);
-    }
-
-    function printPlan() { 
-        if (!currentSelectedPlan) return; 
-        const plan = currentSelectedPlan; 
-        const lines = document.getElementById('est-lines-count').value;
-        const total = document.getElementById('est-price-val').innerText;
-        
-        const exampleList = plan.examples.map(ex => `<li>${ex}</li>`).join(''); 
-        let smartFlexContent = plan.family === 'connect' ? `<div class="sf-box"><div class="sf-title">SmartFlex Included</div><p>We send alerts at 50% and 75% usage. If you exceed the limit, you are <strong>automatically flexed up</strong> to the next plan to maintain high-speed data. You can flex back down anytime. Opting out results in slower speeds for the remainder of the cycle.</p></div>` : ''; 
-        
-        const win = window.open('', '_blank'); 
-        win.document.write(`<html><head><title>Plan Estimate: ${plan.name}</title><style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:0;margin:0;color:#0f172a;-webkit-print-color-adjust:exact}.container{max-width:8.5in;margin:0 auto;padding:40px}.header-bar{background-color:#102B4A;color:white;padding:25px 40px;display:flex;justify-content:space-between;align-items:center}.header-title{font-family:'Oswald',sans-serif;font-size:36px;text-transform:uppercase;letter-spacing:1px;line-height:1}.logo-square{background-color:#F15A22;width:80px;height:80px;display:flex;align-items:center;justify-content:center;text-align:center;color:white;font-family:'Playfair Display',serif;font-weight:700;line-height:1;font-size:16px;padding:5px;box-sizing:border-box}.hero{background-color:#eff6ff;padding:30px;border-radius:12px;text-align:center;border:1px solid #bfdbfe;margin:30px 40px}.plan-title{font-family:'Playfair Display',serif;font-size:2.5rem;color:#1e3a8a;margin:0 0 10px 0}.plan-price{font-size:2rem;font-weight:700;color:#F15A22}.plan-meta{font-size:1.2rem;color:#64748b;font-weight:400}.grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:0 40px;margin-bottom:30px}.section-title{font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;color:white;background-color:#102B4A;font-weight:800;margin-bottom:15px;padding:5px 15px;clip-path:polygon(0% 0%,95% 0%,100% 50%,95% 100%,0% 100%);-webkit-print-color-adjust:exact;width:fit-content;min-width:200px}.content-text{font-size:1.1rem;line-height:1.6;color:#334155}ul{margin:0;padding-left:20px}li{margin-bottom:8px}.sf-box{background:#fff7ed;border:1px solid #fed7aa;padding:20px;border-radius:8px;color:#9a3412;font-size:0.9rem;line-height:1.5;margin:0 40px 30px}.sf-title{font-weight:700;color:#ea580c;margin-bottom:5px;text-transform:uppercase;font-size:0.8rem}.quote-box{border:4px solid #102B4A;margin:0 40px 30px;padding:20px;text-align:center}.gt-label{font-size:18px;font-weight:800;text-transform:uppercase}.gt-amount{font-size:28px;font-weight:800;color:#102B4A}.footer{font-size:10px;color:#90A2B1;text-align:center;padding:20px 40px;margin-top:20px;border-top:1px solid #E3E6EA}</style></head><body><div class="container"><div class="header-bar"><div class="header-title">PLAN ESTIMATE</div><div class="logo-square">Consumer<br>Cellular</div></div><div class="hero"><h1 class="plan-title">${plan.name}</h1><div class="plan-price">$${plan.price} <span class="plan-meta">/ month (Base)</span></div><div class="plan-meta" style="margin-top:5px;font-size:1rem;">${plan.data} High-Speed Data</div></div><div class="quote-box"><div class="gt-label">ESTIMATED MONTHLY TOTAL (PRE-TAX)</div><div class="gt-amount">${total}</div><div style="font-size:1rem;color:#64748b;margin-top:5px;">For ${lines} Line(s)</div><div style="font-size:0.75rem;color:#94a3b8;font-style:italic;margin-top:10px;">*Estimate only. Excludes taxes, fees, and device payments. Not a formal quote.</div></div><div class="grid"><div><div class="section-title">Best For</div><div class="content-text">${plan.bestFor}</div></div><div><div class="section-title">What You Get</div><div class="content-text"><ul>${exampleList}</ul></div></div></div>${smartFlexContent}<div class="footer">Estimate Provided By<br>© 2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025<br>Date: ${new Date().toLocaleDateString()}</div></div><script>window.print();<\/script></body></html>`); 
         win.document.close(); 
     }
     
@@ -759,50 +631,183 @@
     
     // --- TROUBLESHOOTING LOGIC ---
     const troubleshootData = [
-        {category: "general", title: "Phone is Talking (VoiceOver/TalkBack)", content: "• iPhone: Settings → Accessibility → VoiceOver → OFF (Tap once to select, double-tap to activate)\n• Android: Settings → Accessibility → TalkBack → OFF (Use two fingers to scroll)"},
-        {category: "general", title: "No Service / Can't Call", content: "1. Restart (OFF 30s → ON)\n2. Airplane Mode (ON 10s → OFF)\n3. Reseat SIM (Physical) or Toggle eSIM in Settings\n4. Network Reset (Settings → General/System → Reset)"},
-        {category: "general", title: "Slow Internet", content: "1. Toggle Wi-Fi OFF/ON\n2. Airplane Mode Reset\n3. Restart Device"},
-        {category: "general", title: "Battery Draining Fast", content: "1. Restart\n2. Turn OFF Low Power Mode (sometimes causes glitches)\n3. Check Battery Usage in Settings\n4. Close unused apps"},
-        {category: "apple", title: "iPhone 17", content: "1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Cellular. Turn your main cellular plan Off and then back On after 30 seconds.\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. App Cache Deep Clean (Slowness Fix): Tap and hold a slow app's icon, tap Delete App, then re-download it from the App Store.\n4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.", spam: "Be very careful of apps that promise to 'clean' or 'speed up' your phone, as they are often spam/scam apps that collect your information."},
-        {category: "apple", title: "iPhone 17 Air", content: "1. Battery Drain Diagnostics: Go to Settings > Battery to identify and disable background refresh for top offenders in Settings > General > Background App Refresh.\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. Proactive Storage Offload (Free Up Space): Enable Offload Unused Apps in iPhone Storage.\n4. Control Center Toggle Cycling (Quick Fix for Connection): Swipe down to open Control Center. Systematically toggle Airplane Mode, Wi-Fi, and Bluetooth off and on.\n5. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.", spam: "Avoid clicking on pop-up ads or links that say your phone is infected with a virus. Only download apps from the official App Store."},
-        {category: "apple", title: "iPhone 17 Pro", content: "1. Display Sluggishness Check: Verify Low Power Mode is Off (Settings > Battery).\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. Simple Reboot: Power off, wait 30 seconds, and turn back on.\n4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.", spam: "If you notice a sudden increase in ads or your screen keeps opening strange websites, an unwanted spam app may be installed."},
-        {category: "apple", title: "iPhone 17 Pro Max", content: "1. Persistent Notification Clear: Go to Settings > Notifications. Find the app causing the alert and toggle its notifications Off, then On again.\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. System-Wide Haptics/Vibration Check: Test and recalibrate haptics via accessibility settings if needed.\n4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.", spam: "If you notice a sudden increase in ads or your screen keeps opening strange websites, an unwanted spam app may be installed."},
-        {category: "apple", title: "iPhone 16", content: "1. Network Reset Triage (No SIM Removal): Go to Settings > General > Transfer or Reset iPhone > Reset Network Settings.\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. Clear Safari Website Data (Browser Fix): In Settings > Safari, select Clear History and Website Data.\n4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.", spam: "Never enter your Apple ID or credit card information into an app unless you are 100% sure it is a legitimate app from a trusted company."},
-        {category: "apple", title: "iPhone 16E", content: "1. Network Reset Triage (No SIM Removal): Go to Settings > General > Transfer or Reset iPhone > Reset Network Settings.\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. Disable/Re-enable Face ID/Touch ID: Turn off the biometric security feature, reboot the phone, and set it up again.\n4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.", spam: "Never enter your Apple ID or credit card information into an app unless you are 100% sure it is a legitimate app from a trusted company."},
-        {category: "apple", title: "Apple Watch SE 3rd Gen", content: "1. Unpair and Re-pair (Watch Only): Unpair the Watch from the iPhone via the Watch app, then re-pair it.\n2. Accessibility Fix: VoiceOver Disable: If the Watch is reading items aloud, go to Settings on the Watch > Accessibility > VoiceOver. To turn it off: Tap once on the switch to select it, then double-tap to toggle it Off.\n3. Water Lock Cycling: Use the Digital Crown to cycle Water Lock on and off.", spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-        {category: "apple", title: "Apple Watch 11", content: "1. Digital Crown Calibration Check: Clean the Digital Crown with water and test its scrolling and pressing functions.\n2. Accessibility Fix: VoiceOver Disable: If the Watch is reading items aloud, go to Settings on the Watch > Accessibility > VoiceOver. To turn it off: Tap once on the switch to select it, then double-tap to toggle it Off.\n3. Workout Route Data Deletion: Delete the most recent workout in the iPhone’s Fitness app to clear corrupted GPS data.", spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-        {category: "apple", title: "Apple Watch Ultra 3", content: "1. Action Button Reconfiguration: Change the Action Button’s assigned task and then change it back to its original setting.\n2. Accessibility Fix: AssistiveTouch Toggle: Go to Settings on the Watch > Accessibility > AssistiveTouch. Toggle the main feature Off and then On to fix unexpected cursor or gesture movements.\n3. Compass Reorientation: Open the Compass app and perform a figure-eight motion with your arm to recalibrate the magnetometer.", spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-        {category: "apple", title: "Apple Watch SE 2nd Gen", content: "1. Silent Mode Toggle Test: Rapidly toggle the Silent Mode on and off several times to ensure the Taptic Engine (vibration) is fully engaging for notifications.\n2. Accessibility Fix: Taptic Time Toggle: Go to Settings on the Watch > Clock > Taptic Time. Toggle the setting Off and then On if haptics for time telling are wrong or missing.\n3. Watch Face Switch: Apply a different Watch Face and use it for a few hours before switching back.", spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-        {category: "apple", title: "Apple Watch 10", content: "1. Notifications Mirroring Check: Verify the “Mirror iPhone Alerts” setting is correctly configured in the Watch app on the iPhone.\n2. Accessibility Fix: Quick Actions Check: Go to Settings on the Watch > Accessibility > Quick Actions. Toggle this setting Off and then On if the watch is performing unexpected tasks after a quick wrist tap.\n3. Storage Management Drill-down: In the Watch app, check General > Usage and delete the largest unnecessary media/photo syncs.", spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-        {category: "apple", title: "Apple Watch Ultra 2", content: "1. Low Power Mode Specific Check: Ensure that Low Power Mode is not permanently enabled.\n2. Accessibility Fix: Reduce Transparency Toggle: Go to Settings on the Watch > Accessibility > Reduce Transparency. Toggle this setting Off and then On to fix background visibility issues or display rendering glitches.\n3. Cellular Connectivity Diagnostic: Run a cellular speed test directly from the Watch (if possible) or ensure the cellular status icon in Control Center is green/active.", spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
+        {category: "general", title: "Phone is Talking (VoiceOver/TalkBack)", content: `• iPhone: Settings → Accessibility → VoiceOver → OFF (Tap once to select, double-tap to activate)
+• Android: Settings → Accessibility → TalkBack → OFF (Use two fingers to scroll)`},
+        {category: "general", title: "No Service / Can't Call", content: `1. Restart (OFF 30s → ON)
+2. Airplane Mode (ON 10s → OFF)
+3. Reseat SIM (Physical) or Toggle eSIM in Settings
+4. Network Reset (Settings → General/System → Reset)`},
+        {category: "general", title: "Slow Internet", content: `1. Toggle Wi-Fi OFF/ON
+2. Airplane Mode Reset
+3. Restart Device`},
+        {category: "general", title: "Battery Draining Fast", content: `1. Restart
+2. Turn OFF Low Power Mode (sometimes causes glitches)
+3. Check Battery Usage in Settings
+4. Close unused apps`},
+        {category: "apple", title: "iPhone 17", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Cellular. Turn your main cellular plan Off and then back On after 30 seconds.
+2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.
+3. App Cache Deep Clean (Slowness Fix): Tap and hold a slow app's icon, tap Delete App, then re-download it from the App Store.
+4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "Be very careful of apps that promise to 'clean' or 'speed up' your phone, as they are often spam/scam apps that collect your information."},
+        {category: "apple", title: "iPhone 17 Air", content: `1. Battery Drain Diagnostics: Go to Settings > Battery to identify and disable background refresh for top offenders in Settings > General > Background App Refresh.
+2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.
+3. Proactive Storage Offload (Free Up Space): Enable Offload Unused Apps in iPhone Storage.
+4. Control Center Toggle Cycling (Quick Fix for Connection): Swipe down to open Control Center. Systematically toggle Airplane Mode, Wi-Fi, and Bluetooth off and on.
+5. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "Avoid clicking on pop-up ads or links that say your phone is infected with a virus. Only download apps from the official App Store."},
+        {category: "apple", title: "iPhone 17 Pro", content: `1. Display Sluggishness Check: Verify Low Power Mode is Off (Settings > Battery).
+2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.
+3. Simple Reboot: Power off, wait 30 seconds, and turn back on.
+4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "If you notice a sudden increase in ads or your screen keeps opening strange websites, an unwanted spam app may be installed."},
+        {category: "apple", title: "iPhone 17 Pro Max", content: `1. Persistent Notification Clear: Go to Settings > Notifications. Find the app causing the alert and toggle its notifications Off, then On again.
+2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.
+3. System-Wide Haptics/Vibration Check: Test and recalibrate haptics via accessibility settings if needed.
+4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "If you notice a sudden increase in ads or your screen keeps opening strange websites, an unwanted spam app may be installed."},
+        {category: "apple", title: "iPhone 16", content: `1. Network Reset Triage (No SIM Removal): Go to Settings > General > Transfer or Reset iPhone > Reset Network Settings.
+2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.
+3. Clear Safari Website Data (Browser Fix): In Settings > Safari, select Clear History and Website Data.
+4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "Never enter your Apple ID or credit card information into an app unless you are 100% sure it is a legitimate app from a trusted company."},
+        {category: "apple", title: "iPhone 16E", content: `1. Network Reset Triage (No SIM Removal): Go to Settings > General > Transfer or Reset iPhone > Reset Network Settings.
+2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.
+3. Disable/Re-enable Face ID/Touch ID: Turn off the biometric security feature, reboot the phone, and set it up again.
+4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "Never enter your Apple ID or credit card information into an app unless you are 100% sure it is a legitimate app from a trusted company."},
+        {category: "apple", title: "Apple Watch SE 3rd Gen", content: `1. Unpair and Re-pair (Watch Only): Unpair the Watch from the iPhone via the Watch app, then re-pair it.
+2. Accessibility Fix: VoiceOver Disable: If the Watch is reading items aloud, go to Settings on the Watch > Accessibility > VoiceOver. To turn it off: Tap once on the switch to select it, then double-tap to toggle it Off.
+3. Water Lock Cycling: Use the Digital Crown to cycle Water Lock on and off.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
+        {category: "apple", title: "Apple Watch 11", content: `1. Digital Crown Calibration Check: Clean the Digital Crown with water and test its scrolling and pressing functions.
+2. Accessibility Fix: VoiceOver Disable: If the Watch is reading items aloud, go to Settings on the Watch > Accessibility > VoiceOver. To turn it off: Tap once on the switch to select it, then double-tap to toggle it Off.
+3. Workout Route Data Deletion: Delete the most recent workout in the iPhone’s Fitness app to clear corrupted GPS data.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
+        {category: "apple", title: "Apple Watch Ultra 3", content: `1. Action Button Reconfiguration: Change the Action Button’s assigned task and then change it back to its original setting.
+2. Accessibility Fix: AssistiveTouch Toggle: Go to Settings on the Watch > Accessibility > AssistiveTouch. Toggle the main feature Off and then On to fix unexpected cursor or gesture movements.
+3. Compass Reorientation: Open the Compass app and perform a figure-eight motion with your arm to recalibrate the magnetometer.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
+        {category: "apple", title: "Apple Watch SE 2nd Gen", content: `1. Silent Mode Toggle Test: Rapidly toggle the Silent Mode on and off several times to ensure the Taptic Engine (vibration) is fully engaging for notifications.
+2. Accessibility Fix: Taptic Time Toggle: Go to Settings on the Watch > Clock > Taptic Time. Toggle the setting Off and then On if haptics for time telling are wrong or missing.
+3. Watch Face Switch: Apply a different Watch Face and use it for a few hours before switching back.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
+        {category: "apple", title: "Apple Watch 10", content: `1. Notifications Mirroring Check: Verify the “Mirror iPhone Alerts” setting is correctly configured in the Watch app on the iPhone.
+2. Accessibility Fix: Quick Actions Check: Go to Settings on the Watch > Accessibility > Quick Actions. Toggle this setting Off and then On if the watch is performing unexpected tasks after a quick wrist tap.
+3. Storage Management Drill-down: In the Watch app, check General > Usage and delete the largest unnecessary media/photo syncs.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
+        {category: "apple", title: "Apple Watch Ultra 2", content: `1. Low Power Mode Specific Check: Ensure that Low Power Mode is not permanently enabled.
+2. Accessibility Fix: Reduce Transparency Toggle: Go to Settings on the Watch > Accessibility > Reduce Transparency. Toggle this setting Off and then On to fix background visibility issues or display rendering glitches.
+3. Cellular Connectivity Diagnostic: Run a cellular speed test directly from the Watch (if possible) or ensure the cellular status icon in Control Center is green/active.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
 
-        {category: "samsung", title: "S25 Ultra", content: "1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. Clear Partition Cache (General System Refresh): Boot into Recovery Mode (Power + Volume Up) and select Wipe cache partition.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.", spam: "Be wary of apps that constantly ask for unnecessary permissions."},
-        {category: "samsung", title: "S25 FE", content: "1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. App Optimizer Re-run: Force the system to re-analyze all applications for background power usage in the Device Care menu.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.", spam: "Be wary of apps that constantly ask for unnecessary permissions."},
-        {category: "samsung", title: "S25 Edge", content: "1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. Edge Panel Handle Position Lock: Ensure the Edge Panel handle is locked into a fixed position to prevent accidental activation.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.", spam: "Be wary of apps that constantly ask for unnecessary permissions."},
-        {category: "samsung", title: "S25", content: "1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. System UI Force Stop (Visual Fix): Go to Settings > Apps > show system apps > System UI and select Force Stop to manually reset the visual interface.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.", spam: "Be wary of apps that constantly ask for unnecessary permissions."},
-        {category: "samsung", title: "Galaxy Z Fold7", content: "1. Flex Mode Sensor Re-calibration (Hinge Fix): Fully open and close the device three times quickly.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. Multi-Window Tray Reset: Clear the recent apps list and then manually drag two apps into a split-screen view.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.", spam: "If you download a keyboard or theme app that seems overly intrusive or asks to watch everything you type, it could be a privacy-invading spam app."},
-        {category: "samsung", title: "Galaxy Z Flip7 FE", content: "1. External Display Widget Refresh (Cover Screen Widgets): Remove all widgets from the external/cover screen and add them back one by one.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. Camera Shutter Lag Fix: Go into the Camera app settings and toggle off any resource-intensive image processing features temporarily.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.", spam: "If you download a keyboard or theme app that seems overly intrusive or asks to watch everything you type, it could be a privacy-invading spam app."},
-        {category: "samsung", title: "Galaxy A15 (Physical SIM)", content: "1. Power Cycle with SIM Removal (Carrier Fix - Physical SIM): Turn Off. Use a paperclip to open the SIM tray, remove the SIM for 60 seconds, re-insert, and turn back on.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. Storage / microSD Check (if used): Safely unmount and re-mount the microSD card via Storage settings.\n4. Side Key Function Reset: Change the double-press action for the Side Key/Power button and then change it back.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.", spam: "Free games, photo filters, and fake utility apps are common sources of spam."},
-        {category: "samsung", title: "Galaxy A36 5G (eSIM)", content: "1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. RAM Plus Adjustment (Slowness Fix): Adjust the RAM Plus setting to a lower value, reboot, and set it back to the preferred value.\n4. Notification History Clear: Clear the Notification History log to resolve any recurring ghost notifications.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.", spam: "Free games, photo filters, and fake utility apps are common sources of spam."},
-        {category: "samsung", title: "Galaxy A16 5G (eSIM)", content: "1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. MicroSD Card Re-mount (Storage Fix): Safely unmount and re-mount the external microSD card via Storage settings.\n4. Side Key Function Reset: Change the double-press action for the Side Key/Power button and then change it back.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.", spam: "Free games, photo filters, and fake utility apps are common sources of spam."},
-        {category: "samsung", title: "Galaxy Tab A11+", content: "1. Multi-User Profile Check: Switch to a different profile, and then switch back to your main profile to clear profile-specific glitches.\n2. Accessibility Fix: TalkBack Disable: If the tablet is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. Second Screen Mode Test: Attempt to connect the tablet as a second screen to a monitor, then disconnect, to reset the display output parameters.\n4. Dex Mode Toggle: Enable and immediately disable Samsung DeX (if available).\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.", spam: "Never download apps that instruct you to change a complex system setting or install another file outside of the official Google Play Store. (SIM note: only some Galaxy Tab models have a SIM tray.)"},
+        {category: "samsung", title: "S25 Ultra", content: `1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.
+2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.
+3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+4. Clear Partition Cache (General System Refresh): Boot into Recovery Mode (Power + Volume Up) and select Wipe cache partition.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Be wary of apps that constantly ask for unnecessary permissions."},
+        {category: "samsung", title: "S25 FE", content: `1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.
+2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.
+3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+4. App Optimizer Re-run: Force the system to re-analyze all applications for background power usage in the Device Care menu.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Be wary of apps that constantly ask for unnecessary permissions."},
+        {category: "samsung", title: "S25 Edge", content: `1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.
+2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.
+3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+4. Edge Panel Handle Position Lock: Ensure the Edge Panel handle is locked into a fixed position to prevent accidental activation.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Be wary of apps that constantly ask for unnecessary permissions."},
+        {category: "samsung", title: "S25", content: `1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.
+2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.
+3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+4. System UI Force Stop (Visual Fix): Go to Settings > Apps > show system apps > System UI and select Force Stop to manually reset the visual interface.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Be wary of apps that constantly ask for unnecessary permissions."},
+        {category: "samsung", title: "Galaxy Z Fold7", content: `1. Flex Mode Sensor Re-calibration (Hinge Fix): Fully open and close the device three times quickly.
+2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.
+3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+4. Multi-Window Tray Reset: Clear the recent apps list and then manually drag two apps into a split-screen view.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "If you download a keyboard or theme app that seems overly intrusive or asks to watch everything you type, it could be a privacy-invading spam app."},
+        {category: "samsung", title: "Galaxy Z Flip7 FE", content: `1. External Display Widget Refresh (Cover Screen Widgets): Remove all widgets from the external/cover screen and add them back one by one.
+2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.
+3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+4. Camera Shutter Lag Fix: Go into the Camera app settings and toggle off any resource-intensive image processing features temporarily.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "If you download a keyboard or theme app that seems overly intrusive or asks to watch everything you type, it could be a privacy-invading spam app."},
+        {category: "samsung", title: "Galaxy A15 (Physical SIM)", content: `1. Power Cycle with SIM Removal (Carrier Fix - Physical SIM): Turn Off. Use a paperclip to open the SIM tray, remove the SIM for 60 seconds, re-insert, and turn back on.
+2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. Storage / microSD Check (if used): Safely unmount and re-mount the microSD card via Storage settings.
+4. Side Key Function Reset: Change the double-press action for the Side Key/Power button and then change it back.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Free games, photo filters, and fake utility apps are common sources of spam."},
+        {category: "samsung", title: "Galaxy A36 5G (eSIM)", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.
+2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. RAM Plus Adjustment (Slowness Fix): Adjust the RAM Plus setting to a lower value, reboot, and set it back to the preferred value.
+4. Notification History Clear: Clear the Notification History log to resolve any recurring ghost notifications.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Free games, photo filters, and fake utility apps are common sources of spam."},
+        {category: "samsung", title: "Galaxy A16 5G (eSIM)", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.
+2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. MicroSD Card Re-mount (Storage Fix): Safely unmount and re-mount the external microSD card via Storage settings.
+4. Side Key Function Reset: Change the double-press action for the Side Key/Power button and then change it back.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Free games, photo filters, and fake utility apps are common sources of spam."},
+        {category: "samsung", title: "Galaxy Tab A11+", content: `1. Multi-User Profile Check: Switch to a different profile, and then switch back to your main profile to clear profile-specific glitches.
+2. Accessibility Fix: TalkBack Disable: If the tablet is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. Second Screen Mode Test: Attempt to connect the tablet as a second screen to a monitor, then disconnect, to reset the display output parameters.
+4. Dex Mode Toggle: Enable and immediately disable Samsung DeX (if available).
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Never download apps that instruct you to change a complex system setting or install another file outside of the official Google Play Store. (SIM note: only some Galaxy Tab models have a SIM tray.)"},
 
-        {category: "moto", title: "Razr 2025", content: "1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. Quick Display Sensor Check: Gently clean the cover screen’s proximity sensor.\n4. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.", spam: "Be cautious of any other app that tries to change the way your phone moves or acts."},
-        {category: "moto", title: "Razr 2024", content: "1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. Peek Display/Active Display Reset: Toggle the Peek Display feature Off and then On in the Moto app.\n4. Audio Effects Equalizer Reset: In the sound settings, reset the Dolby Atmos or custom Equalizer settings back to the default profile.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.", spam: "Be cautious of any other app that tries to change the way your phone moves or acts."},
-        {category: "moto", title: "Moto G 2025", content: "1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. System UI Force Stop (Visual Fix): Go to Settings > Apps > Show system > System UI and select Force Stop.\n4. Moto Camera App Clear Data: Clear all data for the default Moto Camera app.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.", spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
-        {category: "moto", title: "Moto G Power 2025", content: "1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. Power-Saving Mode Configuration Reset: Toggle the main Battery Saver mode on and then off.\n4. Fingerprint Sensor Timeout Check: Adjust the screen lock timeout and PIN/Pattern requirement duration.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.", spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
-        {category: "moto", title: "Moto G Stylus 2025", content: "1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. Stylus Air Command Refresh: Remove and re-insert the physical stylus firmly several times.\n4. Screen Recorder Shortcut Test: Attempt to use the built-in Screen Recorder shortcut and then force stop the service.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.", spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
-        {category: "moto", title: "Moto G Play 2024 (Physical SIM)", content: "1. Power Cycle with SIM Removal (Carrier Fix - Physical SIM): Turn Off. Use a paperclip to open the SIM tray, remove the SIM for 60 seconds, re-insert, and turn back on.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. External Storage Format Check: If a microSD card is used, safely unmount and re-mount it.\n4. Lock Screen Display Customization: Change the Lock Screen wallpaper and clock style to force a refresh.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.", spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
-        {category: "moto", title: "Moto Edge 2024", content: "1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. Curved Display Edge Detection: Adjust the Accidental Touch Prevention setting for the curved display.\n4. Ready For/External Display Reset: Connect the phone to a desktop-mode environment (like Ready For) and then cleanly disconnect it.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.", spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
+        {category: "moto", title: "Razr 2025", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
+2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. Quick Display Sensor Check: Gently clean the cover screen’s proximity sensor.
+4. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "Be cautious of any other app that tries to change the way your phone moves or acts."},
+        {category: "moto", title: "Razr 2024", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
+2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. Peek Display/Active Display Reset: Toggle the Peek Display feature Off and then On in the Moto app.
+4. Audio Effects Equalizer Reset: In the sound settings, reset the Dolby Atmos or custom Equalizer settings back to the default profile.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "Be cautious of any other app that tries to change the way your phone moves or acts."},
+        {category: "moto", title: "Moto G 2025", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
+2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. System UI Force Stop (Visual Fix): Go to Settings > Apps > Show system > System UI and select Force Stop.
+4. Moto Camera App Clear Data: Clear all data for the default Moto Camera app.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
+        {category: "moto", title: "Moto G Power 2025", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
+2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. Power-Saving Mode Configuration Reset: Toggle the main Battery Saver mode on and then off.
+4. Fingerprint Sensor Timeout Check: Adjust the screen lock timeout and PIN/Pattern requirement duration.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
+        {category: "moto", title: "Moto G Stylus 2025", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
+2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. Stylus Air Command Refresh: Remove and re-insert the physical stylus firmly several times.
+4. Screen Recorder Shortcut Test: Attempt to use the built-in Screen Recorder shortcut and then force stop the service.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
+        {category: "moto", title: "Moto G Play 2024 (Physical SIM)", content: `1. Power Cycle with SIM Removal (Carrier Fix - Physical SIM): Turn Off. Use a paperclip to open the SIM tray, remove the SIM for 60 seconds, re-insert, and turn back on.
+2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. External Storage Format Check: If a microSD card is used, safely unmount and re-mount it.
+4. Lock Screen Display Customization: Change the Lock Screen wallpaper and clock style to force a refresh.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
+        {category: "moto", title: "Moto Edge 2024", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
+2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+3. Curved Display Edge Detection: Adjust the Accidental Touch Prevention setting for the curved display.
+4. Ready For/External Display Reset: Connect the phone to a desktop-mode environment (like Ready For) and then cleanly disconnect it.
+5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
         
-        {category: "pixel", title: "Google Pixel 10", content: "Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.\nAccessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\nAdaptive Connectivity Toggle (Network Fix): Turn off Adaptive Connectivity/Intelligent Networking for 5 minutes and then re-enable it.\nForce Re-Index Search: Go into Google App settings and initiate a manual re-indexing of device content.\nSafety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.", spam: "Be mindful of phishing emails or texts that try to trick you into downloading files or giving up passwords."},
+        {category: "pixel", title: "Google Pixel 10", content: `Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
+Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+Adaptive Connectivity Toggle (Network Fix): Turn off Adaptive Connectivity/Intelligent Networking for 5 minutes and then re-enable it.
+Force Re-Index Search: Go into Google App settings and initiate a manual re-indexing of device content.
+Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "Be mindful of phishing emails or texts that try to trick you into downloading files or giving up passwords."},
         
-        {category: "cc", title: "Iris Eazy Flip (Physical SIM)", content: "Simple Reboot (No SIM Removal): Turn the phone Off, wait 30 seconds, and turn it back on.\nAccessibility Fix: Display Contrast Check: Go to Settings > Display > Contrast (or Accessibility > Display). Make sure the contrast is set to its highest level.\nT9 Text Input Test: Type a test word in a new message and toggle the text input mode.\nExternal Volume Rocker Test: Use the external volume rocker buttons to adjust the ringer volume.\nSafety Check: Remove Bad Apps: This type of phone generally cannot download 'spam apps.'", spam: "Your biggest risk is scam phone calls or scam text messages. Never press a button or call back a number that an automated message tells you to call."},
-        {category: "cc", title: "Verve Home Base", content: "Base Station Power Cycle (Network Fix): Unplug the Home Base from the wall and remove the battery backup (if applicable) for 2 minutes before plugging it back in.\nAlert Tone Check: Test the Ringer Volume and Alert Tone settings to ensure alerts are loud enough.\nVoicemail Reset Password (Store/Care Only): Voicemail reset password must be handled in-store or through Care.\nAntenna Position Adjustment: Re-position the adjustable external antenna by rotating it 90 degrees.\nImportant Note (No Display): Verve Home Base has no display, so menu-based settings like caller blocking won’t be available on the unit itself.\nVoicemail Setup Requirement: To set up voicemail (or fix voicemail issues), the Home Base will need to be handled with all equipment present — either bring everything into the store or call Care for guided setup.", spam: "Be aware of calls reporting a 'problem' with your base station or medical alert service. Hang up and call your service provider's official number directly to confirm."},
-        {category: "cc", title: "Iris Home Base (Physical SIM)", content: "Base Station Power Cycle (Network Fix): Unplug the Home Base from the wall and remove the battery backup (if applicable) for 2 minutes before plugging it back in.\nCheck Display for Caller Blocking: Use the small display to check for any menu options or indicators for blocking unwanted callers. (Iris Home Base has a display and can be used to block callers.)\nVoicemail Reset Password (Store/Care Only): Voicemail reset password must be handled in-store or through Care.\nStatus Light Interpretation: Refer to the device's manual and note the exact color and blinking pattern of all status lights.\nVoicemail Setup Requirement: To set up voicemail (or fix voicemail issues), the Home Base will need to be handled with all equipment present — either bring everything into the store or call Care for guided setup.", spam: "Be aware of calls reporting a 'problem' with your base station or medical alert service. Hang up and call your service provider's official number directly to confirm."},
-        {category: "cc", title: "Iris Ally (Necklace/Cradle)", content: "SOS Button Dry Run: Press the dedicated SOS button on the necklace and immediately cancel the call or alert process to ensure the emergency contact list is active and working.\nCheck Charging Cradle Connection: If the battery light is not green, ensure the necklace is firmly seated in the charging cradle and the cradle is plugged in.\nContact for Sound/Sensitivity: If the Ally is too sensitive or not loud enough, contact your trusted person or Consumer Cellular (Care/in-store) to adjust the sound/volume and Fall Detection Sensitivity settings.\nPendant/Wearable Link Test: Ensure the Ally necklace is within range of the cradle/base station and press a test button on the necklace.\nCoverage Note: Ally works anywhere in the U.S. where coverage is available/applicable.\nFix Path (Trusted Contact / Care / Store): If Iris Ally isn’t working correctly, it should be fixed by a trusted contact, calling Care, or coming into the store (whichever is fastest/most comfortable).", spam: "Be aware of calls reporting a 'problem' with your base station or medical alert service. Hang up and call your service provider's official number directly to confirm."},
+        {category: "cc", title: "Iris Eazy Flip (Physical SIM)", content: `Simple Reboot (No SIM Removal): Turn the phone Off, wait 30 seconds, and turn it back on.
+Accessibility Fix: Display Contrast Check: Go to Settings > Display > Contrast (or Accessibility > Display). Make sure the contrast is set to its highest level.
+T9 Text Input Test: Type a test word in a new message and toggle the text input mode.
+External Volume Rocker Test: Use the external volume rocker buttons to adjust the ringer volume.
+Safety Check: Remove Bad Apps: This type of phone generally cannot download 'spam apps.'`, spam: "Your biggest risk is scam phone calls or scam text messages. Never press a button or call back a number that an automated message tells you to call."},
+        {category: "cc", title: "Verve Home Base", content: `Base Station Power Cycle (Network Fix): Unplug the Home Base from the wall and remove the battery backup (if applicable) for 2 minutes before plugging it back in.
+Alert Tone Check: Test the Ringer Volume and Alert Tone settings to ensure alerts are loud enough.
+Voicemail Reset Password (Store/Care Only): Voicemail reset password must be handled in-store or through Care.
+Antenna Position Adjustment: Re-position the adjustable external antenna by rotating it 90 degrees.
+Important Note (No Display): Verve Home Base has no display, so menu-based settings like caller blocking won’t be available on the unit itself.
+Voicemail Setup Requirement: To set up voicemail (or fix voicemail issues), the Home Base will need to be handled with all equipment present — either bring everything into the store or call Care for guided setup.`, spam: "Be aware of calls reporting a 'problem' with your base station or medical alert service. Hang up and call your service provider's official number directly to confirm."},
+        {category: "cc", title: "Iris Home Base (Physical SIM)", content: `Base Station Power Cycle (Network Fix): Unplug the Home Base from the wall and remove the battery backup (if applicable) for 2 minutes before plugging it back in.
+Check Display for Caller Blocking: Use the small display to check for any menu options or indicators for blocking unwanted callers. (Iris Home Base has a display and can be used to block callers.)
+Voicemail Reset Password (Store/Care Only): Voicemail reset password must be handled in-store or through Care.
+Status Light Interpretation: Refer to the device's manual and note the exact color and blinking pattern of all status lights.
+Voicemail Setup Requirement: To set up voicemail (or fix voicemail issues), the Home Base will need to be handled with all equipment present — either bring everything into the store or call Care for guided setup.`, spam: "Be aware of calls reporting a 'problem' with your base station or medical alert service. Hang up and call your service provider's official number directly to confirm."},
+        {category: "cc", title: "Iris Ally (Necklace/Cradle)", content: `SOS Button Dry Run: Press the dedicated SOS button on the necklace and immediately cancel the call or alert process to ensure the emergency contact list is active and working.
+Check Charging Cradle Connection: If the battery light is not green, ensure the necklace is firmly seated in the charging cradle and the cradle is plugged in.
+Contact for Sound/Sensitivity: If the Ally is too sensitive or not loud enough, contact your trusted person or Consumer Cellular (Care/in-store) to adjust the sound/volume and Fall Detection Sensitivity settings.
+Pendant/Wearable Link Test: Ensure the Ally necklace is within range of the cradle/base station and press a test button on the necklace.
+Coverage Note: Ally works anywhere in the U.S. where coverage is available/applicable.
+Fix Path (Trusted Contact / Care / Store): If Iris Ally isn’t working correctly, it should be fixed by a trusted contact, calling Care, or coming into the store (whichever is fastest/most comfortable).`, spam: "Be aware of calls reporting a 'problem' with your base station or medical alert service. Hang up and call your service provider's official number directly to confirm."},
         
-        {category: "tablet", title: "TCL Tab 8 Gen 2 (Physical SIM)", content: "Power Cycle with SIM Removal (Carrier Fix - Physical SIM): Turn Off. Use a paperclip to open the SIM tray, remove the SIM for 60 seconds, re-insert, and turn back on.\nAccessibility Fix: TalkBack Disable: If a voice starts announcing every button you press, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\nMulti-User Profile Check: If the tablet supports multiple users, switch to a different profile, and then switch back to your main profile.\nKeyboard/Accessory Dock Check: If you use a clip-on keyboard, ensure the connection pins are clean and the accessory is correctly detected.\nSafety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.", spam: "Be careful when downloading free games, as they often come bundled with intrusive ad software. Always use the Google Play Store."}
+        {category: "tablet", title: "TCL Tab 8 Gen 2 (Physical SIM)", content: `Power Cycle with SIM Removal (Carrier Fix - Physical SIM): Turn Off. Use a paperclip to open the SIM tray, remove the SIM for 60 seconds, re-insert, and turn back on.
+Accessibility Fix: TalkBack Disable: If a voice starts announcing every button you press, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
+Multi-User Profile Check: If the tablet supports multiple users, switch to a different profile, and then switch back to your main profile.
+Keyboard/Accessory Dock Check: If you use a clip-on keyboard, ensure the connection pins are clean and the accessory is correctly detected.
+Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "Be careful when downloading free games, as they often come bundled with intrusive ad software. Always use the Google Play Store."}
     ];
 
     function initTroubleshoot() {
@@ -854,7 +859,7 @@
         let spam = item.spam ? `<div class="warning-box"><strong>⚠️ Spam Warning:</strong> ${item.spam}</div>` : '';
         let contentHtml = `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
         const win = window.open('', '_blank');
-        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:0;margin:0;color:#0f172a;-webkit-print-color-adjust:exact}.container{max-width:8.5in;margin:0 auto;padding:40px}.header-bar{background-color:#102B4A;color:white;padding:25px 40px;display:flex;justify-content:space-between;align-items:center}.header-title{font-family:'Oswald',sans-serif;font-size:36px;text-transform:uppercase;letter-spacing:1px;line-height:1}.logo-square{background-color:#F15A22;width:80px;height:80px;display:flex;align-items:center;justify-content:center;text-align:center;color:white;font-family:'Playfair Display',serif;font-weight:700;line-height:1;font-size:16px;padding:5px;box-sizing:border-box}.hero{background-color:#eff6ff;padding:30px;border-radius:12px;text-align:center;border:1px solid #bfdbfe;margin:30px 40px}.plan-title{font-family:'Playfair Display',serif;font-size:2.5rem;color:#1e3a8a;margin:0 0 10px 0}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid;margin:0 40px}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.3rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:20px;border-radius:8px;margin-top:20px;font-size:1.1rem;border-left:6px solid #ea580c;margin:0 40px}.footer{font-size:10px;color:#90A2B1;text-align:center;padding:20px 40px;margin-top:20px;border-top:1px solid #E3E6EA}</style></head><body><div class="container"><div class="header-bar"><div class="header-title">TROUBLESHOOTING GUIDE</div><div class="logo-square">Consumer<br>Cellular</div></div><div class="hero"><h1 class="plan-title">${item.title}</h1></div>${contentHtml}<div class="footer">Provided by DealerTouch • 2025 Consumer Cellular, Inc.</div></div><script>window.print();<\/script></body></html>`);
+        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:40px;color:#0f172a;-webkit-print-color-adjust:exact}.header{display:flex;justify-content:space-between;border-bottom:3px solid #ff7b00;padding-bottom:20px;margin-bottom:30px}.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1e3a8a}.title{font-size:2rem;font-weight:700;margin-bottom:20px;color:#1e3a8a;text-transform:capitalize}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.3rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:20px;border-radius:8px;margin-top:20px;font-size:1.1rem;border-left:6px solid #ea580c}.footer{margin-top:50px;text-align:center;color:#64748b;font-size:0.8rem;border-top:1px solid #e2e8f0;padding-top:20px}h3{color:#2563eb;margin-bottom:10px;font-size:1.6rem}</style></head><body><div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>${contentHtml}<div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div><script>window.print();<\/script></body></html>`);
         win.document.close();
     }
     
