@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Portal V17.5.0</title>
+    <title>Sales Portal V20.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --sidebar-bg: rgba(255, 255, 255, 0.95);
             --header-bg: rgba(255, 255, 255, 0.95);
             --text-dark: #0f172a;
-            --text-muted: #64748b;
-            --primary: #0F2A4A; 
-            --accent: #F05820;  
+            --primary: #0F2A4A; /* Deep Navy */
+            --accent: #F05820;  /* Bright Orange */
             --border: #e2e8f0;
             --hover-bg: #f1f5f9;
         }
@@ -24,12 +23,12 @@
             background-size: cover; background-position: center;
         }
 
-        /* --- LOGIN --- */
+        /* --- LOGIN SCREEN --- */
         #login-view { 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
             width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 2000; 
-            background: linear-gradient(rgba(30, 58, 138, 0.85), rgba(30, 58, 138, 0.9)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000&auto=format&fit=crop');
-            background-size: cover; background-position: center; transition: opacity 0.5s ease; 
+            background: linear-gradient(rgba(15, 42, 74, 0.85), rgba(15, 42, 74, 0.9)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover; background-position: center;
         }
         .login-box-title { border: 3px solid white; padding: 20px 50px; margin-bottom: 60px; color: white; font-family: 'Playfair Display', serif; font-size: 2.5rem; text-transform: uppercase; letter-spacing: 3px; text-align:center; }
         .login-form-container { width: 320px; display: flex; flex-direction: column; }
@@ -40,44 +39,63 @@
         #dashboard-view { display: none; height: 100vh; width: 100%; }
         .sidebar { width: 260px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; transition: width 0.3s ease; backdrop-filter: blur(10px); }
         .sidebar.collapsed { width: 80px; padding: 20px 10px; }
-        .sidebar.collapsed .nav-text, .sidebar.collapsed .brand-text { display: none; }
+        .sidebar.collapsed .nav-text, .sidebar.collapsed .brand-text, .sidebar.collapsed .nav-section-label { display: none; }
         .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; font-weight: 700; color: var(--primary); }
         .brand-icon { min-width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; color: white; display: flex; justify-content: center; align-items: center; }
-        .nav-item { padding: 12px 15px; border-radius: 8px; color: var(--text-muted); cursor: pointer; margin-bottom: 5px; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; transition: all 0.2s; overflow: hidden; white-space: nowrap;}
+        .nav-item { padding: 12px 15px; border-radius: 8px; color: #64748b; cursor: pointer; margin-bottom: 5px; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; transition: all 0.2s; white-space: nowrap; font-weight: 500;}
         .nav-item:hover { background-color: var(--hover-bg); color: var(--text-dark); }
-        .nav-item.active { background-color: #eff6ff; color: var(--primary); font-weight: 600; }
+        .nav-item.active { background-color: #eff6ff; color: var(--primary); font-weight: 700; }
+        
         .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         .header { height: 70px; background: var(--header-bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
         .header-clock { font-family: 'Oswald', sans-serif; font-size: 1.1rem; color: var(--primary); }
         .scroll-area { flex: 1; overflow-y: auto; padding: 40px; }
         .view-section { display: none; }
         .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+        /* --- PDF COMPONENT STYLES --- */
+        .card { background: rgba(255, 255, 255, 0.98); border-radius: 16px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 1000px; margin: 0 auto 30px; }
         
-        /* --- CARD & FORM STYLES --- */
-        .card { background: rgba(255, 255, 255, 0.98); border-radius: 16px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 900px; margin: 0 auto; }
-        .bill-sec-title { background-color: var(--primary); color: white; padding: 8px 30px 8px 15px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; font-size: 0.85rem; width: fit-content; clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%); }
-        .input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; margin-bottom: 15px; }
-        .calc-panel { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-top: 10px; }
-        .calc-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
-        .calc-total { border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px; font-weight: 800; font-size: 1.2rem; display: flex; justify-content: space-between; }
-        .ts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .ts-card { border: 1px solid var(--border); border-radius: 12px; background: white; padding: 20px; }
-        .port-list { list-style: none; padding: 0; }
-        .port-item { border: 1px solid var(--border); background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
-        .port-details { display: none; padding-top: 10px; font-size: 0.85rem; color: var(--text-muted); }
+        /* BLUE ARROW BANNERS */
+        .banner-arrow { 
+            background-color: var(--primary); color: white; 
+            padding: 10px 40px 10px 15px; font-weight: 800; text-transform: uppercase; 
+            margin-bottom: 20px; font-size: 0.9rem; width: fit-content; 
+            clip-path: polygon(0% 0%, 92% 0%, 100% 50%, 92% 100%, 0% 100%); 
+        }
+
+        .row-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed var(--border); }
+        .form-label { color: var(--primary); font-weight: 600; font-size: 0.95rem; }
+        .orange-val { color: var(--accent); font-weight: 800; font-size: 1.1rem; }
+
+        .ts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+        .ts-card { border: 1px solid var(--border); border-radius: 12px; background: white; padding: 25px; border-top: 4px solid var(--accent); }
+        .ts-title { font-weight: 800; font-size: 1.2rem; color: var(--primary); margin-bottom: 10px; }
+        .ts-content { font-size: 0.95rem; color: #444; white-space: pre-wrap; line-height: 1.6; margin-bottom: 20px; }
+
+        .port-item { border: 1px solid var(--border); background: white; padding: 20px; margin-bottom: 10px; border-radius: 12px; cursor: pointer; }
+        .port-details { display: none; padding: 20px; background: #f1f5f9; border-radius: 8px; margin-top: 15px; border-left: 4px solid var(--primary); }
         .port-item.expanded .port-details { display: block; }
+
+        .input { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; font-family: inherit; margin-bottom: 10px; font-size: 1rem; }
+        .input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(240, 88, 32, 0.1); }
+        .btn-primary { background: var(--primary); color: white; border: none; padding: 14px 30px; border-radius: 50px; cursor: pointer; font-weight: 700; text-transform: uppercase; transition: transform 0.2s; }
+        .btn-primary:hover { transform: scale(1.03); background: #081a2e; }
         
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-box { background: white; width: 480px; padding: 40px; border-radius: 20px; text-align: center; border-bottom: 8px solid var(--accent); }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
+
     <div id="login-view">
         <div class="login-box-title">WORK PORTAL</div>
         <form id="login-form" class="login-form-container">
-            <input type="password" id="password-input" class="login-input" placeholder="Password">
-            <button type="submit" class="pill-btn">ENTER</button>
+            <input type="password" id="password-input" class="login-input" placeholder="System Password">
+            <button type="submit" class="pill-btn">ACCESS PORTAL</button>
         </form>
-        <div id="login-error">Access Denied</div>
     </div>
 
     <div id="dashboard-view">
@@ -85,108 +103,205 @@
             <div class="brand"><div class="brand-icon">S</div><div class="brand-text">Sales Portal</div></div>
             <ul class="nav-menu">
                 <li class="nav-item active" onclick="switchView('view-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span class="nav-text">Home</span></li>
-                <li class="nav-item" onclick="switchView('view-calc')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect></svg><span class="nav-text">EasyPay Calculator</span></li>
-                <li class="nav-item" onclick="switchView('view-bill')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg><span class="nav-text">Bill Estimator</span></li>
+                <li class="nav-item" onclick="switchView('view-calc')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="8" y1="2" x2="8" y2="6"></line><line x1="16" y1="2" x2="16" y2="6"></line></svg><span class="nav-text">EasyPay Calculator</span></li>
+                <li class="nav-item" onclick="switchView('view-estimator')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg><span class="nav-text">Plan Estimator</span></li>
+                <li class="nav-item" onclick="switchView('view-bill')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg><span class="nav-text">Bill Estimator</span></li>
                 <li class="nav-item" onclick="switchView('view-troubleshoot')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg><span class="nav-text">Quick Fix</span></li>
-                <li class="nav-item" onclick="switchView('view-contract')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg><span class="nav-text">EasyPay Contract</span></li>
+                <li class="nav-item" onclick="switchView('view-contract')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg><span class="nav-text">EasyPay Contract</span></li>
                 <li class="nav-item" onclick="switchView('view-porting')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg><span class="nav-text">Porting Contacts</span></li>
             </ul>
         </div>
 
         <div class="main-content">
             <div class="header">
-                <div onclick="toggleSidebar()" style="cursor:pointer;"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+                <div onclick="toggleSidebar()" style="cursor:pointer; color:var(--text-muted);"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
                 <div class="header-clock" id="live-clock"></div>
             </div>
+            
             <div class="scroll-area">
                 <div id="view-home" class="view-section active"></div>
+                
                 <div id="view-calc" class="view-section">
-                    <div class="card" style="max-width:500px;">
-                        <h2>EasyPay Calculator</h2>
-                        <input type="number" id="q-price" class="input" placeholder="Retail Price ($)">
-                        <div style="margin-bottom:20px;">
-                            <label><input type="radio" name="q-type" id="q-phone" checked> Phone</label>
-                            <label style="margin-left:20px;"><input type="radio" name="q-type" id="q-watch"> Watch</label>
+                    <div class="card" style="max-width:550px;">
+                        <h2 style="margin-top:0;">EasyPay Calculator</h2>
+                        <label class="form-label">Retail Price ($)</label>
+                        <input type="number" id="ep-price" class="input" placeholder="0.00" oninput="calculateEP()">
+                        <div style="margin:10px 0 25px;">
+                            <label><input type="radio" name="ep-type" id="ep-phone" checked onchange="calculateEP()"> Smartphone</label>
+                            <label style="margin-left:30px;"><input type="radio" name="ep-type" id="ep-watch" onchange="calculateEP()"> Smartwatch</label>
                         </div>
                         <div class="calc-panel">
-                            <div class="calc-row"><span>Sales Tax (8.9%)</span><span id="res-tax">$0.00</span></div>
-                            <div class="calc-row"><span>Down Payment</span><span id="res-down">$0.00</span></div>
-                            <div class="calc-row"><span>Monthly (24mo)</span><span id="res-mo">$0.00</span></div>
-                            <div class="calc-total"><span>Due Today</span><span id="res-total">$0.00</span></div>
+                            <div class="row-item"><span class="label-navy">Sales Tax (8.9%)</span><span id="ep-tax" class="orange-val">$0.00</span></div>
+                            <div class="row-item"><span class="label-navy">Down Payment</span><span id="ep-down" class="orange-val">$0.00</span></div>
+                            <div class="row-item"><span class="label-navy">Monthly Installment (24mo)</span><span id="ep-mo" class="orange-val">$0.00</span></div>
+                            <div class="calc-total"><span class="label-navy">DUE TODAY</span><span id="ep-total" class="accent-orange">$0.00</span></div>
                         </div>
                     </div>
                 </div>
+
                 <div id="view-bill" class="view-section">
                     <div class="card">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <h2>First Bill Estimator</h2>
-                            <button class="btn-primary" onclick="generateBill()">Print PDF</button>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:40px;">
+                            <div><h2 style="margin:0;">Bill Estimator</h2><p style="color:#64748b; margin-top:5px;">Professional Print Output</p></div>
+                            <button class="btn-primary" onclick="printEstimator()">Print Estimated Bill</button>
                         </div>
-                        <div class="bill-sec-title">Monthly Rate Plan</div>
-                        <div class="bill-calc-row"><span>Base Plan Cost</span><input type="number" id="b-plan" class="input" style="width:100px;" value="20"></div>
+                        <div class="banner-arrow">MONTHLY RATE PLAN</div>
+                        <div class="row-item"><span class="label-navy">Select Base Plan</span><select id="be-plan" class="input" style="width:250px; margin:0;" onchange="updateBillMath()"></select></div>
+                        <div class="row-item"><span class="label-navy">Number of Service Lines</span><input type="number" id="be-lines" class="input" style="width:100px; margin:0;" value="1" min="1" max="7" oninput="updateBillMath()"></div>
+                        <div class="row-item"><span class="label-navy">AARP/USAA (5% Discount)</span><input type="checkbox" id="be-aarp" onchange="updateBillMath()" style="width:22px; height:22px;"></div>
+                        <div class="calc-total" style="border:none; background:#f8fafc; padding:20px; border-radius:15px; margin-top:30px;">
+                            <span class="label-navy">ESTIMATED MONTHLY TOTAL</span>
+                            <span id="be-grand-total" class="accent-orange" style="font-size:1.8rem;">$0.00</span>
+                        </div>
                     </div>
                 </div>
+
+                <div id="view-estimator" class="view-section">
+                    <div class="card">
+                        <h2 style="margin:0 0 20px 0;">Plan Selection Guide</h2>
+                        <div style="display:grid; grid-template-columns:1fr 2fr; gap:30px;">
+                            <div id="plan-list-cont"></div>
+                            <div id="plan-detail-cont" class="calc-panel">Select a data plan to view usage examples and details.</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="view-troubleshoot" class="view-section">
                     <div class="card">
-                        <h2>Quick Fix Guides</h2>
-                        <input type="text" id="ts-search" class="input" placeholder="Search devices..." onkeyup="searchTS()">
-                        <div class="ts-grid" id="ts-cont"></div>
+                        <h2 style="margin-top:0;">Quick Fix Device Library</h2>
+                        <input type="text" id="ts-search-input" class="input" placeholder="Start typing device name (e.g. S25, iPhone 17, Razr)..." onkeyup="filterTS()">
+                        <div class="ts-grid" id="ts-grid-cont"></div>
                     </div>
                 </div>
+
                 <div id="view-porting" class="view-section">
                     <div class="card">
-                        <h2>Porting Contacts</h2>
-                        <input type="text" id="port-search" class="input" placeholder="Search carrier..." onkeyup="searchPort()">
-                        <ul class="port-list" id="port-cont"></ul>
+                        <h2 style="margin-top:0;">Carrier Porting Contacts</h2>
+                        <input type="text" id="port-search-input" class="input" placeholder="Search by Carrier Name..." onkeyup="filterPort()">
+                        <div id="port-list-cont"></div>
                     </div>
                 </div>
+
                 <div id="view-contract" class="view-section">
                     <div class="card">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <h2>New EasyPay Contract</h2>
-                            <button class="btn-primary" onclick="handleContract()">Generate PDF</button>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+                            <h2 style="margin:0;">EasyPay Installment Contract</h2>
+                            <button class="btn-primary" onclick="validateContract()">Process Agreement</button>
                         </div>
-                        <input type="text" id="c-name" class="input" placeholder="Customer Name">
-                        <input type="number" id="c-price" class="input" placeholder="Retail Price ($)">
-                        <div>
-                            <label><input type="radio" name="c-type" id="c-phone" checked> Phone</label>
-                            <label style="margin-left:20px;"><input type="radio" name="c-type" id="c-watch"> Watch</label>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                            <div><label class="label-navy">Customer Full Name</label><input type="text" id="c-cust-name" class="input" placeholder="Required"></div>
+                            <div><label class="label-navy">Account Number</label><input type="text" id="c-cust-acct" class="input" placeholder="Required"></div>
+                        </div>
+                        <label class="label-navy">Device Name & Color</label><input type="text" id="c-cust-dev" class="input" placeholder="e.g. iPhone 17 Pro Max Black">
+                        <label class="label-navy">Retail Sales Price ($)</label><input type="number" id="c-cust-price" class="input" placeholder="0.00" oninput="runConMath()">
+                        <div style="margin-top:10px;">
+                            <label><input type="radio" name="c-type-sel" id="c-is-phone" checked onchange="runConMath()"> Phone</label>
+                            <label style="margin-left:40px;"><input type="radio" name="c-type-sel" id="c-is-watch" onchange="runConMath()"> Watch</label>
+                        </div>
+                        <div class="calc-panel" style="margin-top:30px;">
+                            <div class="row-item"><span>Monthly Payment (24mo)</span><span id="con-mo" class="orange-val">$0.00</span></div>
+                            <div class="calc-total"><span>Due Today at Register</span><span id="con-total" class="accent-orange">$0.00</span></div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
     <div id="hv-modal" class="modal-overlay">
         <div class="modal-box">
-            <h3>High Value Approval</h3>
-            <p>This exceeds $700. Call CC EasyPay Credit for authorization.</p>
-            <button class="btn-primary" onclick="closeHV()">I Have Called</button>
+            <div style="font-size:50px; margin-bottom:15px;">⚠️</div>
+            <h2 style="color:var(--accent); margin-top:0;">HIGH VALUE APPROVAL</h2>
+            <p style="font-size:1.1rem; line-height:1.5;">This device retail price exceeds <strong>$700.00</strong>.</p>
+            <p>You MUST call <strong>CC EasyPay Credit</strong> at <strong>(877) 803-0176</strong> for authorization before printing this agreement.</p>
+            <button class="pill-btn" style="background:var(--primary); color:white; width:100%; margin-top:20px; padding:18px 0;" onclick="confirmHV()">I HAVE CALLED CREDIT DEPT</button>
+            <button onclick="closeHV()" style="background:none; border:none; color:#64748b; margin-top:20px; cursor:pointer; text-decoration:underline;">Go Back / Correct Price</button>
         </div>
-    </div><script>
-    // --- AUTH & NAVIGATION ---
-    const loginForm = document.getElementById('login-form');
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if(document.getElementById('password-input').value.toLowerCase() === 'spokanecc') {
-            document.getElementById('login-view').style.display = 'none';
-            document.getElementById('dashboard-view').style.display = 'flex';
-            renderData();
-        }
-    });
+    </div>
+    <script>
+    // --- 1. INITIALIZATION & NAVIGATION ---
+    const carriers = [
+        {name: "Verizon Wireless", num: "888-844-7095", pin: "Number Transfer PIN via #PORT. Valid 7 days."},
+        {name: "AT&T Wireless", num: "877-844-5584", pin: "Port-out PIN via *PORT. Valid 4 days."},
+        {name: "T-Mobile", num: "877-789-3106", pin: "NTP via T-Mobile App/Account Portal."},
+        {name: "Straight Talk", num: "800-327-2077", pin: "Text NTP to 611611."},
+        {name: "Spectrum Mobile", num: "833-224-6603", pin: "Account PIN found on page 1 of bill."},
+        {name: "Xfinity Mobile", num: "877-547-7230", pin: "NTP available in Xfinity App settings."},
+        {name: "Cricket Wireless", num: "800-274-2538", pin: "NTP via *PORT or Account Portal."},
+        {name: "Boost Mobile", num: "833-642-6678", pin: "Call 611 or Port Dept to request PIN."},
+        {name: "Mint Mobile", num: "800-683-7392", pin: "Request via App > Account > Port Out."},
+        {name: "Google Fi", num: "844-825-5234", pin: "Unlock number via Fi app settings."},
+        {name: "Lively / Jitterbug", num: "800-733-6632", pin: "Call CS for unique alphanumeric PIN."},
+        {name: "US Cellular", num: "888-900-7678", pin: "Call Port Dept for PIN."},
+        {name: "Consumer Cellular", num: "888-345-5509", pin: "Last 4 of Primary SSN (Default)."}
+    ];
 
-    function toggleSidebar() { document.getElementById('app-sidebar').classList.toggle('collapsed'); }
-    function switchView(id) {
-        document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+    const tsGuides = [
+        {title: "iPhone 17 Pro Max", content: "1. Cellular Fix: Settings > Cellular > Toggle main plan Off then On after 30s.\n2. Network Reset: Settings > General > Transfer or Reset > Reset Network Settings.\n3. VoiceOver: If speaking, tap once to select, double-tap to toggle Off."},
+        {title: "iPhone 17 Pro", content: "1. Display lag: Verify Low Power Mode is Off.\n2. Force Restart: Up volume, Down volume, hold Power button until logo shows."},
+        {title: "iPhone 17 Air", content: "1. Battery: Go to Settings > Battery and check for high-usage apps.\n2. Toggle Background Refresh in General settings."},
+        {title: "iPhone 17", content: "1. Connection: Cycle Airplane Mode for 10s.\n2. Update carrier settings in Settings > General > About menu."},
+        {title: "iPhone 16 Series", content: "1. SIM Reseat: Remove physical SIM tray and clean contacts.\n2. Reset Safari browser history in Settings > Safari."},
+        {title: "Samsung S25 Ultra", content: "1. Safe Mode: Power off, then hold Power + Volume Down while starting.\n2. Wipe Cache: Power + Volume Up at startup to enter recovery menu."},
+        {title: "Samsung S25 FE", content: "1. App Crash: Go to Settings > Apps > [App Name] > Storage > Clear Cache.\n2. Run Device Care optimizer."},
+        {title: "Samsung S25 Edge", content: "1. Edge Panel: Toggle off in Display settings if accidental touches occur.\n2. Recalibrate Screen Sensitivity in Display menu."},
+        {title: "Samsung S25", content: "1. eSIM: Settings > Connections > SIM manager > Toggle plan off/on.\n2. System UI Reset: Force stop System UI in apps list."},
+        {title: "Galaxy Z Fold 7", content: "1. Hinge Sensors: Open and close fully 3 times quickly.\n2. Screen: Clean inner display with microfiber only."},
+        {title: "Galaxy Z Flip 7 FE", content: "1. Cover Screen: Remove widgets and add back 1 by 1.\n2. Camera Shutter lag: Turn off Scene Optimizer."},
+        {title: "Galaxy A15 (Physical SIM)", content: "1. Network: Turn off, remove SIM for 60s, reinsert, turn on.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF."},
+        {title: "Galaxy A36 5G (eSIM)", content: "1. Network: Settings > Connections > SIM manager > Toggle eSIM.\n2. RAM Plus: Lower the value in Battery/Device Care."},
+        {title: "Galaxy Tab A11+", content: "1. Multi-User: Switch profiles and back to clear glitches.\n2. Dex Mode: Toggle on/off if display looks strange."},
+        {title: "Moto Razr 2025", content: "1. Connection: Settings > Network > Internet > Toggle Mobile Data.\n2. Proximity: Clean cover screen sensor area."},
+        {title: "Moto G Power 2025", content: "1. Battery Saver: Ensure main saver mode is off.\n2. Fingerprint: Delete and re-register fingerprint if failing."},
+        {title: "Moto G Stylus 2025", content: "1. Stylus: Remove and re-insert firmly.\n2. Screen Record: Force stop service in Apps if notification sticks."},
+        {title: "Moto Edge 2024", content: "1. Display: Adjust Accidental Touch Prevention.\n2. Ready For: Disconnect and reset desktop mode."},
+        {title: "Google Pixel 10", content: "1. Connectivity: Disable Adaptive Connectivity for 5 mins.\n2. Re-index search in Google App settings."},
+        {title: "Iris Eazy Flip", content: "1. T9 Input: Cycle text modes with # key.\n2. Contrast: Settings > Display > Max Contrast.\n3. Volume: Test side keys."},
+        {title: "Verve Home Base", content: "1. Power Cycle: Unplug 2 mins.\n2. Signal: Ensure base is near a window.\n3. Voicemail: Set up via *86."},
+        {title: "Iris Ally necklace", content: "1. SOS Button: Press and cancel immediately to test link.\n2. Charging: Ensure base light is green when seated."}
+    ];
+
+    const plans = [
+        {name: "The Minimalist", price: 20, data: "1GB"},
+        {name: "The Sometimes-On", price: 25, data: "5GB"},
+        {name: "The Scroller", price: 35, data: "10GB"},
+        {name: "The Streamer", price: 45, data: "20GB"},
+        {name: "Unlimited", price: 60, data: "Unlimited"},
+        {name: "Unlimited (50+)", price: 40, data: "Unlimited"},
+        {name: "Unlimited for AARP", price: 55, data: "Unlimited (2 Lines Req)"}
+    ];
+
+    function initApplication() {
+        const pSel = document.getElementById('be-plan');
+        plans.forEach((p, i) => { const opt = document.createElement('option'); opt.value = i; opt.text = `${p.name} ($${p.price})`; pSel.appendChild(opt); });
+
+        const tsc = document.getElementById('ts-grid-cont'); tsc.innerHTML = '';
+        tsGuides.forEach(g => {
+            const el = document.createElement('div'); el.className = 'ts-card';
+            el.innerHTML = `<div class="ts-title">${g.title}</div><div class="ts-content">${g.content}</div><button class="btn-primary" style="width:100%;" onclick="printTS('${g.title}')">Print Guide</button>`;
+            tsc.appendChild(el);
+        });
+
+        const pc = document.getElementById('port-list-cont'); pc.innerHTML = '';
+        carriers.sort((a,b)=>a.name.localeCompare(b.name)).forEach(c => {
+            const el = document.createElement('div'); el.className = 'port-item';
+            el.onclick = () => el.classList.toggle('expanded');
+            el.innerHTML = `<div style="display:flex; justify-content:space-between; font-weight:700;"><span>${c.name}</span><span style="color:var(--accent);">${c.num}</span></div><div class="port-details"><strong>Instructions:</strong> ${c.pin}</div>`;
+            pc.appendChild(el);
+        });
+        
+        const estList = document.getElementById('plan-list-cont'); estList.innerHTML = '';
+        plans.forEach((p, i) => {
+            const el = document.createElement('div'); el.className = 'port-item';
+            el.innerText = p.name;
+            el.onclick = () => selectPlan(i);
+            estList.appendChild(el);
+        });
+        updateBillMath();
     }
 
-    setInterval(() => {
-        document.getElementById('live-clock').innerText = new Date().toLocaleString();
-    }, 1000);
-
-    // --- EASYPAY MATH LOGIC ---
+    // --- 2. LOGIC FUNCTIONS ---
     function getMath(price, isPhone) {
         price = parseFloat(price) || 0;
         const tax = price * 0.089;
@@ -200,94 +315,245 @@
                 down = 0;
             }
         }
-        return { tax, down, monthly, total: down + tax };
+        return { tax, down, monthly, totalToday: down + tax };
     }
 
-    document.getElementById('q-price').oninput = () => {
-        const m = getMath(document.getElementById('q-price').value, document.getElementById('q-phone').checked);
-        document.getElementById('res-tax').innerText = "$" + m.tax.toFixed(2);
-        document.getElementById('res-down').innerText = "$" + m.down.toFixed(2);
-        document.getElementById('res-mo').innerText = "$" + m.monthly.toFixed(2);
-        document.getElementById('res-total').innerText = "$" + m.total.toFixed(2);
-    };
-
-    function handleContract() {
-        const p = parseFloat(document.getElementById('c-price').value) || 0;
-        if(p > 700) document.getElementById('hv-modal').style.display = 'flex';
-        else finalizePDF();
+    function calculateEP() {
+        const m = getMath(document.getElementById('ep-price').value, document.getElementById('ep-phone').checked);
+        document.getElementById('ep-tax').innerText = "$" + m.tax.toFixed(2);
+        document.getElementById('ep-down').innerText = "$" + m.down.toFixed(2);
+        document.getElementById('ep-mo').innerText = "$" + m.monthly.toFixed(2);
+        document.getElementById('ep-total').innerText = "$" + m.totalToday.toFixed(2);
     }
-    function closeHV() { document.getElementById('hv-modal').style.display = 'none'; finalizePDF(); }
-    
-    function finalizePDF() {
-        const m = getMath(document.getElementById('c-price').value, document.getElementById('c-phone').checked);
+
+    function runConMath() {
+        const m = getMath(document.getElementById('c-cust-price').value, document.getElementById('c-is-phone').checked);
+        document.getElementById('con-mo').innerText = "$" + m.monthly.toFixed(2);
+        document.getElementById('con-total').innerText = "$" + m.totalToday.toFixed(2);
+    }
+
+    function validateContract() {
+        const p = parseFloat(document.getElementById('c-cust-price').value) || 0;
+        if (p > 700) document.getElementById('hv-modal').style.display = 'flex';
+        else finalizeContractPDF();
+    }
+    function closeHV() { document.getElementById('hv-modal').style.display = 'none'; }
+    function confirmHV() { closeHV(); finalizeContractPDF(); }
+
+    function updateBillMath() {
+        const plan = plans[document.getElementById('be-plan').value];
+        const lines = parseInt(document.getElementById('be-lines').value) || 1;
+        let total = plan.price;
+        if(lines > 1) total += (lines - 1) * 15;
+        if(document.getElementById('be-aarp').checked) total *= 0.95;
+        document.getElementById('be-grand-total').innerText = "$" + total.toFixed(2);
+    }
+
+    let currentSelectedPlan = null;
+    function selectPlan(i) {
+        currentSelectedPlan = plans[i];
+        document.getElementById('plan-detail-cont').innerHTML = `<h3>${currentSelectedPlan.name}</h3><p class="accent-orange" style="font-size:1.5rem;">$${currentSelectedPlan.price}/mo</p><p>Includes ${currentSelectedPlan.data} of high-speed data.</p>`;
+    }
+
+    function filterTS() {
+        const q = document.getElementById('ts-search-input').value.toLowerCase();
+        document.querySelectorAll('.ts-card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? 'block' : 'none');
+    }
+    function filterPort() {
+        const q = document.getElementById('port-search-input').value.toLowerCase();
+        document.querySelectorAll('.port-item').forEach(i => i.style.display = i.innerText.toLowerCase().includes(q) ? 'block' : 'none');
+    }
+
+    // --- 3. PRINT GENERATORS ---
+    function printTS(title) {
+        const guide = tsGuides.find(g => g.title === title);
         const win = window.open('', '_blank');
-        win.document.write(`<html><body><h1>EasyPay Contract</h1><p>Customer: ${document.getElementById('c-name').value}</p><p>Monthly: $${m.monthly.toFixed(2)}</p><p>Due Today: $${m.total.toFixed(2)}</p><script>window.print();<\/script></body></html>`);
+        win.document.write(`<html><head><style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter&display=swap');body{font-family:'Inter',sans-serif; color:#102B4A; padding:0; margin:0;}.header{background:#0F2A4A; color:white; padding:30px; display:flex; justify-content:space-between; align-items:center;}.logo{background:#F05820; padding:15px; color:white; font-weight:bold;}.arrow{background:#102B4A; color:white; padding:10px 40px; clip-path:polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%); width:fit-content; margin:40px; font-weight:bold; font-size:1.2rem;}</style></head><body><div class="header"><h1>TROUBLESHOOTING GUIDE</h1><div class="logo">Consumer Cellular</div></div><div class="arrow">${guide.title.toUpperCase()}</div><div style="padding:0 40px;"><p style="white-space:pre-wrap; font-size:1.3rem; line-height:1.6;">${guide.content}</p></div><script>window.print();<\/script></body></html>`);
+        win.document.close();
     }
 
-    function generateBill() {
+    function printBill() {
+        const val = document.getElementById('be-grand-total').innerText;
         const win = window.open('', '_blank');
-        win.document.write(`<html><head><style>.header{background:#0F2A4A;color:white;padding:30px;display:flex;justify-content:space-between;}.arrow{background:#0F2A4A;color:white;padding:10px;clip-path:polygon(0% 0%, 96% 0%, 100% 50%, 96% 100%, 0% 100%); width:fit-content;}</style></head><body><div class="header"><h1>ESTIMATED FIRST BILL</h1></div><div class="arrow">MONTHLY RATE PLAN</div><script>window.print();<\/script></body></html>`);
-    }<script>
-    // --- FULL TROUBLESHOOTING DATABASE (31 DEVICES) ---
-    const tsData = [
-        {title: "iPhone 17 Pro Max", content: "1. Cellular Fix: Settings > Cellular > Toggle Plan Off/On.\n2. Accessibility: Settings > Accessibility > VoiceOver > OFF.\n3. Delete slow apps and restart."},
-        {title: "iPhone 17 Pro", content: "1. Display: Settings > Battery > Low Power Mode OFF.\n2. Accessibility: Settings > Accessibility > VoiceOver > OFF.\n3. Power cycle device."},
-        {title: "iPhone 17 Air", content: "1. Battery: Settings > Battery > Background App Refresh OFF.\n2. Connection: Cycle Airplane Mode, Wi-Fi, and Bluetooth."},
-        {title: "iPhone 17", content: "1. Cellular Fix: Settings > Cellular > Toggle main plan Off then On.\n2. Accessibility: Settings > Accessibility > VoiceOver > OFF."},
-        {title: "iPhone 16 series", content: "1. Network Reset: Settings > General > Transfer or Reset > Reset Network Settings."},
-        {title: "Samsung S25 Ultra", content: "1. Safe Mode: Power + Vol Down while starting. Uninstall bad apps.\n2. SIM: Settings > Connections > SIM manager > Toggle Off/On."},
-        {title: "Samsung S25 FE", content: "1. Safe Mode: Restart + Hold Vol Down. 2. App Optimizer: Device Care > Auto Optimization."},
-        {title: "Galaxy Z Fold 7", content: "1. Hinge Sensors: Open and close fully 3 times quickly.\n2. Screen: Clear recent apps list."},
-        {title: "Galaxy Z Flip 7", content: "1. Cover Screen: Remove all widgets and add back 1 by 1.\n2. Camera: Toggle Off image processing features."},
-        {title: "Moto Razr 2025", content: "1. Sensors: Fully open/close 3 times. 2. Data: Settings > Network > Internet > Toggle Mobile Data."},
-        {title: "Moto G Stylus 2025", content: "1. Stylus: Remove and re-insert firmly. 2. Recorder: Force stop Screen Recorder service."},
-        {title: "Google Pixel 10", content: "1. Connectivity: Disable Adaptive Connectivity. 2. Reset: Reset Wi-Fi and Bluetooth settings."},
-        {title: "Iris Eazy Flip", content: "1. Reboot: Power Off 30s. 2. SIM: Remove and clean physical SIM. 3. Volume: Check side keys."},
-        {title: "Verve Home Base", content: "1. Network: Unplug power 2 mins. 2. Signal: Move near window. 3. Antenna: Rotate 90 degrees."}
-    ];
+        win.document.write(`<html><head><style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter&display=swap');body{font-family:'Inter',sans-serif; color:#102B4A; padding:0; margin:0;}.header{background:#0F2A4A; color:white; padding:30px; display:flex; justify-content:space-between; align-items:center;}.logo{background:#F05820; padding:15px; color:white; font-weight:bold;}.arrow{background:#102B4A; color:white; padding:10px 40px; clip-path:polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%); width:fit-content; margin:40px; font-weight:bold;}.total-box{border:4px solid #102B4A; margin:40px; padding:20px; display:flex; justify-content:space-between; font-size:24px; font-weight:800;}</style></head><body><div class="header"><h1>ESTIMATED FIRST BILL</h1><div class="logo">Consumer Cellular</div></div><div class="arrow">MONTHLY RATE PLAN</div><div class="total-box"><span>GRAND TOTAL</span><span>${val}</span></div><script>window.print();<\/script></body></html>`);
+        win.document.close();
+    }
 
-    // --- FULL PORTING DATABASE (100+ CARRIERS) ---
+    function finalizeContractPDF() {
+        const name = document.getElementById('c-cust-name').value || "Customer";
+        const m = getMath(document.getElementById('c-cust-price').value, document.getElementById('c-is-phone').checked);
+        const win = window.open('', '_blank');
+        win.document.write(`<html><body style="font-family:sans-serif; padding:50px;"><h1>EasyPay Agreement</h1><hr><p>Customer: ${name}</p><p>Monthly: $${m.monthly.toFixed(2)}</p><p>Due Today: $${m.totalToday.toFixed(2)}</p><script>window.print();<\/script></body></html>`);
+        win.document.close();
+    }
+</script>
+</body>
+</html><script>
+    // --- 1. INITIALIZATION & NAVIGATION ---
     const carriers = [
-        {name: "Verizon Wireless", num: "888-844-7095", pin: "Number Transfer PIN via #PORT"},
-        {name: "AT&T Wireless", num: "877-844-5584", pin: "Port-out PIN via *PORT"},
-        {name: "T-Mobile", num: "877-789-3106", pin: "NTP via App or Web"},
-        {name: "Straight Talk", num: "800-327-2077", pin: "Text NTP to 611611"},
-        {name: "Spectrum Mobile", num: "833-224-6603", pin: "NTP via Spectrum App"},
-        {name: "Xfinity Mobile", num: "877-547-7230", pin: "NTP via Account Settings"},
-        {name: "Cricket Wireless", num: "800-274-2538", pin: "NTP via *PORT or App"},
-        {name: "Boost Mobile", num: "833-642-6678", pin: "Call for NTP"},
-        {name: "Mint Mobile", num: "800-683-7392", pin: "NTP via App > Account > Port Out"},
-        {name: "Google Fi", num: "844-825-5234", pin: "Unlock via Google Steps"},
-        {name: "Lively / Jitterbug", num: "800-733-6632", pin: "Call for NTP"},
-        {name: "Tracfone", num: "800-867-7183", pin: "Text NTP to 611611"},
-        {name: "US Cellular", num: "888-900-7678", pin: "Call for NTP"},
-        {name: "Consumer Cellular", num: "888-345-5509", pin: "Last 4 of SSN (Default)"}
+        {name: "Verizon Wireless", num: "888-844-7095", pin: "Number Transfer PIN via #PORT. Valid 7 days."},
+        {name: "AT&T Wireless", num: "877-844-5584", pin: "Port-out PIN via *PORT. Valid 4 days."},
+        {name: "T-Mobile", num: "877-789-3106", pin: "NTP via T-Mobile App/Account Portal."},
+        {name: "Straight Talk", num: "800-327-2077", pin: "Text NTP to 611611."},
+        {name: "Spectrum Mobile", num: "833-224-6603", pin: "Account PIN found on page 1 of bill."},
+        {name: "Xfinity Mobile", num: "877-547-7230", pin: "NTP available in Xfinity App settings."},
+        {name: "Cricket Wireless", num: "800-274-2538", pin: "NTP via *PORT or Account Portal."},
+        {name: "Boost Mobile", num: "833-642-6678", pin: "Call 611 or Port Dept to request PIN."},
+        {name: "Mint Mobile", num: "800-683-7392", pin: "Request via App > Account > Port Out."},
+        {name: "Google Fi", num: "844-825-5234", pin: "Unlock number via Fi app settings."},
+        {name: "Lively / Jitterbug", num: "800-733-6632", pin: "Call CS for unique alphanumeric PIN."},
+        {name: "US Cellular", num: "888-900-7678", pin: "Call Port Dept for PIN."},
+        {name: "Consumer Cellular", num: "888-345-5509", pin: "Last 4 of Primary SSN (Default)."}
     ];
 
-    function renderData() {
-        const tc = document.getElementById('ts-cont'); tc.innerHTML = '';
-        tsData.forEach(t => {
+    const tsGuides = [
+        {title: "iPhone 17 Pro Max", content: "1. Cellular Fix: Settings > Cellular > Toggle main plan Off then On after 30s.\n2. Network Reset: Settings > General > Transfer or Reset > Reset Network Settings.\n3. VoiceOver: If speaking, tap once to select, double-tap to toggle Off."},
+        {title: "iPhone 17 Pro", content: "1. Display lag: Verify Low Power Mode is Off.\n2. Force Restart: Up volume, Down volume, hold Power button until logo shows."},
+        {title: "iPhone 17 Air", content: "1. Battery: Go to Settings > Battery and check for high-usage apps.\n2. Toggle Background Refresh in General settings."},
+        {title: "iPhone 17", content: "1. Connection: Cycle Airplane Mode for 10s.\n2. Update carrier settings in Settings > General > About menu."},
+        {title: "iPhone 16 Series", content: "1. SIM Reseat: Remove physical SIM tray and clean contacts.\n2. Reset Safari browser history in Settings > Safari."},
+        {title: "Samsung S25 Ultra", content: "1. Safe Mode: Power off, then hold Power + Volume Down while starting.\n2. Wipe Cache: Power + Volume Up at startup to enter recovery menu."},
+        {title: "Samsung S25 FE", content: "1. App Crash: Go to Settings > Apps > [App Name] > Storage > Clear Cache.\n2. Run Device Care optimizer."},
+        {title: "Samsung S25 Edge", content: "1. Edge Panel: Toggle off in Display settings if accidental touches occur.\n2. Recalibrate Screen Sensitivity in Display menu."},
+        {title: "Samsung S25", content: "1. eSIM: Settings > Connections > SIM manager > Toggle plan off/on.\n2. System UI Reset: Force stop System UI in apps list."},
+        {title: "Galaxy Z Fold 7", content: "1. Hinge Sensors: Open and close fully 3 times quickly.\n2. Screen: Clean inner display with microfiber only."},
+        {title: "Galaxy Z Flip 7 FE", content: "1. Cover Screen: Remove widgets and add back 1 by 1.\n2. Camera Shutter lag: Turn off Scene Optimizer."},
+        {title: "Galaxy A15 (Physical SIM)", content: "1. Network: Turn off, remove SIM for 60s, reinsert, turn on.\n2. TalkBack: Settings > Accessibility > TalkBack > OFF."},
+        {title: "Galaxy A36 5G (eSIM)", content: "1. Network: Settings > Connections > SIM manager > Toggle eSIM.\n2. RAM Plus: Lower the value in Battery/Device Care."},
+        {title: "Galaxy Tab A11+", content: "1. Multi-User: Switch profiles and back to clear glitches.\n2. Dex Mode: Toggle on/off if display looks strange."},
+        {title: "Moto Razr 2025", content: "1. Connection: Settings > Network > Internet > Toggle Mobile Data.\n2. Proximity: Clean cover screen sensor area."},
+        {title: "Moto G Power 2025", content: "1. Battery Saver: Ensure main saver mode is off.\n2. Fingerprint: Delete and re-register fingerprint if failing."},
+        {title: "Moto G Stylus 2025", content: "1. Stylus: Remove and re-insert firmly.\n2. Screen Record: Force stop service in Apps if notification sticks."},
+        {title: "Moto Edge 2024", content: "1. Display: Adjust Accidental Touch Prevention.\n2. Ready For: Disconnect and reset desktop mode."},
+        {title: "Google Pixel 10", content: "1. Connectivity: Disable Adaptive Connectivity for 5 mins.\n2. Re-index search in Google App settings."},
+        {title: "Iris Eazy Flip", content: "1. T9 Input: Cycle text modes with # key.\n2. Contrast: Settings > Display > Max Contrast.\n3. Volume: Test side keys."},
+        {title: "Verve Home Base", content: "1. Power Cycle: Unplug 2 mins.\n2. Signal: Ensure base is near a window.\n3. Voicemail: Set up via *86."},
+        {title: "Iris Ally necklace", content: "1. SOS Button: Press and cancel immediately to test link.\n2. Charging: Ensure base light is green when seated."}
+    ];
+
+    const plans = [
+        {name: "The Minimalist", price: 20, data: "1GB"},
+        {name: "The Sometimes-On", price: 25, data: "5GB"},
+        {name: "The Scroller", price: 35, data: "10GB"},
+        {name: "The Streamer", price: 45, data: "20GB"},
+        {name: "Unlimited", price: 60, data: "Unlimited"},
+        {name: "Unlimited (50+)", price: 40, data: "Unlimited"},
+        {name: "Unlimited for AARP", price: 55, data: "Unlimited (2 Lines Req)"}
+    ];
+
+    function initApplication() {
+        const pSel = document.getElementById('be-plan');
+        plans.forEach((p, i) => { const opt = document.createElement('option'); opt.value = i; opt.text = `${p.name} ($${p.price})`; pSel.appendChild(opt); });
+
+        const tsc = document.getElementById('ts-grid-cont'); tsc.innerHTML = '';
+        tsGuides.forEach(g => {
             const el = document.createElement('div'); el.className = 'ts-card';
-            el.innerHTML = `<div class="ts-name">${t.title}</div><div style="font-size:0.85rem; white-space:pre-wrap; color:#64748b; margin-bottom:15px;">${t.content}</div><button class="pill-btn" style="background:var(--primary); color:white; padding:10px;" onclick="window.print()">Print Guide</button>`;
-            tc.appendChild(el);
+            el.innerHTML = `<div class="ts-title">${g.title}</div><div class="ts-content">${g.content}</div><button class="btn-primary" style="width:100%;" onclick="printTS('${g.title}')">Print Guide</button>`;
+            tsc.appendChild(el);
         });
 
-        const pc = document.getElementById('port-cont'); pc.innerHTML = '';
+        const pc = document.getElementById('port-list-cont'); pc.innerHTML = '';
         carriers.sort((a,b)=>a.name.localeCompare(b.name)).forEach(c => {
-            const li = document.createElement('li'); li.className = 'port-item';
-            li.onclick = () => li.classList.toggle('expanded');
-            li.innerHTML = `<strong>${c.name}</strong>: ${c.num} <div class="port-details">Rules: ${c.pin}</div>`;
-            pc.appendChild(li);
+            const el = document.createElement('div'); el.className = 'port-item';
+            el.onclick = () => el.classList.toggle('expanded');
+            el.innerHTML = `<div style="display:flex; justify-content:space-between; font-weight:700;"><span>${c.name}</span><span style="color:var(--accent);">${c.num}</span></div><div class="port-details"><strong>Instructions:</strong> ${c.pin}</div>`;
+            pc.appendChild(el);
         });
+        
+        const estList = document.getElementById('plan-list-cont'); estList.innerHTML = '';
+        plans.forEach((p, i) => {
+            const el = document.createElement('div'); el.className = 'port-item';
+            el.innerText = p.name;
+            el.onclick = () => selectPlan(i);
+            estList.appendChild(el);
+        });
+        updateBillMath();
     }
 
-    function searchTS() {
-        const t = document.getElementById('ts-search').value.toLowerCase();
-        document.querySelectorAll('.ts-card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(t) ? 'block' : 'none');
+    // --- 2. LOGIC FUNCTIONS ---
+    function getMath(price, isPhone) {
+        price = parseFloat(price) || 0;
+        const tax = price * 0.089;
+        let monthly = 0, down = 0;
+        if (price > 0) {
+            if (isPhone) {
+                monthly = Math.floor(price / 24);
+                down = price - (monthly * 24);
+            } else {
+                monthly = Math.ceil((price / 24) * 100) / 100;
+                down = 0;
+            }
+        }
+        return { tax, down, monthly, totalToday: down + tax };
     }
-    function searchPort() {
-        const t = document.getElementById('port-search').value.toLowerCase();
-        document.querySelectorAll('.port-item').forEach(i => i.style.display = i.innerText.toLowerCase().includes(t) ? 'block' : 'none');
+
+    function calculateEP() {
+        const m = getMath(document.getElementById('ep-price').value, document.getElementById('ep-phone').checked);
+        document.getElementById('ep-tax').innerText = "$" + m.tax.toFixed(2);
+        document.getElementById('ep-down').innerText = "$" + m.down.toFixed(2);
+        document.getElementById('ep-mo').innerText = "$" + m.monthly.toFixed(2);
+        document.getElementById('ep-total').innerText = "$" + m.totalToday.toFixed(2);
+    }
+
+    function runConMath() {
+        const m = getMath(document.getElementById('c-cust-price').value, document.getElementById('c-is-phone').checked);
+        document.getElementById('con-mo').innerText = "$" + m.monthly.toFixed(2);
+        document.getElementById('con-total').innerText = "$" + m.totalToday.toFixed(2);
+    }
+
+    function validateContract() {
+        const p = parseFloat(document.getElementById('c-cust-price').value) || 0;
+        if (p > 700) document.getElementById('hv-modal').style.display = 'flex';
+        else finalizeContractPDF();
+    }
+    function closeHV() { document.getElementById('hv-modal').style.display = 'none'; }
+    function confirmHV() { closeHV(); finalizeContractPDF(); }
+
+    function updateBillMath() {
+        const plan = plans[document.getElementById('be-plan').value];
+        const lines = parseInt(document.getElementById('be-lines').value) || 1;
+        let total = plan.price;
+        if(lines > 1) total += (lines - 1) * 15;
+        if(document.getElementById('be-aarp').checked) total *= 0.95;
+        document.getElementById('be-grand-total').innerText = "$" + total.toFixed(2);
+    }
+
+    let currentSelectedPlan = null;
+    function selectPlan(i) {
+        currentSelectedPlan = plans[i];
+        document.getElementById('plan-detail-cont').innerHTML = `<h3>${currentSelectedPlan.name}</h3><p class="accent-orange" style="font-size:1.5rem;">$${currentSelectedPlan.price}/mo</p><p>Includes ${currentSelectedPlan.data} of high-speed data.</p>`;
+    }
+
+    function filterTS() {
+        const q = document.getElementById('ts-search-input').value.toLowerCase();
+        document.querySelectorAll('.ts-card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? 'block' : 'none');
+    }
+    function filterPort() {
+        const q = document.getElementById('port-search-input').value.toLowerCase();
+        document.querySelectorAll('.port-item').forEach(i => i.style.display = i.innerText.toLowerCase().includes(q) ? 'block' : 'none');
+    }
+
+    // --- 3. PRINT GENERATORS ---
+    function printTS(title) {
+        const guide = tsGuides.find(g => g.title === title);
+        const win = window.open('', '_blank');
+        win.document.write(`<html><head><style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter&display=swap');body{font-family:'Inter',sans-serif; color:#102B4A; padding:0; margin:0;}.header{background:#0F2A4A; color:white; padding:30px; display:flex; justify-content:space-between; align-items:center;}.logo{background:#F05820; padding:15px; color:white; font-weight:bold;}.arrow{background:#102B4A; color:white; padding:10px 40px; clip-path:polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%); width:fit-content; margin:40px; font-weight:bold; font-size:1.2rem;}</style></head><body><div class="header"><h1>TROUBLESHOOTING GUIDE</h1><div class="logo">Consumer Cellular</div></div><div class="arrow">${guide.title.toUpperCase()}</div><div style="padding:0 40px;"><p style="white-space:pre-wrap; font-size:1.3rem; line-height:1.6;">${guide.content}</p></div><script>window.print();<\/script></body></html>`);
+        win.document.close();
+    }
+
+    function printBill() {
+        const val = document.getElementById('be-grand-total').innerText;
+        const win = window.open('', '_blank');
+        win.document.write(`<html><head><style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter&display=swap');body{font-family:'Inter',sans-serif; color:#102B4A; padding:0; margin:0;}.header{background:#0F2A4A; color:white; padding:30px; display:flex; justify-content:space-between; align-items:center;}.logo{background:#F05820; padding:15px; color:white; font-weight:bold;}.arrow{background:#102B4A; color:white; padding:10px 40px; clip-path:polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%); width:fit-content; margin:40px; font-weight:bold;}.total-box{border:4px solid #102B4A; margin:40px; padding:20px; display:flex; justify-content:space-between; font-size:24px; font-weight:800;}</style></head><body><div class="header"><h1>ESTIMATED FIRST BILL</h1><div class="logo">Consumer Cellular</div></div><div class="arrow">MONTHLY RATE PLAN</div><div class="total-box"><span>GRAND TOTAL</span><span>${val}</span></div><script>window.print();<\/script></body></html>`);
+        win.document.close();
+    }
+
+    function finalizeContractPDF() {
+        const name = document.getElementById('c-cust-name').value || "Customer";
+        const m = getMath(document.getElementById('c-cust-price').value, document.getElementById('c-is-phone').checked);
+        const win = window.open('', '_blank');
+        win.document.write(`<html><body style="font-family:sans-serif; padding:50px;"><h1>EasyPay Agreement</h1><hr><p>Customer: ${name}</p><p>Monthly: $${m.monthly.toFixed(2)}</p><p>Due Today: $${m.totalToday.toFixed(2)}</p><script>window.print();<\/script></body></html>`);
+        win.document.close();
     }
 </script>
 </body>
