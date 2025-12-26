@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V16.1.0</title>
+    <title>Work Portal V16.1.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -23,7 +23,6 @@
             color: var(--text-dark); 
             height: 100vh; 
             overflow: hidden; 
-            /* GLOBAL BACKGROUND IMAGE */
             background: linear-gradient(rgba(15, 42, 74, 0.4), rgba(15, 42, 74, 0.4)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
@@ -41,8 +40,7 @@
             top: 0; 
             left: 0; 
             z-index: 2000; 
-            /* Login Background */
-            background: linear-gradient(rgba(15, 42, 74, 0.85), rgba(15, 42, 74, 0.9)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000&auto=format&fit=crop');
+            background: linear-gradient(rgba(30, 58, 138, 0.85), rgba(30, 58, 138, 0.9)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             transition: opacity 0.5s ease; 
@@ -59,8 +57,6 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            background: rgba(255,255,255,0.1);
         }
 
         .login-form-container { width: 320px; display: flex; flex-direction: column; }
@@ -179,7 +175,6 @@
         .bill-cost { width: 80px; text-align: right; font-weight: 600; color: var(--text-dark); }
         .bill-section { margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
         
-        /* RESTORED: Navy Arrow Banner Style */
         .bill-sec-title { 
             background-color: var(--primary); 
             color: white; 
@@ -190,22 +185,8 @@
             font-size: 0.85rem; 
             width: fit-content;
             min-width: 150px;
-            clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
+            clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
         }
-        
-        .bill-total-bar {
-            background-color: var(--primary);
-            color: white;
-            padding: 8px 30px 8px 15px;
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
-            margin-top: 10px;
-        }
-
-        .discount-toggle { background: #fff7ed; border: 1px solid #fed7aa; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: #9a3412; font-weight: 600; }
 
         .port-search-bar { width: 100%; padding: 14px 18px; margin-bottom: 25px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; }
         .port-list { list-style: none; padding: 0; margin: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
@@ -218,19 +199,6 @@
         .port-item.expanded .port-details { display: block; }
         .port-item.expanded .port-header { background: #eff6ff; }
 
-        /* PLAN EST */
-        .split-view { display: flex; gap: 30px; height: 600px; }
-        .plan-list { flex: 1; border: 1px solid var(--border); border-radius: 12px; overflow-y: auto; background: white; }
-        .plan-btn { display: block; width: 100%; text-align: left; padding: 20px; border: none; border-bottom: 1px solid var(--border); background: white; cursor: pointer; transition: all 0.2s; }
-        .plan-btn:hover { background: #f8fafc; }
-        .plan-btn.active { background: #eff6ff; border-left: 4px solid var(--primary); }
-        .plan-name { font-weight: 700; color: var(--text-dark); font-size: 1rem; margin-bottom: 4px; }
-        .plan-price { font-size: 0.9rem; color: var(--primary); font-weight: 600; }
-        .plan-detail-view { flex: 2; border: 1px solid var(--border); border-radius: 12px; background: white; padding: 30px; overflow-y: auto; }
-        .est-calc-box { margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--border); }
-        .est-price-display { font-size: 1.8rem; font-weight: 700; color: #1e3a8a; }
-
-        /* TROUBLESHOOT */
         .ts-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
         .ts-title-lg { font-size: 1.8rem; font-weight: 700; color: #1e3a8a; }
         .ts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
@@ -244,20 +212,8 @@
         .ts-filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: white; cursor: pointer; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s; }
         .ts-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         .ts-search-bar { width: 100%; padding: 12px 18px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; }
-        .ts-spam-box { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 0.85rem; }
         .ts-print-btn { width: 100%; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: white; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .ts-print-btn:hover { background: var(--primary); color: white; }
-
-        /* WELCOME */
-        .welcome-box { text-align: center; padding: 80px 20px; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .welcome-icon { width: 80px; height: 80px; background: rgba(255,255,255,0.2); color: white; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 25px; backdrop-filter: blur(5px); }
-        
-        .alert-box { background-color: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger-text); padding: 15px 20px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; line-height: 1.5; }
-        .list-group { list-style: none; padding: 0; margin: 0; }
-        .list-item { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .list-name { font-weight: 600; font-size: 1rem; color: var(--text-dark); }
-        .list-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
-        .list-action span { color: var(--primary); font-weight: 600; font-size: 1rem; }
 
         /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
@@ -265,7 +221,6 @@
         .modal-icon { width: 60px; height: 60px; background: #eff6ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
         .modal-title { font-size: 1.4rem; font-weight: 700; color: #1e3a8a; margin-bottom: 10px; }
         .modal-msg { color: #475569; font-size: 1rem; line-height: 1.5; margin-bottom: 25px; }
-        .modal-msg strong { color: #0f172a; }
         .modal-actions { display: flex; gap: 10px; justify-content: center; }
 
     </style>
@@ -312,8 +267,16 @@
             </div>
             <div class="scroll-area">
                 
-                <div id="view-home" class="view-section active">
+                <div id="view-home" class="view-section active"></div>
+
+                <div id="view-calc" class="view-section">
+                    <div class="card" style="max-width:600px;">
+                        <div class="card-header"><div class="card-title"><h2>EasyPay Calculator</h2><p>Quick price check.</p></div></div>
+                        <div class="row"><div class="col"><label class="label">Retail Price ($)</label><input type="number" id="quick-price" class="input" placeholder="0.00" step="0.01"></div></div>
+                        <div class="row"><div class="col"><label class="label">Device Type</label><div class="radio-group"><label class="radio-item"><input type="radio" name="quickType" id="q-mode-phone" checked> Phone</label><label class="radio-item"><input type="radio" name="quickType" id="q-mode-watch"> Watch</label></div></div></div>
+                        <div class="calc-panel"><div class="calc-row"><span>Sales Tax (8.9%)</span><span id="q-tax">$0.00</span></div><div class="calc-row"><span>Down Payment</span><span id="q-down">$0.00</span></div><div class="calc-row"><span>Monthly (24mo)</span><span id="q-monthly">$0.00</span></div><div class="calc-total"><span>Total Due Today</span><span id="q-total">$0.00</span></div></div>
                     </div>
+                </div>
 
                 <div id="view-bill" class="view-section">
                     <div class="card" style="max-width:800px;">
@@ -323,78 +286,48 @@
                         </div>
                         <div class="discount-toggle"><input type="checkbox" id="be-apply-5-percent" onchange="calcBill()" style="width:20px; height:20px;"><label for="be-apply-5-percent">Apply 5% AARP/USAA Discount (Not valid on 'Unlimited for AARP')</label></div>
                         <div class="bill-section"><div class="bill-sec-title">Monthly Rate Plan</div><div class="bill-calc-row"><div class="bill-label">Select Plan & Lines</div><div class="bill-input-group"><select id="be-quick-plan" class="bill-input-sm" style="width:160px;" onchange="updateBillFromQuick()"></select><select id="be-quick-lines" class="bill-input-sm" style="width:80px;" onchange="updateBillFromQuick()"><option value="1">1 Line</option><option value="2">2 Lines</option><option value="3">3 Lines</option><option value="4">4 Lines</option><option value="5">5 Lines</option><option value="6">6 Lines</option><option value="7">7 Lines</option></select></div></div><div class="bill-calc-row"><div class="bill-label">Base Plan Price</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-plan-price" class="bill-input-sm" value="0" readonly></div></div><div class="bill-calc-row"><div class="bill-label">Additional Standard Lines ($15 ea)</div><div class="bill-input-group"><input type="number" id="be-add-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Additional Unlimited Lines ($20 ea)</div><div class="bill-input-group"><input type="number" id="be-unl-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Smartwatch Lines ($5 ea)</div><div class="bill-input-group"><input type="number" id="be-watch-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Iris Ally Lines ($25 ea)</div><div class="bill-input-group"><input type="number" id="be-ally-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Home Phone Base Lines</div><div class="bill-input-group"><select id="be-home-type" class="bill-input-sm" style="width:80px;" onchange="calcBill()"><option value="0">None</option><option value="15">@ $15</option><option value="20">@ $20</option></select><input type="number" id="be-home-qty" class="bill-input-sm" value="0" placeholder="Qty" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Asurion Protection Total</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-asurion" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL FOR RATE PLAN</div><div class="bill-cost" id="be-total-rate">$0.00</div><div class="bill-total-bar"></div></div></div>
-                        <div class="bill-section"><div class="bill-sec-title">Surcharges & Taxes</div><div class="bill-calc-row"><div class="bill-label">Zip Code (for printout)</div><div class="bill-input-group"><input type="text" id="be-zip" class="bill-input-sm" style="width:80px;"></div></div><div class="bill-calc-row"><div class="bill-label">Estimated Govt Taxes & Fees</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-gov" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Surcharges & Other Items</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-other" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL SURCHARGES</div><div class="bill-cost" id="be-total-surch">$0.00</div><div class="bill-total-bar"></div></div></div>
-                        <div class="bill-section"><div class="bill-sec-title">EasyPay Financing</div><div class="bill-calc-row"><div class="bill-label">Device 1 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev1" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Device 2 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev2" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL EASYPAY</div><div class="bill-cost" id="be-total-dev">$0.00</div><div class="bill-total-bar"></div></div></div>
+                        <div class="bill-section"><div class="bill-sec-title">Surcharges & Taxes</div><div class="bill-calc-row"><div class="bill-label">Zip Code (for printout)</div><div class="bill-input-group"><input type="text" id="be-zip" class="bill-input-sm" style="width:80px;"></div></div><div class="bill-calc-row"><div class="bill-label">Estimated Govt Taxes & Fees</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-gov" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Surcharges & Other Items</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-other" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label" style="font-weight:700;">TOTAL SURCHARGES</div><div class="bill-cost" id="be-total-surch">$0.00</div><div class="bill-total-bar"></div></div></div>
+                        <div class="bill-section"><div class="bill-sec-title">EasyPay Financing</div><div class="bill-calc-row"><div class="bill-label">Device 1 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev1" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Device 2 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev2" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label" style="font-weight:700;">TOTAL EASYPAY</div><div class="bill-cost" id="be-total-dev">$0.00</div><div class="bill-total-bar"></div></div></div>
                         <div class="bill-section"><div class="bill-sec-title">Promotions & Credits</div><div class="bill-calc-row"><div class="bill-label">Rate Plan Promo</div><div class="bill-input-group"><span style="color:#64748b;">-$</span><input type="number" id="be-cred-plan" class="bill-input-sm" value="0" oninput="calcBill()" placeholder="Auto"></div></div><div class="bill-calc-row"><div class="bill-label">SIM Kit Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-sim" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Survey Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-survey" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL CREDITS</div><div class="bill-cost" id="be-total-cred">-$0.00</div><div class="bill-total-bar"></div></div></div>
-                        <div class="bill-section"><div class="row"><div class="col"><label class="label">SmartFlex?</label><select id="be-opt-smart" class="select"><option>YES</option><option>NO</option></select></div><div class="col"><label class="label">AARP/USAA?</label><select id="be-opt-aarp" class="select"><option>NO</option><option>YES</option></select></div><div class="col"><label class="label">AutoPay?</label><select id="be-opt-auto" class="select"><option>NO</option><option>YES</option></select></div></div></div>
-                        <div style="background:#fff7ed; color:#9a3412; padding:15px; border-radius:8px; border:1px solid #fed7aa; margin-bottom:20px; text-align:center; font-size:0.9rem; font-weight:600;">* Prices reflect AutoPay & E-Billing discount. Taxes and fees are additional.</div>
                         <div style="background:#1e3a8a; color:white; padding:20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;"><div style="font-size:1.1rem; font-weight:600;">ESTIMATED MONTHLY TOTAL<br><span style="font-size:0.8rem; font-weight:400; opacity:0.8;">(Before Taxes & Fees)</span></div><div style="font-size:1.8rem; font-weight:700;" id="be-grand-total">$0.00</div></div>
-                    </div>
-                </div>
-
-                <div id="view-calc" class="view-section">
-                    <div class="card" style="max-width:600px;">
-                        <div class="card-header"><div class="card-title"><h2>EasyPay Calculator</h2><p>Quick price check and approval status.</p></div></div>
-                        <div class="row"><div class="col"><label class="label">Retail Price ($)</label><input type="number" id="quick-price" class="input" placeholder="0.00" step="0.01"></div></div>
-                        <div class="row"><div class="col"><label class="label">Device Type</label><div class="radio-group"><label class="radio-item"><input type="radio" name="quickType" id="q-mode-phone" checked> Phone</label><label class="radio-item"><input type="radio" name="quickType" id="q-mode-watch"> Watch</label></div></div></div>
-                        <div class="calc-panel"><div class="calc-row"><span>Sales Tax (8.9%)</span><span id="q-tax">$0.00</span></div><div class="calc-row"><span>Down Payment</span><span id="q-down">$0.00</span></div><div class="calc-row"><span>Monthly (24mo)</span><span id="q-monthly">$0.00</span></div><div class="calc-total"><span>Total Due Today</span><span id="q-total">$0.00</span></div></div>
-                    </div>
-                </div>
-
-                <div id="view-estimator" class="view-section">
-                    <div class="card" style="max-width:1000px;">
-                        <div class="card-header"><div class="card-title"><h2>Plan Estimator</h2><p>Find the right data fit based on customer habits.</p></div><div class="btn-group" id="print-plan-btn-group" style="display:none;"><button class="btn btn-primary" onclick="printPlan()">Print Plan Details</button></div></div>
-                        <div class="split-view"><div class="plan-list" id="plan-list-container"></div><div class="plan-detail-view" id="plan-detail-container"><div style="text-align:center; padding-top:100px; color:#aaa;">Select a plan to view details</div></div></div>
-                        <div class="data-reality-bar"><div class="dr-item"><strong>Email (Text)</strong>Almost free</div><div class="dr-item"><strong>Email (Photo)</strong>Few MB each</div><div class="dr-item"><strong>Music</strong>1-2 MB/min</div><div class="dr-item"><strong>Video (SD)</strong>0.5 - 1 GB/hr</div><div class="dr-item"><strong>Video (HD)</strong>1.5 - 3 GB/hr</div><div class="dr-item"><strong>Video Calls</strong>0.5 - 1.5 GB/hr</div></div>
-                    </div>
-                </div>
-
-                <div id="view-troubleshoot" class="view-section">
-                    <div class="card" style="max-width:1000px;">
-                        <div class="card-header"><div class="card-title"><h2>Quick Fix & Troubleshoot</h2><p>Printable guides tailored for specific devices.</p></div></div>
-                        <div class="ts-top-bar"><div class="ts-title-lg">Select Device Guide</div><div style="font-size:0.9rem; color:#64748b;">Click 'Print' for a customer handout</div></div>
-                        <div class="ts-controls"><input type="text" class="ts-search-bar" id="ts-search" placeholder="Type device name (e.g. 'iPhone 17', 'Razr')..." onkeyup="searchTroubleshoot()"><button class="ts-filter-btn active" onclick="filterTroubleshoot('all', this)">All</button><button class="ts-filter-btn" onclick="filterTroubleshoot('apple', this)">Apple</button><button class="ts-filter-btn" onclick="filterTroubleshoot('samsung', this)">Samsung</button><button class="ts-filter-btn" onclick="filterTroubleshoot('moto', this)">Motorola</button><button class="ts-filter-btn" onclick="filterTroubleshoot('pixel', this)">Google</button><button class="ts-filter-btn" onclick="filterTroubleshoot('cc', this)">CC Devices</button><button class="ts-filter-btn" onclick="filterTroubleshoot('tablet', this)">Tablet</button></div>
-                        <div class="ts-grid" id="ts-grid-container"></div>
-                        <div style="margin-top:40px; padding-top:20px; border-top:1px solid var(--border); color:var(--text-muted); font-size:0.9rem; text-align:center;"><strong>WHEN TO COME IN:</strong> "No Service" after resets, locked accounts, new phone activations, physical damage/heating issues. We are happy to help!</div>
-                    </div>
-                </div>
-
-                <div id="view-contract" class="view-section">
-                    <div class="card">
-                        <div class="card-header"><div class="card-title"><h2>New Agreement</h2><p>Generate a compliant EasyPay installment contract.</p></div><div class="btn-group"><button class="btn btn-outline" onclick="resetForm()">Clear</button><button class="btn btn-primary" id="trigger-gen">Generate PDF</button></div></div>
-                        <div class="section-label">Customer Information</div>
-                        <div class="row"><div class="col"><label class="label">Full Name</label><input type="text" id="con-name" class="input" placeholder="John Doe"></div><div class="col"><label class="label">Account Number</label><input type="text" id="con-acct" class="input" placeholder="123456789"></div></div>
-                        <div class="row"><div class="col"><label class="label">Street Address</label><input type="text" id="con-address" class="input" placeholder="123 Main St"></div><div class="col"><label class="label">City</label><input type="text" id="con-city" class="input" placeholder="Spokane"></div></div>
-                        <div class="row"><div class="col"><label class="label">State</label><input type="text" id="con-state" class="input" placeholder="WA"></div><div class="col"><label class="label">Zip Code</label><input type="text" id="con-zip" class="input" placeholder="99201"></div><div class="col"><label class="label">Phone Number</label><input type="text" id="con-phone" class="input" placeholder="(555) 555-5555"></div></div>
-                        <hr style="border:0; border-top:1px solid var(--border); margin:30px 0;">
-                        <div class="section-label">Device & Pricing</div>
-                        <div class="row"><div class="col"><label class="label">Device Name</label><input type="text" id="con-item" class="input" placeholder="iPhone 17"></div><div class="col"><label class="label">SKU (First 6)</label><div style="display:flex;"><input type="text" id="con-sku" class="input" placeholder="123456" style="border-top-right-radius:0; border-bottom-right-radius:0; border-right:0;"><div style="background:#f1f5f9; border:1px solid var(--border); padding:0 15px; display:flex; align-items:center; border-radius:0 8px 8px 0; color:#64748b; font-weight:500;">236</div></div></div></div>
-                        <div class="row"><div class="col"><label class="label">Retail Price ($)</label><input type="number" id="con-price" class="input" placeholder="0.00" step="0.01"></div><div class="col"><label class="label">Device Type</label><div class="radio-group" style="padding-top:10px;"><label class="radio-item"><input type="radio" name="devType" id="mode-phone" checked> Phone</label><label class="radio-item"><input type="radio" name="devType" id="mode-watch"> Watch</label></div></div></div>
-                        <div class="row"><div class="col"><div class="calc-panel"><div class="calc-row"><span>Sales Tax (8.9%)</span><span id="disp-tax">$0.00</span></div><div class="calc-row"><span>Down Payment</span><span id="disp-down">$0.00</span></div><div class="calc-row"><span>Monthly (24mo)</span><span id="disp-monthly">$0.00</span></div><div class="calc-total"><span>Total Due Today</span><span id="con-due-today">$0.00</span></div></div></div></div>
                     </div>
                 </div>
 
                 <div id="view-porting" class="view-section">
                     <div class="card">
-                        <div class="card-header"><div class="card-title"><h2>Porting Contacts</h2><p>Carrier rules, contacts, and PIN requirements.</p></div></div>
-                        <div class="alert-box"><strong>ESCALATION RULE:</strong> If a carrier requires email support: 1) Submit ConnEx ticket. 2) If unresolved, email seniorlead@consumercellular.com.</div>
-                        <input type="text" class="port-search-bar" id="port-search" placeholder="Type to search carriers (e.g. Mint, Verizon, CenturyLink)..." onkeyup="filterCarriers()">
+                        <div class="card-header"><div class="card-title"><h2>Porting Contacts</h2><p>Carrier rules and contacts.</p></div></div>
+                        <input type="text" class="port-search-bar" id="port-search" placeholder="Search carriers..." onkeyup="filterCarriers()">
                         <ul class="port-list" id="port-list-container"></ul>
+                    </div>
+                </div>
+
+                <div id="view-troubleshoot" class="view-section">
+                    <div class="card">
+                        <div class="card-header"><div class="card-title"><h2>Quick Fix Guides</h2><p>Device troubleshooting.</p></div></div>
+                        <input type="text" class="ts-search-bar" id="ts-search" placeholder="Search devices..." onkeyup="searchTroubleshoot()">
+                        <div class="ts-grid" id="ts-grid-container"></div>
+                    </div>
+                </div>
+
+                <div id="view-contract" class="view-section">
+                    <div class="card">
+                        <div class="card-header"><div class="card-title"><h2>EasyPay Contract</h2><p>Generate agreement.</p></div><div class="btn-group"><button class="btn btn-outline" onclick="resetForm()">Clear</button><button class="btn btn-primary" id="trigger-gen">Generate PDF</button></div></div>
+                        <div class="row"><div class="col"><label class="label">Full Name</label><input type="text" id="con-name" class="input"></div><div class="col"><label class="label">Account #</label><input type="text" id="con-acct" class="input"></div></div>
+                        <div class="row"><div class="col"><label class="label">Device Name</label><input type="text" id="con-item" class="input"></div><div class="col"><label class="label">Retail Price ($)</label><input type="number" id="con-price" class="input" step="0.01"></div></div>
+                        <div class="row"><div class="col"><label class="label">Device Type</label><div class="radio-group"><label class="radio-item"><input type="radio" name="devType" id="mode-phone" checked> Phone</label><label class="radio-item"><input type="radio" name="devType" id="mode-watch"> Watch</label></div></div></div>
+                        <div class="calc-panel"><div class="calc-row"><span>Sales Tax</span><span id="disp-tax">$0.00</span></div><div class="calc-row"><span>Down Payment</span><span id="disp-down">$0.00</span></div><div class="calc-row"><span>Monthly</span><span id="disp-monthly">$0.00</span></div><div class="calc-total"><span>Total Today</span><span id="con-due-today">$0.00</span></div></div>
                     </div>
                 </div>
 
                 <div id="view-support" class="view-section">
                     <div class="card">
-                        <div class="card-header"><div class="card-title"><h2>Support Directory</h2><p>Quick access to essential contacts.</p></div></div>
+                        <div class="card-header"><div class="card-title"><h2>Support Directory</h2></div></div>
                         <ul class="list-group">
-                            <li class="list-item"><div><div class="list-name">CC Customer Service</div><div class="list-sub">General Support</div></div><div class="list-action"><span>(888) 345-5509</span></div></li>
-                            <li class="list-item"><div><div class="list-name">CC Billing</div><div class="list-sub">Finance Dept</div></div><div class="list-action"><span>(888) 549-4789</span></div></li>
-                            <li class="list-item"><div><div class="list-name">CC Direct Line</div><div class="list-sub">Internal Priority</div></div><div class="list-action"><span>(877) 864-0344</span></div></li>
-                            <li class="list-item"><div><div class="list-name">CC EasyPay Credit</div><div class="list-sub">Approvals & Overrides</div></div><div class="list-action"><span>(877) 803-0176</span></div></li>
+                            <li class="list-item"><div><div class="list-name">CC Customer Service</div></div><div class="list-action"><span>(888) 345-5509</span></div></li>
+                            <li class="list-item"><div><div class="list-name">CC EasyPay Credit</div></div><div class="list-action"><span>(877) 803-0176</span></div></li>
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -403,7 +336,7 @@
         <div class="modal-box">
             <div class="modal-icon"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
             <div class="modal-title">High-Value Approval</div>
-            <div class="modal-msg">This transaction exceeds <strong>$700.00</strong>.<br><br>Please ensure the customer <strong>qualifies in Lead</strong> for EasyPay and then <strong>call CC EasyPay Credit</strong> at <strong>(877) 803-0176</strong> for authorization before proceeding.</div>
+            <div class="modal-msg">This transaction exceeds <strong>$700.00</strong>. Call CC EasyPay Credit for authorization.</div>
             <div class="modal-actions"><button class="btn btn-outline" onclick="closeHvModal()">Cancel</button><button class="btn btn-primary" onclick="confirmHv()">I Have Called</button></div>
         </div>
     </div>
@@ -416,18 +349,10 @@
     function switchView(viewId) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active')); document.getElementById(viewId).classList.add('active');
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        if(viewId === 'view-home') document.getElementById('nav-home').classList.add('active');
-        if(viewId === 'view-calc') document.getElementById('nav-calc').classList.add('active');
-        // TAXES/SETUP REMOVED
-        if(viewId === 'view-estimator') document.getElementById('nav-estimator').classList.add('active');
-        if(viewId === 'view-troubleshoot') document.getElementById('nav-troubleshoot').classList.add('active');
-        if(viewId === 'view-contract') document.getElementById('nav-contract').classList.add('active');
-        if(viewId === 'view-porting') document.getElementById('nav-porting').classList.add('active');
-        if(viewId === 'view-support') document.getElementById('nav-support').classList.add('active');
-        if(viewId === 'view-bill') document.getElementById('nav-bill').classList.add('active');
+        const navId = 'nav-' + viewId.split('-')[1];
+        if(document.getElementById(navId)) document.getElementById(navId).classList.add('active');
     }
 
-    // CLOCK
     function updateClock() {
         const now = new Date();
         const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -435,410 +360,68 @@
     }
     setInterval(updateClock, 1000); updateClock();
 
-    // SIDEBAR TOGGLE
-    function toggleSidebar() {
-        const sb = document.getElementById('app-sidebar');
-        sb.classList.toggle('collapsed');
+    function toggleSidebar() { document.getElementById('app-sidebar').classList.toggle('collapsed'); }
+
+    // EASYPAY MATH LOGIC
+    function getMath(price, isPhone) {
+        price = parseFloat(price) || 0;
+        const tax = price * 0.089;
+        let monthly = 0, down = 0;
+        if (price > 0) {
+            if (isPhone) {
+                monthly = Math.floor(price / 24);
+                down = price - (monthly * 24);
+            } else {
+                monthly = Math.ceil((price / 24) * 100) / 100;
+                down = 0;
+            }
+        }
+        return { price, tax, down, monthly, totalToday: down + tax, financed: monthly * 24 };
     }
 
-    // --- BILL ESTIMATOR LOGIC ---
-    const plans = [
-        {name: "The Minimalist", price: 20, data: "1GB", family: "connect", bestFor: "Calling/Texting + Light Email", examples: ["10k emails", "200 photo emails"]},
-        {name: "The Sometimes-On", price: 25, data: "5GB", family: "connect", bestFor: "Email + Social", examples: ["50k emails", "1k photo emails"]},
-        {name: "The Scroller", price: 35, data: "10GB", family: "connect", bestFor: "Normal smartphone use", examples: ["100k emails", "Video calls"]},
-        {name: "The Streamer", price: 45, data: "20GB", family: "connect", bestFor: "Streaming video", examples: ["30hrs SD video", "10hrs HD video"]},
-        {name: "Unlimited", price: 60, data: "Unlimited", family: "unlimited", bestFor: "Heavy streaming", examples: ["HD Streaming", "Hotspot"]},
-        {name: "Unlimited (50+)", price: 40, data: "Unlimited", family: "50plus", bestFor: "Single user 50+", examples: ["Discounted rate"]},
-        {name: "Unlimited for AARP", price: 55, data: "Unlimited", family: "50plus", bestFor: "AARP Members (2 Lines Required)", examples: ["AARP Exclusive", "2 Lines Required"]},
-    ];
-
-    // INIT BILL ESTIMATOR SELECTORS
-    const quickPlanSelect = document.getElementById('be-quick-plan');
-    plans.forEach((p, index) => {
-        const opt = document.createElement('option');
-        opt.value = index;
-        opt.text = `${p.name} ($${p.price})`;
-        quickPlanSelect.appendChild(opt);
-    });
-
-    const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
-    
-    function resetBill() { document.querySelectorAll('#view-bill input').forEach(i => i.value = (i.type === 'number' ? '0' : '')); calcBill(); }
-
-    function updateBillFromQuick() {
-        const planIdx = document.getElementById('be-quick-plan').value;
-        let lineCount = parseInt(document.getElementById('be-quick-lines').value);
-        const plan = plans[planIdx];
-
-        // AARP Logic
-        if(plan.name === "Unlimited for AARP" && lineCount < 2) {
-            lineCount = 2; 
-            document.getElementById('be-quick-lines').value = 2;
-        }
-
-        // Base Price logic
-        document.getElementById('be-plan-price').value = plan.price;
-        
-        // Add Line Logic
-        if(plan.name === "Unlimited for AARP") {
-             const extra = Math.max(0, lineCount - 2);
-             document.getElementById('be-add-lines').value = 0;
-             document.getElementById('be-unl-lines').value = extra;
-        } else if (plan.family === 'connect') {
-            const extra = Math.max(0, lineCount - 1);
-            document.getElementById('be-add-lines').value = extra;
-            document.getElementById('be-unl-lines').value = 0;
-        } else if (plan.family === 'unlimited') {
-             const extra = Math.max(0, lineCount - 1);
-             document.getElementById('be-add-lines').value = 0;
-             document.getElementById('be-unl-lines').value = extra;
-        } else if (plan.family === '50plus' && plan.name !== "Unlimited for AARP") {
-             const extra = Math.max(0, lineCount - 1);
-             document.getElementById('be-add-lines').value = 0;
-             document.getElementById('be-unl-lines').value = extra;
-        }
-
-        // AARP TOGGLE CHECK
-        const discountToggle = document.getElementById('be-apply-5-percent');
-        if(plan.name === "Unlimited for AARP") {
-            discountToggle.checked = false;
-            discountToggle.disabled = true;
-        } else {
-            discountToggle.disabled = false;
-        }
-
-        calcBill();
+    function updateCalculator() {
+        const m = getMath(document.getElementById('quick-price').value, document.getElementById('q-mode-phone').checked);
+        document.getElementById('q-tax').innerText = "$" + m.tax.toFixed(2);
+        document.getElementById('q-down').innerText = "$" + m.down.toFixed(2);
+        document.getElementById('q-monthly').innerText = "$" + m.monthly.toFixed(2);
+        document.getElementById('q-total').innerText = "$" + m.totalToday.toFixed(2);
     }
+    document.getElementById('quick-price').addEventListener('input', updateCalculator);
+    document.querySelectorAll('input[name="quickType"]').forEach(r => r.addEventListener('change', updateCalculator));
 
-    function calcBill() {
-        const planPrice = getVal('be-plan-price');
-        const addLines = getVal('be-add-lines') * 15;
-        const unlLines = getVal('be-unl-lines') * 20;
-        const watchLines = getVal('be-watch-lines') * 5;
-        const allyLines = getVal('be-ally-lines') * 25;
-        const homeType = parseInt(document.getElementById('be-home-type').value);
-        const homeQty = getVal('be-home-qty');
-        const homeTotal = homeType * homeQty;
-        const asurion = getVal('be-asurion');
-        
-        const rateTotal = planPrice + addLines + unlLines + watchLines + allyLines + homeTotal + asurion;
-        document.getElementById('be-total-rate').innerText = "$" + rateTotal.toFixed(2);
-
-        const taxGov = getVal('be-tax-gov');
-        const taxOther = getVal('be-tax-other');
-        const surchTotal = taxGov + taxOther;
-        document.getElementById('be-total-surch').innerText = "$" + surchTotal.toFixed(2);
-
-        const dev1 = getVal('be-dev1');
-        const dev2 = getVal('be-dev2');
-        const devTotal = dev1 + dev2;
-        document.getElementById('be-total-dev').innerText = "$" + devTotal.toFixed(2);
-
-        // 5% DISCOUNT LOGIC
-        let ratePromo = 0;
-        const discountActive = document.getElementById('be-apply-5-percent').checked;
-        if(discountActive) {
-            ratePromo = rateTotal * 0.05;
-        }
-        document.getElementById('be-cred-plan').value = ratePromo.toFixed(2);
-
-        const credPlan = getVal('be-cred-plan');
-        const credSim = getVal('be-cred-sim') * 10;
-        const credSurvey = getVal('be-cred-survey') * 10;
-        const credTotal = credPlan + credSim + credSurvey;
-        document.getElementById('be-total-cred').innerText = "-$" + credTotal.toFixed(2);
-
-        const grandTotal = rateTotal + surchTotal + devTotal - credTotal;
-        document.getElementById('be-grand-total').innerText = "$" + grandTotal.toFixed(2);
-        
-        return { planPrice, addLines, unlLines, watchLines, allyLines, homeTotal, asurion, rateTotal, taxGov, taxOther, surchTotal, dev1, dev2, devTotal, credPlan, credSim, credSurvey, credTotal, grandTotal, discountActive };
+    function updateContractMath() {
+        const m = getMath(document.getElementById('con-price').value, document.getElementById('mode-phone').checked);
+        document.getElementById('disp-tax').innerText = "$" + m.tax.toFixed(2);
+        document.getElementById('disp-down').innerText = "$" + m.down.toFixed(2);
+        document.getElementById('disp-monthly').innerText = "$" + m.monthly.toFixed(2);
+        document.getElementById('con-due-today').innerText = "$" + m.totalToday.toFixed(2);
     }
+    document.getElementById('con-price').addEventListener('input', updateContractMath);
+    document.querySelectorAll('input[name="devType"]').forEach(r => r.addEventListener('change', updateContractMath));
 
-    function generateBillPDF() {
-        const d = calcBill();
-        const zip = document.getElementById('be-zip').value;
-        const sf = document.getElementById('be-opt-smart').value;
-        // Auto-set AARP to YES if discount is active
-        const aarp = d.discountActive ? 'YES' : document.getElementById('be-opt-aarp').value;
-        const auto = document.getElementById('be-opt-auto').value;
-        
-        const addLineQty = getVal('be-add-lines');
-        const unlLineQty = getVal('be-unl-lines');
-        const watchQty = getVal('be-watch-lines');
-        const allyQty = getVal('be-ally-lines');
-        const homeQty = getVal('be-home-qty');
-        const homeCost = parseInt(document.getElementById('be-home-type').value);
-        const simQty = getVal('be-cred-sim');
-        const surveyQty = getVal('be-cred-survey');
-        
-        const check = (val) => val === 'YES' ? '☒' : '☐';
-        const uncheck = (val) => val === 'NO' ? '☒' : '☐';
-        const checkYes = (val) => val === 'YES' ? `☒` : `☐`;
-        const checkNo = (val) => val === 'NO' ? `☒` : `☐`;
-        
-        const asurYes = d.asurion > 0 ? '☒' : '☐';
-        const asurNo = d.asurion > 0 ? '☐' : '☒';
+    function generatePDF() { 
+        const price = parseFloat(document.getElementById('con-price').value) || 0;
+        if(price > 700) { document.getElementById('hv-modal').style.display='flex'; } else { finalizePDF(); }
+    }
+    document.getElementById('trigger-gen').addEventListener('click', generatePDF);
+    function closeHvModal() { document.getElementById('hv-modal').style.display='none'; }
+    function confirmHv() { closeHvModal(); finalizePDF(); }
 
-        const hp15 = (homeCost === 15 && homeQty > 0) ? '☒' : '☐';
-        const hp20 = (homeCost === 20 && homeQty > 0) ? '☒' : '☐';
-
+    function finalizePDF() {
+        const m = getMath(document.getElementById('con-price').value, document.getElementById('mode-phone').checked);
         const win = window.open('', '_blank');
-        win.document.write(`
-            <html><head><title>Estimated First Bill</title><style>
-                @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
-                body { font-family: 'Inter', sans-serif; padding: 0; margin: 0; color: #102B4A; -webkit-print-color-adjust: exact; }
-                .container { width: 100%; max-width: 8.5in; margin: 0 auto; }
-                .header-bar { background-color: #102B4A; color: white; padding: 25px 40px; display: flex; justify-content: space-between; align-items: center; }
-                .header-title { font-family: 'Oswald', sans-serif; font-size: 36px; text-transform: uppercase; letter-spacing: 1px; line-height: 1; }
-                .logo-square { background-color: #F15A22; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; text-align: center; color: white; font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1; font-size: 16px; padding: 5px; box-sizing: border-box; }
-                .section { padding: 20px 40px 10px; }
-                .sec-title { background-color: #102B4A; color: white; padding: 5px 15px; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; font-size: 14px; clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%); -webkit-print-color-adjust: exact; width: fit-content; min-width: 200px; }
-                .line-row { display: flex; align-items: flex-end; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
-                .lr-label { flex: 0 0 auto; padding-right: 10px; }
-                .lr-fill { flex: 1 1 auto; border-bottom: 1px solid #D3DCE5; margin-bottom: 4px; }
-                .lr-price { flex: 0 0 100px; text-align: right; font-size: 14px; font-weight: 700; }
-                .orange-sym { color: #F15A22; }
-                .total-bar { background-color: #102B4A; color: white; padding: 8px 15px; margin: 10px 40px 20px; font-weight: 700; display: flex; justify-content: space-between; font-size: 14px; -webkit-print-color-adjust: exact; clip-path: polygon(0% 0%, 96% 0%, 100% 50%, 96% 100%, 0% 100%); }
-                .check-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 13px; font-weight: 600; padding: 0 40px; }
-                .check-opts { display: flex; gap: 20px; }
-                .grand-total-box { border: 4px solid #102B4A; margin: 20px 40px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-                .gt-label { font-size: 18px; font-weight: 800; text-transform: uppercase; }
-                .gt-amount { font-size: 28px; font-weight: 800; color: #102B4A; }
-                .footer { font-size: 10px; color: #90A2B1; text-align: center; padding: 20px 40px; margin-top: 20px; border-top: 1px solid #E3E6EA; }
-            </style></head><body><div class="container"><div class="header-bar"><div class="header-title">ESTIMATED FIRST BILL</div><div class="logo-square">Consumer<br>Cellular</div></div>
-            <div class="section"><div class="sec-title">Monthly Rate Plan</div><div class="line-row"><div class="lr-label">Plan</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.planPrice.toFixed(2)}</div></div><div class="line-row"><div class="lr-label">Line 1 Included in Plan</div><div class="lr-fill"></div><div class="lr-price"></div></div>${addLineQty > 0 ? `<div class="line-row"><div class="lr-label"># of Additional Lines: ${addLineQty}</div><div class="lr-fill"></div><div class="lr-price">x $15 <span class="orange-sym">$</span>${d.addLines.toFixed(2)}</div></div>` : ''}${unlLineQty > 0 ? `<div class="line-row"><div class="lr-label"># of Additional Unlimited Lines: ${unlLineQty}</div><div class="lr-fill"></div><div class="lr-price">x $20 <span class="orange-sym">$</span>${d.unlLines.toFixed(2)}</div></div>` : ''}${watchQty > 0 ? `<div class="line-row"><div class="lr-label"># of Smartwatch Lines: ${watchQty}</div><div class="lr-fill"></div><div class="lr-price">x $5 <span class="orange-sym">$</span>${d.watchLines.toFixed(2)}</div></div>` : ''}${allyQty > 0 ? `<div class="line-row"><div class="lr-label"># of IRIS Ally Lines: ${allyQty}</div><div class="lr-fill"></div><div class="lr-price">x $25 <span class="orange-sym">$</span>${d.allyLines.toFixed(2)}</div></div>` : ''}${homeQty > 0 ? `<div class="line-row"><div class="lr-label"># of Home Phone Base Lines: ${homeQty} &nbsp;&nbsp; ${hp15} x $15 &nbsp; ${hp20} x $20</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.homeTotal.toFixed(2)}</div></div>` : ''}<div class="line-row"><div class="lr-label">Asurion Protection &nbsp;&nbsp; ${asurNo} NO &nbsp; ${asurYes} YES</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.asurion.toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL FOR RATE PLAN</div><div>$${d.rateTotal.toFixed(2)}</div></div>
-            <div class="section"><div class="sec-title">Surcharges and Other Items Estimate</div><div class="line-row"><div class="lr-label">Zip Code Entered: ${zip}</div><div class="lr-fill"></div><div class="lr-price"></div></div><div class="line-row"><div class="lr-label">Surcharges and Other Items</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.taxOther.toFixed(2)}</div></div><div class="line-row"><div class="lr-label">Government Taxes and Fees</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.taxGov.toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL FOR SURCHARGES AND FEES</div><div>$${d.surchTotal.toFixed(2)}</div></div>
-            <div class="section"><div class="sec-title">EASYPAY Interest-Free Device Financing</div><div class="line-row"><div class="lr-label">Device 1 Monthly Fee</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.dev1.toFixed(2)}</div></div><div class="line-row"><div class="lr-label">Device 2 Monthly Fee</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">$</span>${d.dev2.toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL FOR EASY PAY</div><div>$${d.devTotal.toFixed(2)}</div></div>
-            <div class="section"><div class="sec-title">Promotions and Other Credits</div><div class="line-row"><div class="lr-label">Rate Plan Promotion</div><div class="lr-fill"></div><div class="lr-price"><span class="orange-sym">-$</span>${d.credPlan.toFixed(2)}</div></div><div class="line-row"><div class="lr-label"># of SIM Kit Credit(s): ${simQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(simQty*10).toFixed(2)}</div></div><div class="line-row"><div class="lr-label"># of Customer Service Surveys: ${surveyQty}</div><div class="lr-fill"></div><div class="lr-price">- $10 <span class="orange-sym">-$</span>${(surveyQty*10).toFixed(2)}</div></div></div><div class="total-bar"><div>TOTAL CREDITS FOR PROMOTIONS</div><div>-$${d.credTotal.toFixed(2)}</div></div>
-            <div style="margin-top:20px;"><div class="check-row"><div>Do You Have SmartFlex Turned On?</div><div class="check-opts"><div>${checkNo(sf)} NO</div><div>${checkYes(sf)} YES</div></div></div><div style="padding:0 40px; font-size:10px; font-style:italic; color:#F15A22; margin-bottom:10px;">Totals will change if data limits are exceeded and the plan is flexed up.</div><div class="check-row"><div>AARP or USAA Member ID Added?</div><div class="check-opts"><div>${checkNo(aarp)} NO</div><div>${checkYes(aarp)} YES</div></div></div><div class="check-row"><div>AutoPay and E-Billing Active?</div><div class="check-opts"><div>${checkNo(auto)} NO</div><div>${checkYes(auto)} YES</div></div></div></div>
-            <div class="grand-total-box"><div class="gt-label">GRAND TOTAL OF FIRST MONTH INVOICE</div><div class="gt-amount">$${d.grandTotal.toFixed(2)}</div></div>
-            <div class="footer">Estimate Provided By<br>© 2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025<br>Date: ${new Date().toLocaleDateString()}</div></div>
-            <script>window.print();<\/script></body></html>`);
+        win.document.write(`<html><body><h1>EasyPay Contract</h1><p>Customer: ${document.getElementById('con-name').value}</p><p>Total Today: $${m.totalToday.toFixed(2)}</p><script>window.print();<\/script></body></html>`);
         win.document.close();
     }
 
-    // --- PLAN ESTIMATOR LOGIC ---
-    function initEstimator() {
-        const container = document.getElementById('plan-list-container');
-        container.innerHTML = "";
-        const addHeader = (text) => { const h = document.createElement('div'); h.innerText = text; h.style.padding = "15px 20px 5px"; h.style.color = "#94a3b8"; h.style.fontSize = "0.75rem"; h.style.fontWeight = "700"; h.style.textTransform = "uppercase"; container.appendChild(h); }
-        addHeader("Data Plans ($15 add-line)"); plans.filter(p => p.family === 'connect').forEach(renderPlanBtn);
-        addHeader("Unlimited Plans ($20 add-line)"); plans.filter(p => p.family === 'unlimited').forEach(renderPlanBtn);
-        addHeader("50+ Unlimited"); plans.filter(p => p.family === '50plus').forEach(renderPlanBtn);
-    }
-    function renderPlanBtn(plan) { const btn = document.createElement('div'); btn.className = 'plan-btn'; btn.innerHTML = `<div class="plan-name">${plan.name}</div><div class="plan-price">$${plan.price} / mo</div>`; btn.onclick = () => showPlanDetails(plan, btn); document.getElementById('plan-list-container').appendChild(btn); }
-    
-    // NEW EST CALC LOGIC
-    let currentSelectedPlan = null;
-    
-    function showPlanDetails(plan, btnElement) {
-        currentSelectedPlan = plan; 
-        document.getElementById('print-plan-btn-group').style.display = 'block';
-        document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('active')); btnElement.classList.add('active');
-        
-        const detail = document.getElementById('plan-detail-container');
-        const exampleList = plan.examples.map(ex => `<li style="margin-bottom:8px;">${ex}</li>`).join('');
-        
-        // Disable AARP Checkbox if AARP plan is selected
-        const isAARP = plan.name === "Unlimited for AARP";
-        const checkboxState = isAARP ? 'disabled' : '';
-        const checkboxNote = isAARP ? '(Already included)' : '';
-        
-        let html = `
-            <div style="font-size:2rem; font-weight:700; color:#1e3a8a; margin-bottom:5px;">${plan.name}</div>
-            <div style="font-size:1.2rem; color:#2563eb; font-weight:600; margin-bottom:20px;">$${plan.price} <span style="color:#64748b; font-size:1rem; font-weight:400;">(${plan.data})</span></div>
-            <div style="background:#f8fafc; padding:15px; border-radius:8px; margin-bottom:20px; border:1px solid #e2e8f0;">
-                <div style="font-weight:600; color:#0f172a; margin-bottom:5px;">Best For:</div>
-                <div style="color:#334155;">${plan.bestFor}</div>
-            </div>
-            
-            <div class="est-calc-box">
-                <div class="bill-sec-title">Quick Quote</div>
-                <div class="est-row">
-                    <label style="font-weight:500;">Number of Lines:</label>
-                    <select id="est-lines-count" class="select" style="width:100px;" onchange="updateEstPrice()">
-                        <option value="1">1 Line</option>
-                        <option value="2">2 Lines</option>
-                        <option value="3">3 Lines</option>
-                        <option value="4">4 Lines</option>
-                        <option value="5">5 Lines</option>
-                        <option value="6">6 Lines</option>
-                        <option value="7">7 Lines</option>
-                    </select>
-                </div>
-                <div class="est-row">
-                     <label style="font-weight:500; display:flex; align-items:center; gap:8px;">
-                        <input type="checkbox" id="pe-apply-5-percent" onchange="updateEstPrice()" ${checkboxState}> 
-                        Apply 5% AARP/USAA Discount ${checkboxNote}
-                     </label>
-                </div>
-                <div class="est-price-display" id="est-price-val">$${plan.price}.00</div>
-                <div class="est-disclaimer">ESTIMATED MONTHLY TOTAL (Pre-Tax)<br>This is an estimate for service lines only. Not a formal quote. Taxes & fees not included.</div>
-            </div>
-            
-            <h3 style="font-size:1rem; margin-bottom:10px; margin-top:30px;">Details</h3>
-            <ul style="padding-left:20px; color:#475569; line-height:1.5;">${exampleList}</ul>`;
-            
-        if (plan.family === 'connect') html += `<div class="smartflex-box"><div class="smartflex-title"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>SmartFlex Included</div>CCI sends alerts at 50% and 75% usage. If the customer exceeds the limit, they are <strong>automatically flexed up</strong> to the next plan to maintain speed.<br><br>Customers can flex back down anytime via Customer Service (coming soon to MyAccount). Opting out results in <strong>slower speeds</strong> for the remainder of the cycle.</div>`;
-        
-        detail.innerHTML = html;
-        updateEstPrice(); // Trigger initial calc
-    }
-
-    function updateEstPrice() {
-        if(!currentSelectedPlan) return;
-        const plan = currentSelectedPlan;
-        let lines = parseInt(document.getElementById('est-lines-count').value);
-        let total = plan.price;
-
-        if (plan.name === "Unlimited for AARP") {
-            if(lines < 2) {
-                // If AARP plan selected but user picks 1 line, force 2 or just show base 55
-                // Let's force UI to show 2 minimum effectively or just charge base 55
-                if(lines === 1) total = 55; // Base covers 2
-            } else {
-                // Lines 3+ are +20
-                total = 55 + ((lines - 2) * 20);
-            }
-        } else if (plan.family === 'connect') {
-            // Line 1 base, add'l 15
-            total = plan.price + ((lines - 1) * 15);
-        } else if (plan.family === 'unlimited') {
-            // Line 1 base, add'l 20
-            total = plan.price + ((lines - 1) * 20);
-        } else if (plan.family === '50plus') {
-             // 50+ Solo (1 Line). Base 40. Add'l 20
-            total = plan.price + ((lines - 1) * 20);
-        }
-        
-        // 5% Discount
-        const disc = document.getElementById('pe-apply-5-percent');
-        if(disc && disc.checked && !disc.disabled) {
-            total = total * 0.95;
-        }
-        
-        document.getElementById('est-price-val').innerText = "$" + total.toFixed(2);
-    }
-
-    function printPlan() { 
-        if (!currentSelectedPlan) return; 
-        const plan = currentSelectedPlan; 
-        const lines = document.getElementById('est-lines-count').value;
-        const total = document.getElementById('est-price-val').innerText;
-        
-        const exampleList = plan.examples.map(ex => `<li>${ex}</li>`).join(''); 
-        let smartFlexContent = plan.family === 'connect' ? `<div class="sf-box"><div class="sf-title">SmartFlex Included</div><p>We send alerts at 50% and 75% usage. If you exceed the limit, you are <strong>automatically flexed up</strong> to the next plan to maintain high-speed data. You can flex back down anytime. Opting out results in slower speeds for the remainder of the cycle.</p></div>` : ''; 
-        
-        const win = window.open('', '_blank'); 
-        win.document.write(`<html><head><title>Plan Estimate: ${plan.name}</title><style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:0;margin:0;color:#0f172a;-webkit-print-color-adjust:exact}.container{max-width:8.5in;margin:0 auto;padding:40px}.header-bar{background-color:#102B4A;color:white;padding:25px 40px;display:flex;justify-content:space-between;align-items:center}.header-title{font-family:'Oswald',sans-serif;font-size:36px;text-transform:uppercase;letter-spacing:1px;line-height:1}.logo-square{background-color:#F15A22;width:80px;height:80px;display:flex;align-items:center;justify-content:center;text-align:center;color:white;font-family:'Playfair Display',serif;font-weight:700;line-height:1;font-size:16px;padding:5px;box-sizing:border-box}.hero{background-color:#eff6ff;padding:30px;border-radius:12px;text-align:center;border:1px solid #bfdbfe;margin:30px 40px}.plan-title{font-family:'Playfair Display',serif;font-size:2.5rem;color:#1e3a8a;margin:0 0 10px 0}.plan-price{font-size:2rem;font-weight:700;color:#F15A22}.plan-meta{font-size:1.2rem;color:#64748b;font-weight:400}.grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:0 40px;margin-bottom:30px}.section-title{font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;color:white;background-color:#102B4A;font-weight:800;margin-bottom:15px;padding:5px 15px;clip-path:polygon(0% 0%,95% 0%,100% 50%,95% 100%,0% 100%);-webkit-print-color-adjust:exact;width:fit-content;min-width:200px}.content-text{font-size:1.1rem;line-height:1.6;color:#334155}ul{margin:0;padding-left:20px}li{margin-bottom:8px}.sf-box{background:#fff7ed;border:1px solid #fed7aa;padding:20px;border-radius:8px;color:#9a3412;font-size:0.9rem;line-height:1.5;margin:0 40px 30px}.sf-title{font-weight:700;color:#ea580c;margin-bottom:5px;text-transform:uppercase;font-size:0.8rem}.quote-box{border:4px solid #102B4A;margin:0 40px 30px;padding:20px;text-align:center}.gt-label{font-size:18px;font-weight:800;text-transform:uppercase}.gt-amount{font-size:28px;font-weight:800;color:#102B4A}.footer{font-size:10px;color:#90A2B1;text-align:center;padding:20px 40px;margin-top:20px;border-top:1px solid #E3E6EA}</style></head><body><div class="container"><div class="header-bar"><div class="header-title">PLAN ESTIMATE</div><div class="logo-square">Consumer<br>Cellular</div></div><div class="hero"><h1 class="plan-title">${plan.name}</h1><div class="plan-price">$${plan.price} <span class="plan-meta">/ month (Base)</span></div><div class="plan-meta" style="margin-top:5px;font-size:1rem;">${plan.data} High-Speed Data</div></div><div class="quote-box"><div class="gt-label">ESTIMATED MONTHLY TOTAL (PRE-TAX)</div><div class="gt-amount">${total}</div><div style="font-size:1rem;color:#64748b;margin-top:5px;">For ${lines} Line(s)</div><div style="font-size:0.75rem;color:#94a3b8;font-style:italic;margin-top:10px;">*Estimate only. Excludes taxes, fees, and device payments. Not a formal quote.</div></div><div class="grid"><div><div class="section-title">Best For</div><div class="content-text">${plan.bestFor}</div></div><div><div class="section-title">What You Get</div><div class="content-text"><ul>${exampleList}</ul></div></div></div>${smartFlexContent}<div class="footer">Estimate Provided By<br>© 2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025<br>Date: ${new Date().toLocaleDateString()}</div></div><script>window.print();<\/script></body></html>`); 
-        win.document.close(); 
-    }
-    
-    initEstimator();
-    
-    // --- TROUBLESHOOTING LOGIC ---
+    // --- TROUBLESHOOTING DATA ---
     const troubleshootData = [
-        {category: "general", title: "Phone is Talking (VoiceOver/TalkBack)", content: `• iPhone: Settings → Accessibility → VoiceOver → OFF (Tap once to select, double-tap to activate)\n• Android: Settings → Accessibility → TalkBack → OFF (Use two fingers to scroll)`},
-        {category: "general", title: "No Service / Can't Call", content: `1. Restart (OFF 30s → ON)\n2. Airplane Mode (ON 10s → OFF)\n3. Reseat SIM (Physical) or Toggle eSIM in Settings\n4. Network Reset (Settings → General/System → Reset)`},
-        {category: "general", title: "Slow Internet", content: `1. Toggle Wi-Fi OFF/ON\n2. Airplane Mode Reset\n3. Restart Device`},
-        {category: "general", title: "Battery Draining Fast", content: `1. Restart\n2. Turn OFF Low Power Mode (sometimes causes glitches)\n3. Check Battery Usage in Settings\n4. Close unused apps`},
-        {category: "apple", title: "iPhone 17", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Cellular. Turn your main cellular plan Off and then back On after 30 seconds.\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. App Cache Deep Clean (Slowness Fix): Tap and hold a slow app's icon, tap Delete App, then re-download it from the App Store.\n4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "Be very careful of apps that promise to 'clean' or 'speed up' your phone, as they are often spam/scam apps that collect your information."},
-        {category: "apple", title: "iPhone 17 Air", content: `1. Battery Drain Diagnostics: Go to Settings > Battery to identify and disable background refresh for top offenders in Settings > General > Background App Refresh.\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. Proactive Storage Offload (Free Up Space): Enable Offload Unused Apps in iPhone Storage.\n4. Control Center Toggle Cycling (Quick Fix for Connection): Swipe down to open Control Center. Systematically toggle Airplane Mode, Wi-Fi, and Bluetooth off and on.\n5. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "Avoid clicking on pop-up ads or links that say your phone is infected with a virus. Only download apps from the official App Store."},
-        {category: "apple", title: "iPhone 17 Pro", content: `1. Display Sluggishness Check: Verify Low Power Mode is Off (Settings > Battery).\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. Simple Reboot: Power off, wait 30 seconds, and turn back on.\n4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "If you notice a sudden increase in ads or your screen keeps opening strange websites, an unwanted spam app may be installed."},
-        {category: "apple", title: "iPhone 17 Pro Max", content: `1. Persistent Notification Clear: Go to Settings > Notifications. Find the app causing the alert and toggle its notifications Off, then On again.\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. System-Wide Haptics/Vibration Check: Test and recalibrate haptics via accessibility settings if needed.\n4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "If you notice a sudden increase in ads or your screen keeps opening strange websites, an unwanted spam app may be installed."},
-        {category: "apple", title: "iPhone 16", content: `1. Network Reset Triage (No SIM Removal): Go to Settings > General > Transfer or Reset iPhone > Reset Network Settings.\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. Clear Safari Website Data (Browser Fix): In Settings > Safari, select Clear History and Website Data.\n4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "Never enter your Apple ID or credit card information into an app unless you are 100% sure it is a legitimate app from a trusted company."},
-        {category: "apple", title: "iPhone 16E", content: `1. Network Reset Triage (No SIM Removal): Go to Settings > General > Transfer or Reset iPhone > Reset Network Settings.\n2. Accessibility Fix: VoiceOver Disable: If a voice speaks when you tap, go to Settings > Accessibility > VoiceOver. To turn it off: Tap once on the switch, then double-tap to toggle it Off.\n3. Disable/Re-enable Face ID/Touch ID: Turn off the biometric security feature, reboot the phone, and set it up again.\n4. Safety Check: Remove Bad Apps: Look through your App Library for any suspicious app and delete it.`, spam: "Never enter your Apple ID or credit card information into an app unless you are 100% sure it is a legitimate app from a trusted company."},
-        {category: "apple", title: "Apple Watch SE 3rd Gen", content: `1. Unpair and Re-pair (Watch Only): Unpair the Watch from the iPhone via the Watch app, then re-pair it.\n2. Accessibility Fix: VoiceOver Disable: If the Watch is reading items aloud, go to Settings on the Watch > Accessibility > VoiceOver. To turn it off: Tap once on the switch to select it, then double-tap to toggle it Off.\n3. Water Lock Cycling: Use the Digital Crown to cycle Water Lock on and off.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-        {category: "apple", title: "Apple Watch 11", content: `1. Digital Crown Calibration Check: Clean the Digital Crown with water and test its scrolling and pressing functions.\n2. Accessibility Fix: VoiceOver Disable: If the Watch is reading items aloud, go to Settings on the Watch > Accessibility > VoiceOver. To turn it off: Tap once on the switch to select it, then double-tap to toggle it Off.\n3. Workout Route Data Deletion: Delete the most recent workout in the iPhone’s Fitness app to clear corrupted GPS data.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-        {category: "apple", title: "Apple Watch Ultra 3", content: `1. Action Button Reconfiguration: Change the Action Button’s assigned task and then change it back to its original setting.\n2. Accessibility Fix: AssistiveTouch Toggle: Go to Settings on the Watch > Accessibility > AssistiveTouch. Toggle the main feature Off and then On to fix unexpected cursor or gesture movements.\n3. Compass Reorientation: Open the Compass app and perform a figure-eight motion with your arm to recalibrate the magnetometer.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-        {category: "apple", title: "Apple Watch SE 2nd Gen", content: `1. Silent Mode Toggle Test: Rapidly toggle the Silent Mode on and off several times to ensure the Taptic Engine (vibration) is fully engaging for notifications.\n2. Accessibility Fix: Taptic Time Toggle: Go to Settings on the Watch > Clock > Taptic Time. Toggle the setting Off and then On if haptics for time telling are wrong or missing.\n3. Watch Face Switch: Apply a different Watch Face and use it for a few hours before switching back.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-        {category: "apple", title: "Apple Watch 10", content: `1. Notifications Mirroring Check: Verify the “Mirror iPhone Alerts” setting is correctly configured in the Watch app on the iPhone.\n2. Accessibility Fix: Quick Actions Check: Go to Settings on the Watch > Accessibility > Quick Actions. Toggle this setting Off and then On if the watch is performing unexpected tasks after a quick wrist tap.\n3. Storage Management Drill-down: In the Watch app, check General > Usage and delete the largest unnecessary media/photo syncs.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-        {category: "apple", title: "Apple Watch Ultra 2", content: `1. Low Power Mode Specific Check: Ensure that Low Power Mode is not permanently enabled.\n2. Accessibility Fix: Reduce Transparency Toggle: Go to Settings on the Watch > Accessibility > Reduce Transparency. Toggle this setting Off and then On to fix background visibility issues or display rendering glitches.\n3. Cellular Connectivity Diagnostic: Run a cellular speed test directly from the Watch (if possible) or ensure the cellular status icon in Control Center is green/active.`, spam: "Do not respond to strange notifications on your watch that ask for your password or credit card."},
-
-        {category: "samsung", title: "S25 Ultra", content: `1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. Clear Partition Cache (General System Refresh): Boot into Recovery Mode (Power + Volume Up) and select Wipe cache partition.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Be wary of apps that constantly ask for unnecessary permissions."},
-        {category: "samsung", title: "S25 FE", content: `1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. App Optimizer Re-run: Force the system to re-analyze all applications for background power usage in the Device Care menu.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Be wary of apps that constantly ask for unnecessary permissions."},
-        {category: "samsung", title: "S25 Edge", content: `1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. Edge Panel Handle Position Lock: Ensure the Edge Panel handle is locked into a fixed position to prevent accidental activation.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Be wary of apps that constantly ask for unnecessary permissions."},
-        {category: "samsung", title: "S25", content: `1. Safe Mode Check (Isolating a Bad App): Restart the phone while holding the Volume Down key to enter Safe Mode. If the problem disappears, uninstall the last 3-5 apps installed.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. System UI Force Stop (Visual Fix): Go to Settings > Apps > show system apps > System UI and select Force Stop to manually reset the visual interface.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Be wary of apps that constantly ask for unnecessary permissions."},
-        {category: "samsung", title: "Galaxy Z Fold7", content: `1. Flex Mode Sensor Re-calibration (Hinge Fix): Fully open and close the device three times quickly.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. Multi-Window Tray Reset: Clear the recent apps list and then manually drag two apps into a split-screen view.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "If you download a keyboard or theme app that seems overly intrusive or asks to watch everything you type, it could be a privacy-invading spam app."},
-        {category: "samsung", title: "Galaxy Z Flip7 FE", content: `1. External Display Widget Refresh (Cover Screen Widgets): Remove all widgets from the external/cover screen and add them back one by one.\n2. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n3. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n4. Camera Shutter Lag Fix: Go into the Camera app settings and toggle off any resource-intensive image processing features temporarily.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "If you download a keyboard or theme app that seems overly intrusive or asks to watch everything you type, it could be a privacy-invading spam app."},
-        {category: "samsung", title: "Galaxy A15 (Physical SIM)", content: `1. Power Cycle with SIM Removal (Carrier Fix - Physical SIM): Turn Off. Use a paperclip to open the SIM tray, remove the SIM for 60 seconds, re-insert, and turn back on.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. Storage / microSD Check (if used): Safely unmount and re-mount the microSD card via Storage settings.\n4. Side Key Function Reset: Change the double-press action for the Side Key/Power button and then change it back.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Free games, photo filters, and fake utility apps are common sources of spam."},
-        {category: "samsung", title: "Galaxy A36 5G (eSIM)", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. RAM Plus Adjustment (Slowness Fix): Adjust the RAM Plus setting to a lower value, reboot, and set it back to the preferred value.\n4. Notification History Clear: Clear the Notification History log to resolve any recurring ghost notifications.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Free games, photo filters, and fake utility apps are common sources of spam."},
-        {category: "samsung", title: "Galaxy A16 5G (eSIM)", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Connections > SIM card manager. Find your main plan and toggle it Off and then back On.\n2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.\n3. MicroSD Card Re-mount (Storage Fix): Safely unmount and re-mount the external microSD card via Storage settings.\n4. Side Key Function Reset: Change the double-press action for the Side Key/Power button and then change it back.\n5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Free games, photo filters, and fake utility apps are common sources of spam."},
-        {category: "samsung", title: "Galaxy Tab A11+", content: `1. Multi-User Profile Check: Switch to a different profile, and then switch back to your main profile to clear profile-specific glitches.
-2. Accessibility Fix: TalkBack Disable: If the tablet is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
-3. Second Screen Mode Test: Attempt to connect the tablet as a second screen to a monitor, then disconnect, to reset the display output parameters.
-4. Dex Mode Toggle: Enable and immediately disable Samsung DeX (if available).
-5. Safety Check: Remove Bad Apps: Go to Settings > Apps. Look for any suspicious app and delete it.`, spam: "Never download apps that instruct you to change a complex system setting or install another file outside of the official Google Play Store. (SIM note: only some Galaxy Tab models have a SIM tray.)"},
-
-        {category: "moto", title: "Razr 2025", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
-2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
-3. Quick Display Sensor Check: Gently clean the cover screen’s proximity sensor.
-4. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "Be cautious of any other app that tries to change the way your phone moves or acts."},
-        {category: "moto", title: "Razr 2024", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
-2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
-3. Peek Display/Active Display Reset: Toggle the Peek Display feature Off and then On in the Moto app.
-4. Audio Effects Equalizer Reset: In the sound settings, reset the Dolby Atmos or custom Equalizer settings back to the default profile.
-5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "Be cautious of any other app that tries to change the way your phone moves or acts."},
-        {category: "moto", title: "Moto G 2025", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
-2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
-3. System UI Force Stop (Visual Fix): Go to Settings > Apps > Show system > System UI and select Force Stop.
-4. Moto Camera App Clear Data: Clear all data for the default Moto Camera app.
-5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
-        {category: "moto", title: "Moto G Power 2025", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
-2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
-3. Power-Saving Mode Configuration Reset: Toggle the main Battery Saver mode on and then off.
-4. Fingerprint Sensor Timeout Check: Adjust the screen lock timeout and PIN/Pattern requirement duration.
-5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
-        {category: "moto", title: "Moto G Stylus 2025", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
-2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
-3. Stylus Air Command Refresh: Remove and re-insert the physical stylus firmly several times.
-4. Screen Recorder Shortcut Test: Attempt to use the built-in Screen Recorder shortcut and then force stop the service.
-5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
-        {category: "moto", title: "Moto G Play 2024 (Physical SIM)", content: `1. Power Cycle with SIM Removal (Carrier Fix - Physical SIM): Turn Off. Use a paperclip to open the SIM tray, remove the SIM for 60 seconds, re-insert, and turn back on.
-2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
-3. External Storage Format Check: If a microSD card is used, safely unmount and re-mount it.
-4. Lock Screen Display Customization: Change the Lock Screen wallpaper and clock style to force a refresh.
-5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
-        {category: "moto", title: "Moto Edge 2024", content: `1. Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
-2. Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
-3. Curved Display Edge Detection: Adjust the Accidental Touch Prevention setting for the curved display.
-4. Ready For/External Display Reset: Connect the phone to a desktop-mode environment (like Ready For) and then cleanly disconnect it.
-5. Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "If you download a simple utility app and it starts showing video ads or covering your screen, it’s a spam app."},
-        
-        {category: "pixel", title: "Google Pixel 10", content: `Cellular Fix (eSIM/Network Toggle): Go to Settings > Network & internet > Internet. Find your network and toggle the Mobile Data/Cellular Plan Off and then back On.
-Accessibility Fix: TalkBack Disable: If the phone is speaking aloud, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
-Adaptive Connectivity Toggle (Network Fix): Turn off Adaptive Connectivity/Intelligent Networking for 5 minutes and then re-enable it.
-Force Re-Index Search: Go into Google App settings and initiate a manual re-indexing of device content.
-Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "Be mindful of phishing emails or texts that try to trick you into downloading files or giving up passwords."},
-        
-        {category: "cc", title: "Iris Eazy Flip (Physical SIM)", content: `Simple Reboot (No SIM Removal): Turn the phone Off, wait 30 seconds, and turn it back on.
-Accessibility Fix: Display Contrast Check: Go to Settings > Display > Contrast (or Accessibility > Display). Make sure the contrast is set to its highest level.
-T9 Text Input Test: Type a test word in a new message and toggle the text input mode.
-External Volume Rocker Test: Use the external volume rocker buttons to adjust the ringer volume.
-Safety Check: Remove Bad Apps: This type of phone generally cannot download 'spam apps.'`, spam: "Your biggest risk is scam phone calls or scam text messages. Never press a button or call back a number that an automated message tells you to call."},
-        {category: "cc", title: "Verve Home Base", content: `Base Station Power Cycle (Network Fix): Unplug the Home Base from the wall and remove the battery backup (if applicable) for 2 minutes before plugging it back in.
-Alert Tone Check: Test the Ringer Volume and Alert Tone settings to ensure alerts are loud enough.
-Voicemail Reset Password (Store/Care Only): Voicemail reset password must be handled in-store or through Care.
-Antenna Position Adjustment: Re-position the adjustable external antenna by rotating it 90 degrees.
-Important Note (No Display): Verve Home Base has no display, so menu-based settings like caller blocking won’t be available on the unit itself.
-Voicemail Setup Requirement: To set up voicemail (or fix voicemail issues), the Home Base will need to be handled with all equipment present — either bring everything into the store or call Care for guided setup.`, spam: "Be aware of calls reporting a 'problem' with your base station or medical alert service. Hang up and call your service provider's official number directly to confirm."},
-        {category: "cc", title: "Iris Home Base (Physical SIM)", content: `Base Station Power Cycle (Network Fix): Unplug the Home Base from the wall and remove the battery backup (if applicable) for 2 minutes before plugging it back in.
-Check Display for Caller Blocking: Use the small display to check for any menu options or indicators for blocking unwanted callers. (Iris Home Base has a display and can be used to block callers.)
-Voicemail Reset Password (Store/Care Only): Voicemail reset password must be handled in-store or through Care.
-Status Light Interpretation: Refer to the device's manual and note the exact color and blinking pattern of all status lights.
-Voicemail Setup Requirement: To set up voicemail (or fix voicemail issues), the Home Base will need to be handled with all equipment present — either bring everything into the store or call Care for guided setup.`, spam: "Be aware of calls reporting a 'problem' with your base station or medical alert service. Hang up and call your service provider's official number directly to confirm."},
-        {category: "cc", title: "Iris Ally (Necklace/Cradle)", content: `SOS Button Dry Run: Press the dedicated SOS button on the necklace and immediately cancel the call or alert process to ensure the emergency contact list is active and working.
-Check Charging Cradle Connection: If the battery light is not green, ensure the necklace is firmly seated in the charging cradle and the cradle is plugged in.
-Contact for Sound/Sensitivity: If the Ally is too sensitive or not loud enough, contact your trusted person or Consumer Cellular (Care/in-store) to adjust the sound/volume and Fall Detection Sensitivity settings.
-Pendant/Wearable Link Test: Ensure the Ally necklace is within range of the cradle/base station and press a test button on the necklace.
-Coverage Note: Ally works anywhere in the U.S. where coverage is available/applicable.
-Fix Path (Trusted Contact / Care / Store): If Iris Ally isn’t working correctly, it should be fixed by a trusted contact, calling Care, or coming into the store (whichever is fastest/most comfortable).`, spam: "Be aware of calls reporting a 'problem' with your base station or medical alert service. Hang up and call your service provider's official number directly to confirm."},
-        
-        {category: "tablet", title: "TCL Tab 8 Gen 2 (Physical SIM)", content: `Power Cycle with SIM Removal (Carrier Fix - Physical SIM): Turn Off. Use a paperclip to open the SIM tray, remove the SIM for 60 seconds, re-insert, and turn back on.
-Accessibility Fix: TalkBack Disable: If a voice starts announcing every button you press, go to Settings > Accessibility > TalkBack. To turn it off: Use two fingers to scroll. Tap once on the switch, then double-tap to toggle it Off.
-Multi-User Profile Check: If the tablet supports multiple users, switch to a different profile, and then switch back to your main profile.
-Keyboard/Accessory Dock Check: If you use a clip-on keyboard, ensure the connection pins are clean and the accessory is correctly detected.
-Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for any suspicious app and delete it.`, spam: "Be careful when downloading free games, as they often come bundled with intrusive ad software. Always use the Google Play Store."}
+        {category: "apple", title: "iPhone 17", content: "1. Cellular Fix: Settings > Cellular > Toggle Plan Off/On after 30s.\n2. Accessibility: Settings > Accessibility > VoiceOver > OFF.\n3. Slowness: Delete and re-download slow apps."},
+        {category: "apple", title: "iPhone 17 Air", content: "1. Battery: Check Settings > Battery > Background Refresh.\n2. Connection: Systematically cycle Airplane Mode, Wi-Fi, and BT."},
+        {category: "apple", title: "iPhone 16", content: "1. Network: Settings > General > Transfer or Reset > Reset Network Settings.\n2. Browser: Settings > Safari > Clear History."},
+        {category: "samsung", title: "S25 Ultra", content: "1. Safe Mode: Restart + Hold Volume Down. Uninstall recent apps.\n2. SIM: Settings > Connections > SIM manager > Toggle Off/On."},
+        {category: "moto", title: "Razr 2025", content: "1. Connection: Settings > Network > Internet > Toggle Mobile Data Off/On."},
+        {category: "pixel", title: "Google Pixel 10", content: "1. Network: Toggle Mobile Data Off/On. Disable 'Adaptive Connectivity' for 5 mins."}
     ];
 
     function initTroubleshoot() {
@@ -847,65 +430,44 @@ Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for an
         troubleshootData.forEach(item => {
             const div = document.createElement('div');
             div.className = 'ts-card';
-            div.dataset.category = item.category;
-            
-            let iconLetter = item.title.charAt(0);
-            let spamHtml = item.spam ? `<div class="ts-spam-box"><div class="ts-spam-title">⚠️ Spam Warning</div>${item.spam}</div>` : '';
-            
-            div.innerHTML = `
-                <div class="ts-card-header"><div class="ts-icon">${iconLetter}</div><div class="ts-name">${item.title}</div></div>
-                <div class="ts-details">${item.content}</div>
-                ${spamHtml}
-                <button class="ts-print-btn" onclick="printSingleTS('${item.title}')">🖨️ Print Guide</button>
-            `;
+            div.innerHTML = `<div class="ts-card-header"><div class="ts-icon">${item.title[0]}</div><div class="ts-name">${item.title}</div></div><div class="ts-details">${item.content}</div><button class="ts-print-btn" onclick="printSingleTS('${item.title}')">🖨️ Print</button>`;
             container.appendChild(div);
         });
     }
 
-    function filterTroubleshoot(cat, btn) {
-        document.querySelectorAll('.ts-filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        const items = document.querySelectorAll('.ts-card');
-        items.forEach(item => {
-            if(cat === 'all' || item.dataset.category === cat || (cat === 'general' && item.dataset.category === 'general')) {
-                item.style.display = 'flex';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    }
-    
     function searchTroubleshoot() {
         const term = document.getElementById('ts-search').value.toLowerCase();
-        const items = document.querySelectorAll('.ts-card');
-        items.forEach(item => {
-            const text = item.innerText.toLowerCase();
-            item.style.display = text.includes(term) ? 'flex' : 'none';
+        document.querySelectorAll('.ts-card').forEach(c => {
+            c.style.display = c.innerText.toLowerCase().includes(term) ? 'flex' : 'none';
         });
     }
 
-    function printSingleTS(title) {
-        const item = troubleshootData.find(i => i.title === title);
-        if(!item) return;
-        let spam = item.spam ? `<div class="warning-box"><strong>⚠️ Spam Warning:</strong> ${item.spam}</div>` : '';
-        let contentHtml = `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
-        const win = window.open('', '_blank');
-        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:0;margin:0;color:#0f172a;-webkit-print-color-adjust:exact}.container{max-width:8.5in;margin:0 auto;padding:40px}.header-bar{background-color:#102B4A;color:white;padding:25px 40px;display:flex;justify-content:space-between;align-items:center}.header-title{font-family:'Oswald',sans-serif;font-size:36px;text-transform:uppercase;letter-spacing:1px;line-height:1}.logo-square{background-color:#F15A22;width:80px;height:80px;display:flex;align-items:center;justify-content:center;text-align:center;color:white;font-family:'Playfair Display',serif;font-weight:700;line-height:1;font-size:16px;padding:5px;box-sizing:border-box}.hero{background-color:#eff6ff;padding:30px;border-radius:12px;text-align:center;border:1px solid #bfdbfe;margin:30px 40px}.plan-title{font-family:'Playfair Display',serif;font-size:2.5rem;color:#1e3a8a;margin:0 0 10px 0}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid;margin:0 40px}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.3rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:20px;border-radius:8px;margin-top:20px;font-size:1.1rem;border-left:6px solid #ea580c;margin:0 40px}.footer{font-size:10px;color:#90A2B1;text-align:center;padding:20px 40px;margin-top:20px;border-top:1px solid #E3E6EA}</style></head><body><div class="container"><div class="header-bar"><div class="header-title">TROUBLESHOOTING GUIDE</div><div class="logo-square">Consumer<br>Cellular</div></div><div class="hero"><h1 class="plan-title">${item.title}</h1></div>${contentHtml}<div class="footer">Provided by DealerTouch • 2025 Consumer Cellular, Inc.</div></div><script>window.print();<\/script></body></html>`);
-        win.document.close();
+    const carriers = [
+        {name: "Verizon", contact: "888-844-7095", details: "NTP via #PORT"},
+        {name: "AT&T", contact: "877-844-5584", details: "Port-out PIN via *PORT"},
+        {name: "T-Mobile", contact: "877-789-3106", details: "PIN via App/Web"}
+    ];
+
+    function initPorting() {
+        const list = document.getElementById('port-list-container');
+        list.innerHTML = "";
+        carriers.forEach(c => {
+            const item = document.createElement('li');
+            item.className = 'port-item';
+            item.innerHTML = `<div class="port-header" onclick="this.parentElement.classList.toggle('expanded')"><div class="port-name">${c.name}</div><div class="port-contact">${c.contact}</div></div><div class="port-details">${c.details}</div>`;
+            list.appendChild(item);
+        });
     }
-    
-    // KEEP THE OLD PRINT FUNCTION FOR BULK
-    function printTroubleshoot(type) {
-        const items = troubleshootData.filter(i => i.category === type || i.category === 'general');
-        let contentHtml = items.map(item => {
-            let spam = item.spam ? `<div class="warning-box"><strong>⚠️ Spam Warning:</strong> ${item.spam}</div>` : '';
-            return `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
-        }).join('');
-        const win = window.open('', '_blank');
-        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:40px;color:#0f172a;-webkit-print-color-adjust:exact}.header{display:flex;justify-content:space-between;border-bottom:3px solid #ff7b00;padding-bottom:20px;margin-bottom:30px}.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1e3a8a}.title{font-size:2rem;font-weight:700;margin-bottom:20px;color:#1e3a8a;text-transform:capitalize}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.1rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:15px;border-radius:8px;margin-top:10px;font-size:1rem;border-left:5px solid #ea580c}.footer{margin-top:50px;text-align:center;color:#64748b;font-size:0.8rem;border-top:1px solid #e2e8f0;padding-top:20px}h3{color:#2563eb;margin-bottom:10px;font-size:1.4rem}</style></head><body><div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div><div class="title">${type.toUpperCase()} Quick Fix Guide</div>${contentHtml}<div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div><script>window.print();<\/script></body></html>`);
-        win.document.close();
+
+    function filterCarriers() {
+        const term = document.getElementById('port-search').value.toLowerCase();
+        document.querySelectorAll('.port-item').forEach(i => {
+            i.style.display = i.innerText.toLowerCase().includes(term) ? 'block' : 'none';
+        });
     }
+
+    function resetBill() { document.querySelectorAll('#view-bill input').forEach(i => i.value = (i.type === 'number' ? '0' : '')); }
+    function resetForm() { document.querySelectorAll('#view-contract input').forEach(i => i.value = ''); updateContractMath(); }
 
     initPorting();
     initTroubleshoot();
