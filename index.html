@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V16.1.0</title>
+    <title>Sales Portal V16.0.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,8 +11,8 @@
             --header-bg: rgba(255, 255, 255, 0.95);
             --text-dark: #0f172a;
             --text-muted: #64748b;
-            --primary: #0F2A4A; /* Deep Navy */
-            --accent: #F05820;  /* Bright Orange */
+            --primary: #0F2A4A; /* Deep Navy from PDF */
+            --accent: #F05820;  /* Bright Orange from PDF */
             --border: #e2e8f0;
             --hover-bg: #f1f5f9;
         }
@@ -42,7 +42,7 @@
             left: 0; 
             z-index: 2000; 
             /* Login Background */
-            background: linear-gradient(rgba(15, 42, 74, 0.85), rgba(15, 42, 74, 0.9)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000&auto=format&fit=crop');
+            background: linear-gradient(rgba(15, 42, 74, 0.85), rgba(15, 42, 74, 0.9)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             transition: opacity 0.5s ease; 
@@ -105,7 +105,6 @@
             backdrop-filter: blur(10px);
         }
         
-        /* Collapsed Sidebar State */
         .sidebar.collapsed { width: 80px; padding: 20px 10px; }
         .sidebar.collapsed .brand-text { display: none; }
         .sidebar.collapsed .nav-text { display: none; }
@@ -180,19 +179,20 @@
         .bill-cost { width: 80px; text-align: right; font-weight: 600; color: var(--text-dark); }
         .bill-section { margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
         
-        /* UPDATED: Orange Section Title */
+        /* UPDATED: Navy Arrow Banner Style for Web View */
         .bill-sec-title { 
-            color: #F15A22; 
+            background-color: var(--primary); 
+            color: white; 
+            padding: 8px 30px 8px 15px; 
             font-weight: 800; 
             text-transform: uppercase; 
             margin-bottom: 15px; 
             font-size: 0.85rem; 
-            letter-spacing: 1px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid var(--border);
+            width: fit-content;
+            min-width: 150px;
+            clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
         }
         
-        /* UPDATED: Navy Arrow Total Bar (Web Preview) */
         .bill-total-bar {
             background-color: var(--primary);
             color: white;
@@ -941,6 +941,7 @@ Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for an
     function filterTroubleshoot(cat, btn) {
         document.querySelectorAll('.ts-filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+
         const items = document.querySelectorAll('.ts-card');
         items.forEach(item => {
             if(cat === 'all' || item.dataset.category === cat || (cat === 'general' && item.dataset.category === 'general')) {
@@ -966,7 +967,7 @@ Safety Check: Remove Bad Apps: Go to Settings > Apps > See all apps. Look for an
         let spam = item.spam ? `<div class="warning-box"><strong>⚠️ Spam Warning:</strong> ${item.spam}</div>` : '';
         let contentHtml = `<div class="step-box"><h3>${item.title}</h3><div class="step-text">${item.content}</div>${spam}</div>`;
         const win = window.open('', '_blank');
-        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:0;margin:0;color:#0f172a;-webkit-print-color-adjust:exact}.container{max-width:8.5in;margin:0 auto;padding:40px}.header-bar{background-color:#102B4A;color:white;padding:25px 40px;display:flex;justify-content:space-between;align-items:center}.header-title{font-family:'Oswald',sans-serif;font-size:36px;text-transform:uppercase;letter-spacing:1px;line-height:1}.logo-square{background-color:#F15A22;width:80px;height:80px;display:flex;align-items:center;justify-content:center;text-align:center;color:white;font-family:'Playfair Display',serif;font-weight:700;line-height:1;font-size:16px;padding:5px;box-sizing:border-box}.hero{background-color:#eff6ff;padding:30px;border-radius:12px;text-align:center;border:1px solid #bfdbfe;margin:30px 40px}.plan-title{font-family:'Playfair Display',serif;font-size:2.5rem;color:#1e3a8a;margin:0 0 10px 0}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid;margin:0 40px}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.3rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:20px;border-radius:8px;margin-top:20px;font-size:1.1rem;border-left:6px solid #ea580c;margin:0 40px}.footer{font-size:10px;color:#90A2B1;text-align:center;padding:20px 40px;margin-top:20px;border-top:1px solid #E3E6EA}</style></head><body><div class="container"><div class="header-bar"><div class="header-title">TROUBLESHOOTING GUIDE</div><div class="logo-square">Consumer<br>Cellular</div></div><div class="hero"><h1 class="plan-title">${item.title}</h1></div>${contentHtml}<div class="footer">Provided by DealerTouch • 2025 Consumer Cellular, Inc.</div></div><script>window.print();<\/script></body></html>`);
+        win.document.write(`<html><head><title>Quick Guide</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');body{font-family:'Inter',sans-serif;padding:40px;color:#0f172a;-webkit-print-color-adjust:exact}.header{display:flex;justify-content:space-between;border-bottom:3px solid #ff7b00;padding-bottom:20px;margin-bottom:30px}.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1e3a8a}.title{font-size:2rem;font-weight:700;margin-bottom:20px;color:#1e3a8a;text-transform:capitalize}.step-box{margin-bottom:25px;padding-bottom:25px;border-bottom:1px solid #e2e8f0;page-break-inside:avoid;margin:0 40px}.step-text{white-space:pre-wrap;line-height:1.6;font-size:1.3rem}.warning-box{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:20px;border-radius:8px;margin-top:20px;font-size:1.1rem;border-left:6px solid #ea580c;margin:0 40px}.footer{font-size:10px;color:#90A2B1;text-align:center;padding:20px 40px;margin-top:20px;border-top:1px solid #E3E6EA}</style></head><body><div class="header"><div class="logo">Consumer Cellular</div><div>${new Date().toLocaleDateString()}</div></div>${contentHtml}<div class="footer"><strong>Still having trouble?</strong> Come in-store! Bring your device, charger, and any account details. We are happy to help.</div><script>window.print();<\/script></body></html>`);
         win.document.close();
     }
     
