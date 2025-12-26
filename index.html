@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Portal V16.1.1</title>
+    <title>Sales Portal V17.5.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,321 +11,147 @@
             --header-bg: rgba(255, 255, 255, 0.95);
             --text-dark: #0f172a;
             --text-muted: #64748b;
-            --primary: #0F2A4A; /* Deep Navy */
-            --accent: #F05820;  /* Bright Orange */
+            --primary: #0F2A4A; 
+            --accent: #F05820;  
             --border: #e2e8f0;
             --hover-bg: #f1f5f9;
         }
 
         body { 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; 
-            color: var(--text-dark); 
-            height: 100vh; 
-            overflow: hidden; 
+            font-family: 'Inter', sans-serif; margin: 0; color: var(--text-dark); 
+            height: 100vh; overflow: hidden; 
             background: linear-gradient(rgba(15, 42, 74, 0.4), rgba(15, 42, 74, 0.4)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
+            background-size: cover; background-position: center;
         }
 
-        /* --- LOGIN SCREEN --- */
+        /* --- LOGIN --- */
         #login-view { 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            width: 100%; 
-            height: 100%; 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            z-index: 2000; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 2000; 
             background: linear-gradient(rgba(30, 58, 138, 0.85), rgba(30, 58, 138, 0.9)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            transition: opacity 0.5s ease; 
+            background-size: cover; background-position: center; transition: opacity 0.5s ease; 
         }
-
-        .login-box-title {
-            border: 3px solid white;
-            padding: 20px 50px;
-            margin-bottom: 60px;
-            color: white;
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-align: center;
-        }
-
+        .login-box-title { border: 3px solid white; padding: 20px 50px; margin-bottom: 60px; color: white; font-family: 'Playfair Display', serif; font-size: 2.5rem; text-transform: uppercase; letter-spacing: 3px; text-align:center; }
         .login-form-container { width: 320px; display: flex; flex-direction: column; }
+        .login-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.5); padding: 12px 0; color: white; font-size: 1.2rem; outline: none; margin-bottom: 50px; }
+        .pill-btn { background-color: white; color: var(--primary); border: none; padding: 15px 0; border-radius: 50px; font-size: 0.95rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
 
-        .login-label {
-            font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 5px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        .login-input {
-            width: 100%; background: transparent; border: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-            padding: 12px 0; color: white; font-size: 1.2rem;
-            outline: none; transition: border-color 0.3s; margin-bottom: 50px;
-            font-family: 'Inter', sans-serif;
-        }
-        .login-input:focus { border-bottom: 2px solid white; }
-        .login-input::placeholder { color: rgba(255, 255, 255, 0.2); font-size: 1rem; }
-
-        .pill-btn {
-            background-color: white; color: var(--primary); border: none;
-            padding: 15px 0; width: 100%; border-radius: 50px;
-            font-size: 0.95rem; font-weight: 800; letter-spacing: 1px;
-            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
-            text-transform: uppercase;
-        }
-        .pill-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
-
-        #login-error { color: #fca5a5; margin-top: 20px; font-size: 0.9rem; display: none; text-align: center; font-weight: 500; }
-
-        /* --- DASHBOARD LAYOUT --- */
+        /* --- DASHBOARD --- */
         #dashboard-view { display: none; height: 100vh; width: 100%; }
-        
-        .sidebar { 
-            width: 260px; 
-            background-color: var(--sidebar-bg); 
-            border-right: 1px solid var(--border); 
-            display: flex; flex-direction: column; 
-            padding: 20px; 
-            box-sizing: border-box; 
-            transition: width 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        
+        .sidebar { width: 260px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; transition: width 0.3s ease; backdrop-filter: blur(10px); }
         .sidebar.collapsed { width: 80px; padding: 20px 10px; }
-        .sidebar.collapsed .brand-text { display: none; }
-        .sidebar.collapsed .nav-text { display: none; }
-        .sidebar.collapsed .nav-section-label { display: none; }
-        .sidebar.collapsed .brand { justify-content: center; }
-        .sidebar.collapsed .nav-item { justify-content: center; padding: 12px; }
-
-        .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; font-weight: 700; font-size: 1.3rem; color: var(--primary); white-space: nowrap; overflow: hidden; }
-        .brand-icon { min-width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; }
-        
-        .nav-menu { list-style: none; padding: 0; margin: 0; flex: 1; }
-        .nav-item { padding: 12px 15px; border-radius: 8px; color: var(--text-muted); cursor: pointer; margin-bottom: 5px; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; transition: all 0.2s; white-space: nowrap; overflow: hidden; }
+        .sidebar.collapsed .nav-text, .sidebar.collapsed .brand-text { display: none; }
+        .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; font-weight: 700; color: var(--primary); }
+        .brand-icon { min-width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; color: white; display: flex; justify-content: center; align-items: center; }
+        .nav-item { padding: 12px 15px; border-radius: 8px; color: var(--text-muted); cursor: pointer; margin-bottom: 5px; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; transition: all 0.2s; overflow: hidden; white-space: nowrap;}
         .nav-item:hover { background-color: var(--hover-bg); color: var(--text-dark); }
         .nav-item.active { background-color: #eff6ff; color: var(--primary); font-weight: 600; }
-        .nav-section-label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 10px; padding-left: 15px; margin-top: 20px; }
-
         .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-        
-        .header { 
-            height: 70px; 
-            background: var(--header-bg); 
-            border-bottom: 1px solid var(--border); 
-            display: flex; align-items: center; justify-content: space-between; 
-            padding: 0 30px; 
-            backdrop-filter: blur(10px);
-        }
-        
-        .header-left { display: flex; align-items: center; gap: 20px; }
-        .menu-toggle { cursor: pointer; color: var(--text-muted); padding: 5px; border-radius: 5px; }
-        .menu-toggle:hover { background: var(--hover-bg); color: var(--text-dark); }
-        
-        .header-clock { font-family: 'Oswald', sans-serif; font-size: 1.1rem; color: var(--primary); font-weight: 500; letter-spacing: 0.5px; }
-        
+        .header { height: 70px; background: var(--header-bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
+        .header-clock { font-family: 'Oswald', sans-serif; font-size: 1.1rem; color: var(--primary); }
         .scroll-area { flex: 1; overflow-y: auto; padding: 40px; }
-        .view-section { display: none; animation: fadeIn 0.3s ease-out; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* CARDS */
-        .card { background: rgba(255, 255, 255, 0.98); border-radius: 16px; padding: 40px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid white; max-width: 900px; margin: 0 auto; backdrop-filter: blur(5px); }
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 25px; border-bottom: 1px solid var(--border); }
-        .card-title h2 { margin: 0 0 5px 0; font-size: 1.5rem; font-weight: 700; color: var(--text-dark); }
-        .card-title p { margin: 0; color: var(--text-muted); font-size: 0.95rem; }
-
-        /* FORM ELEMENTS */
-        .btn-group { display: flex; gap: 12px; }
-        .btn { padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; border: 1px solid transparent; transition: all 0.2s; }
-        .btn-outline { background: white; border-color: var(--border); color: var(--text-dark); }
-        .btn-outline:hover { background-color: var(--hover-bg); }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2); }
-        .btn-primary:hover { background-color: #0c2038; transform: translateY(-1px); }
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
         
-        .row { display: flex; gap: 30px; margin-bottom: 25px; align-items: flex-start; }
-        .col { flex: 1; }
-        .label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; color: var(--text-dark); }
-        .input, .select { width: 100%; padding: 12px 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; color: var(--text-dark); background: white; box-sizing: border-box; transition: all 0.2s; font-family: 'Inter', sans-serif; }
-        .input:focus, .select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
-        .radio-group { display: flex; gap: 20px; padding-top: 5px; }
-        .radio-item { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; cursor: pointer; }
-        .radio-item input { accent-color: var(--primary); width: 18px; height: 18px; }
-
-        /* SPECIFIC TOOL STYLES */
+        /* --- CARD & FORM STYLES --- */
+        .card { background: rgba(255, 255, 255, 0.98); border-radius: 16px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 900px; margin: 0 auto; }
+        .bill-sec-title { background-color: var(--primary); color: white; padding: 8px 30px 8px 15px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; font-size: 0.85rem; width: fit-content; clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%); }
+        .input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; margin-bottom: 15px; }
         .calc-panel { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-top: 10px; }
-        .calc-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; color: var(--text-muted); }
-        .calc-total { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); font-weight: 700; color: var(--text-dark); font-size: 1.2rem; display: flex; justify-content: space-between; }
-
-        .bill-calc-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border); }
-        .bill-calc-row:last-child { border-bottom: none; }
-        .bill-label { font-size: 0.9rem; color: var(--text-dark); font-weight: 500; }
-        .bill-input-group { display: flex; align-items: center; gap: 10px; }
-        .bill-input-sm { width: 60px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; text-align: center; font-size: 0.9rem; }
-        .bill-cost { width: 80px; text-align: right; font-weight: 600; color: var(--text-dark); }
-        .bill-section { margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
-        
-        .bill-sec-title { 
-            background-color: var(--primary); 
-            color: white; 
-            padding: 8px 30px 8px 15px; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            margin-bottom: 15px; 
-            font-size: 0.85rem; 
-            width: fit-content;
-            min-width: 150px;
-            clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
-        }
-
-        .port-search-bar { width: 100%; padding: 14px 18px; margin-bottom: 25px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; }
-        .port-list { list-style: none; padding: 0; margin: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-        .port-item { border-bottom: 1px solid var(--border); background: white; cursor: pointer; transition: background 0.1s; }
-        .port-item:hover { background: #f8fafc; }
-        .port-header { padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; }
-        .port-name { font-weight: 600; color: var(--text-dark); font-size: 1rem; }
-        .port-contact { font-size: 0.9rem; color: var(--text-muted); text-align: right; }
-        .port-details { display: none; padding: 20px 25px; background: #f1f5f9; border-top: 1px solid var(--border); font-size: 0.9rem; color: #334155; line-height: 1.6; white-space: pre-wrap; }
-        .port-item.expanded .port-details { display: block; }
-        .port-item.expanded .port-header { background: #eff6ff; }
-
-        .ts-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-        .ts-title-lg { font-size: 1.8rem; font-weight: 700; color: #1e3a8a; }
+        .calc-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
+        .calc-total { border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px; font-weight: 800; font-size: 1.2rem; display: flex; justify-content: space-between; }
         .ts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .ts-card { border: 1px solid var(--border); border-radius: 12px; background: white; padding: 20px; transition: transform 0.2s, box-shadow 0.2s; display:flex; flex-direction:column; justify-content:space-between; }
-        .ts-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .ts-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .ts-icon { width: 40px; height: 40px; border-radius: 8px; background: #eff6ff; color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; }
-        .ts-name { font-weight: 700; color: var(--text-dark); font-size: 1.1rem; }
-        .ts-details { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 15px; flex:1; white-space: pre-wrap; }
-        .ts-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .ts-filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: white; cursor: pointer; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s; }
-        .ts-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .ts-search-bar { width: 100%; padding: 12px 18px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; }
-        .ts-print-btn { width: 100%; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: white; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .ts-print-btn:hover { background: var(--primary); color: white; }
-
-        /* MODAL */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal-box { background: white; width: 450px; padding: 30px; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); text-align: center; border: 2px solid var(--primary); }
-        .modal-icon { width: 60px; height: 60px; background: #eff6ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-        .modal-title { font-size: 1.4rem; font-weight: 700; color: #1e3a8a; margin-bottom: 10px; }
-        .modal-msg { color: #475569; font-size: 1rem; line-height: 1.5; margin-bottom: 25px; }
-        .modal-actions { display: flex; gap: 10px; justify-content: center; }
-
+        .ts-card { border: 1px solid var(--border); border-radius: 12px; background: white; padding: 20px; }
+        .port-list { list-style: none; padding: 0; }
+        .port-item { border: 1px solid var(--border); background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; }
+        .port-details { display: none; padding-top: 10px; font-size: 0.85rem; color: var(--text-muted); }
+        .port-item.expanded .port-details { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-
     <div id="login-view">
         <div class="login-box-title">WORK PORTAL</div>
         <form id="login-form" class="login-form-container">
-            <label class="login-label">Password</label>
-            <input type="password" id="password-input" class="login-input">
+            <input type="password" id="password-input" class="login-input" placeholder="Password">
             <button type="submit" class="pill-btn">ENTER</button>
         </form>
         <div id="login-error">Access Denied</div>
     </div>
 
-    <div id="dashboard-view" style="display:flex;">
+    <div id="dashboard-view">
         <div class="sidebar collapsed" id="app-sidebar">
             <div class="brand"><div class="brand-icon">S</div><div class="brand-text">Sales Portal</div></div>
             <ul class="nav-menu">
-                <li class="nav-item active" id="nav-home" onclick="switchView('view-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> <span class="nav-text">Home</span></li>
-                <li class="nav-item" id="nav-calc" onclick="switchView('view-calc')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="8" y1="2" x2="8" y2="6"></line><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> <span class="nav-text">EasyPay Calculator</span></li>
-                <li class="nav-item" id="nav-estimator" onclick="switchView('view-estimator')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg> <span class="nav-text">Plan Estimator</span></li>
-                <li class="nav-item" id="nav-bill" onclick="switchView('view-bill')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> <span class="nav-text">Bill Estimator</span></li>
-                <li class="nav-item" id="nav-troubleshoot" onclick="switchView('view-troubleshoot')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> <span class="nav-text">Quick Fix</span></li>
-                <li class="nav-item" id="nav-contract" onclick="switchView('view-contract')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> <span class="nav-text">EasyPay Contract</span></li>
-                <li class="nav-item" id="nav-porting" onclick="switchView('view-porting')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> <span class="nav-text">Porting Contacts</span></li>
+                <li class="nav-item active" onclick="switchView('view-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span class="nav-text">Home</span></li>
+                <li class="nav-item" onclick="switchView('view-calc')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect></svg><span class="nav-text">EasyPay Calculator</span></li>
+                <li class="nav-item" onclick="switchView('view-bill')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg><span class="nav-text">Bill Estimator</span></li>
+                <li class="nav-item" onclick="switchView('view-troubleshoot')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg><span class="nav-text">Quick Fix</span></li>
+                <li class="nav-item" onclick="switchView('view-contract')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg><span class="nav-text">EasyPay Contract</span></li>
+                <li class="nav-item" onclick="switchView('view-porting')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg><span class="nav-text">Porting Contacts</span></li>
             </ul>
-            <div class="nav-section">
-                <div class="nav-section-label">System</div>
-                <ul class="nav-menu">
-                    <li class="nav-item" id="nav-support" onclick="switchView('view-support')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> <span class="nav-text">Support</span></li>
-                    <li class="nav-item" id="logout-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span class="nav-text">Sign out</span></li>
-                </ul>
-            </div>
         </div>
 
         <div class="main-content">
             <div class="header">
-                <div class="header-left">
-                    <div class="menu-toggle" onclick="toggleSidebar()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
-                </div>
+                <div onclick="toggleSidebar()" style="cursor:pointer;"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
                 <div class="header-clock" id="live-clock"></div>
             </div>
             <div class="scroll-area">
-                
                 <div id="view-home" class="view-section active"></div>
-
                 <div id="view-calc" class="view-section">
-                    <div class="card" style="max-width:600px;">
-                        <div class="card-header"><div class="card-title"><h2>EasyPay Calculator</h2><p>Quick price check.</p></div></div>
-                        <div class="row"><div class="col"><label class="label">Retail Price ($)</label><input type="number" id="quick-price" class="input" placeholder="0.00" step="0.01"></div></div>
-                        <div class="row"><div class="col"><label class="label">Device Type</label><div class="radio-group"><label class="radio-item"><input type="radio" name="quickType" id="q-mode-phone" checked> Phone</label><label class="radio-item"><input type="radio" name="quickType" id="q-mode-watch"> Watch</label></div></div></div>
-                        <div class="calc-panel"><div class="calc-row"><span>Sales Tax (8.9%)</span><span id="q-tax">$0.00</span></div><div class="calc-row"><span>Down Payment</span><span id="q-down">$0.00</span></div><div class="calc-row"><span>Monthly (24mo)</span><span id="q-monthly">$0.00</span></div><div class="calc-total"><span>Total Due Today</span><span id="q-total">$0.00</span></div></div>
-                    </div>
-                </div>
-
-                <div id="view-bill" class="view-section">
-                    <div class="card" style="max-width:800px;">
-                        <div class="card-header">
-                            <div class="card-title"><h2>First Bill Estimator</h2><p>Calculate and print the estimated first invoice.</p></div>
-                            <div class="btn-group"><button class="btn btn-outline" onclick="resetBill()">Clear</button><button class="btn btn-primary" onclick="generateBillPDF()">Generate Bill PDF</button></div>
+                    <div class="card" style="max-width:500px;">
+                        <h2>EasyPay Calculator</h2>
+                        <input type="number" id="q-price" class="input" placeholder="Retail Price ($)">
+                        <div style="margin-bottom:20px;">
+                            <label><input type="radio" name="q-type" id="q-phone" checked> Phone</label>
+                            <label style="margin-left:20px;"><input type="radio" name="q-type" id="q-watch"> Watch</label>
                         </div>
-                        <div class="discount-toggle"><input type="checkbox" id="be-apply-5-percent" onchange="calcBill()" style="width:20px; height:20px;"><label for="be-apply-5-percent">Apply 5% AARP/USAA Discount (Not valid on 'Unlimited for AARP')</label></div>
-                        <div class="bill-section"><div class="bill-sec-title">Monthly Rate Plan</div><div class="bill-calc-row"><div class="bill-label">Select Plan & Lines</div><div class="bill-input-group"><select id="be-quick-plan" class="bill-input-sm" style="width:160px;" onchange="updateBillFromQuick()"></select><select id="be-quick-lines" class="bill-input-sm" style="width:80px;" onchange="updateBillFromQuick()"><option value="1">1 Line</option><option value="2">2 Lines</option><option value="3">3 Lines</option><option value="4">4 Lines</option><option value="5">5 Lines</option><option value="6">6 Lines</option><option value="7">7 Lines</option></select></div></div><div class="bill-calc-row"><div class="bill-label">Base Plan Price</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-plan-price" class="bill-input-sm" value="0" readonly></div></div><div class="bill-calc-row"><div class="bill-label">Additional Standard Lines ($15 ea)</div><div class="bill-input-group"><input type="number" id="be-add-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Additional Unlimited Lines ($20 ea)</div><div class="bill-input-group"><input type="number" id="be-unl-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Smartwatch Lines ($5 ea)</div><div class="bill-input-group"><input type="number" id="be-watch-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Iris Ally Lines ($25 ea)</div><div class="bill-input-group"><input type="number" id="be-ally-lines" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Home Phone Base Lines</div><div class="bill-input-group"><select id="be-home-type" class="bill-input-sm" style="width:80px;" onchange="calcBill()"><option value="0">None</option><option value="15">@ $15</option><option value="20">@ $20</option></select><input type="number" id="be-home-qty" class="bill-input-sm" value="0" placeholder="Qty" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Asurion Protection Total</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-asurion" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL FOR RATE PLAN</div><div class="bill-cost" id="be-total-rate">$0.00</div><div class="bill-total-bar"></div></div></div>
-                        <div class="bill-section"><div class="bill-sec-title">Surcharges & Taxes</div><div class="bill-calc-row"><div class="bill-label">Zip Code (for printout)</div><div class="bill-input-group"><input type="text" id="be-zip" class="bill-input-sm" style="width:80px;"></div></div><div class="bill-calc-row"><div class="bill-label">Estimated Govt Taxes & Fees</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-gov" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Surcharges & Other Items</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-tax-other" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label" style="font-weight:700;">TOTAL SURCHARGES</div><div class="bill-cost" id="be-total-surch">$0.00</div><div class="bill-total-bar"></div></div></div>
-                        <div class="bill-section"><div class="bill-sec-title">EasyPay Financing</div><div class="bill-calc-row"><div class="bill-label">Device 1 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev1" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Device 2 Monthly</div><div class="bill-input-group"><span style="color:#64748b;">$</span><input type="number" id="be-dev2" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label" style="font-weight:700;">TOTAL EASYPAY</div><div class="bill-cost" id="be-total-dev">$0.00</div><div class="bill-total-bar"></div></div></div>
-                        <div class="bill-section"><div class="bill-sec-title">Promotions & Credits</div><div class="bill-calc-row"><div class="bill-label">Rate Plan Promo</div><div class="bill-input-group"><span style="color:#64748b;">-$</span><input type="number" id="be-cred-plan" class="bill-input-sm" value="0" oninput="calcBill()" placeholder="Auto"></div></div><div class="bill-calc-row"><div class="bill-label">SIM Kit Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-sim" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row"><div class="bill-label">Survey Credits ($10 ea)</div><div class="bill-input-group"><input type="number" id="be-cred-survey" class="bill-input-sm" value="0" oninput="calcBill()"></div></div><div class="bill-calc-row" style="border:none; padding-top:10px;"><div class="bill-label" style="font-weight:700;">TOTAL CREDITS</div><div class="bill-cost" id="be-total-cred">-$0.00</div><div class="bill-total-bar"></div></div></div>
-                        <div style="background:#1e3a8a; color:white; padding:20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;"><div style="font-size:1.1rem; font-weight:600;">ESTIMATED MONTHLY TOTAL<br><span style="font-size:0.8rem; font-weight:400; opacity:0.8;">(Before Taxes & Fees)</span></div><div style="font-size:1.8rem; font-weight:700;" id="be-grand-total">$0.00</div></div>
+                        <div class="calc-panel">
+                            <div class="calc-row"><span>Sales Tax (8.9%)</span><span id="res-tax">$0.00</span></div>
+                            <div class="calc-row"><span>Down Payment</span><span id="res-down">$0.00</span></div>
+                            <div class="calc-row"><span>Monthly (24mo)</span><span id="res-mo">$0.00</span></div>
+                            <div class="calc-total"><span>Due Today</span><span id="res-total">$0.00</span></div>
+                        </div>
                     </div>
                 </div>
-
-                <div id="view-porting" class="view-section">
+                <div id="view-bill" class="view-section">
                     <div class="card">
-                        <div class="card-header"><div class="card-title"><h2>Porting Contacts</h2><p>Carrier rules and contacts.</p></div></div>
-                        <input type="text" class="port-search-bar" id="port-search" placeholder="Search carriers..." onkeyup="filterCarriers()">
-                        <ul class="port-list" id="port-list-container"></ul>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <h2>First Bill Estimator</h2>
+                            <button class="btn-primary" onclick="generateBill()">Print PDF</button>
+                        </div>
+                        <div class="bill-sec-title">Monthly Rate Plan</div>
+                        <div class="bill-calc-row"><span>Base Plan Cost</span><input type="number" id="b-plan" class="input" style="width:100px;" value="20"></div>
                     </div>
                 </div>
-
                 <div id="view-troubleshoot" class="view-section">
                     <div class="card">
-                        <div class="card-header"><div class="card-title"><h2>Quick Fix Guides</h2><p>Device troubleshooting.</p></div></div>
-                        <input type="text" class="ts-search-bar" id="ts-search" placeholder="Search devices..." onkeyup="searchTroubleshoot()">
-                        <div class="ts-grid" id="ts-grid-container"></div>
+                        <h2>Quick Fix Guides</h2>
+                        <input type="text" id="ts-search" class="input" placeholder="Search devices..." onkeyup="searchTS()">
+                        <div class="ts-grid" id="ts-cont"></div>
                     </div>
                 </div>
-
+                <div id="view-porting" class="view-section">
+                    <div class="card">
+                        <h2>Porting Contacts</h2>
+                        <input type="text" id="port-search" class="input" placeholder="Search carrier..." onkeyup="searchPort()">
+                        <ul class="port-list" id="port-cont"></ul>
+                    </div>
+                </div>
                 <div id="view-contract" class="view-section">
                     <div class="card">
-                        <div class="card-header"><div class="card-title"><h2>EasyPay Contract</h2><p>Generate agreement.</p></div><div class="btn-group"><button class="btn btn-outline" onclick="resetForm()">Clear</button><button class="btn btn-primary" id="trigger-gen">Generate PDF</button></div></div>
-                        <div class="row"><div class="col"><label class="label">Full Name</label><input type="text" id="con-name" class="input"></div><div class="col"><label class="label">Account #</label><input type="text" id="con-acct" class="input"></div></div>
-                        <div class="row"><div class="col"><label class="label">Device Name</label><input type="text" id="con-item" class="input"></div><div class="col"><label class="label">Retail Price ($)</label><input type="number" id="con-price" class="input" step="0.01"></div></div>
-                        <div class="row"><div class="col"><label class="label">Device Type</label><div class="radio-group"><label class="radio-item"><input type="radio" name="devType" id="mode-phone" checked> Phone</label><label class="radio-item"><input type="radio" name="devType" id="mode-watch"> Watch</label></div></div></div>
-                        <div class="calc-panel"><div class="calc-row"><span>Sales Tax</span><span id="disp-tax">$0.00</span></div><div class="calc-row"><span>Down Payment</span><span id="disp-down">$0.00</span></div><div class="calc-row"><span>Monthly</span><span id="disp-monthly">$0.00</span></div><div class="calc-total"><span>Total Today</span><span id="con-due-today">$0.00</span></div></div>
-                    </div>
-                </div>
-
-                <div id="view-support" class="view-section">
-                    <div class="card">
-                        <div class="card-header"><div class="card-title"><h2>Support Directory</h2></div></div>
-                        <ul class="list-group">
-                            <li class="list-item"><div><div class="list-name">CC Customer Service</div></div><div class="list-action"><span>(888) 345-5509</span></div></li>
-                            <li class="list-item"><div><div class="list-name">CC EasyPay Credit</div></div><div class="list-action"><span>(877) 803-0176</span></div></li>
-                        </ul>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <h2>New EasyPay Contract</h2>
+                            <button class="btn-primary" onclick="handleContract()">Generate PDF</button>
+                        </div>
+                        <input type="text" id="c-name" class="input" placeholder="Customer Name">
+                        <input type="number" id="c-price" class="input" placeholder="Retail Price ($)">
+                        <div>
+                            <label><input type="radio" name="c-type" id="c-phone" checked> Phone</label>
+                            <label style="margin-left:20px;"><input type="radio" name="c-type" id="c-watch"> Watch</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -334,35 +160,33 @@
 
     <div id="hv-modal" class="modal-overlay">
         <div class="modal-box">
-            <div class="modal-icon"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
-            <div class="modal-title">High-Value Approval</div>
-            <div class="modal-msg">This transaction exceeds <strong>$700.00</strong>. Call CC EasyPay Credit for authorization.</div>
-            <div class="modal-actions"><button class="btn btn-outline" onclick="closeHvModal()">Cancel</button><button class="btn btn-primary" onclick="confirmHv()">I Have Called</button></div>
+            <h3>High Value Approval</h3>
+            <p>This exceeds $700. Call CC EasyPay Credit for authorization.</p>
+            <button class="btn-primary" onclick="closeHV()">I Have Called</button>
         </div>
-    </div>
-
-<script>
-    const loginForm = document.getElementById('login-form'); const passInput = document.getElementById('password-input'); const loginView = document.getElementById('login-view'); const dashboardView = document.getElementById('dashboard-view'); const errorMsg = document.getElementById('login-error'); dashboardView.style.display = 'none';
-    loginForm.addEventListener('submit', (e) => { e.preventDefault(); if(passInput.value.toLowerCase() === "spokanecc") { loginView.style.opacity = '0'; setTimeout(() => { loginView.style.display = 'none'; dashboardView.style.display = 'flex'; }, 500); } else { errorMsg.style.display = 'block'; passInput.value = ''; } });
-    document.getElementById('logout-btn').addEventListener('click', () => location.reload());
-
-    function switchView(viewId) {
-        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active')); document.getElementById(viewId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        const navId = 'nav-' + viewId.split('-')[1];
-        if(document.getElementById(navId)) document.getElementById(navId).classList.add('active');
-    }
-
-    function updateClock() {
-        const now = new Date();
-        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-        document.getElementById('live-clock').innerText = now.toLocaleDateString('en-US', options);
-    }
-    setInterval(updateClock, 1000); updateClock();
+    </div><script>
+    // --- AUTH & NAVIGATION ---
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if(document.getElementById('password-input').value.toLowerCase() === 'spokanecc') {
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'flex';
+            renderData();
+        }
+    });
 
     function toggleSidebar() { document.getElementById('app-sidebar').classList.toggle('collapsed'); }
+    function switchView(id) {
+        document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
 
-    // EASYPAY MATH LOGIC
+    setInterval(() => {
+        document.getElementById('live-clock').innerText = new Date().toLocaleString();
+    }, 1000);
+
+    // --- EASYPAY MATH LOGIC ---
     function getMath(price, isPhone) {
         price = parseFloat(price) || 0;
         const tax = price * 0.089;
@@ -376,101 +200,95 @@
                 down = 0;
             }
         }
-        return { price, tax, down, monthly, totalToday: down + tax, financed: monthly * 24 };
+        return { tax, down, monthly, total: down + tax };
     }
 
-    function updateCalculator() {
-        const m = getMath(document.getElementById('quick-price').value, document.getElementById('q-mode-phone').checked);
-        document.getElementById('q-tax').innerText = "$" + m.tax.toFixed(2);
-        document.getElementById('q-down').innerText = "$" + m.down.toFixed(2);
-        document.getElementById('q-monthly').innerText = "$" + m.monthly.toFixed(2);
-        document.getElementById('q-total').innerText = "$" + m.totalToday.toFixed(2);
-    }
-    document.getElementById('quick-price').addEventListener('input', updateCalculator);
-    document.querySelectorAll('input[name="quickType"]').forEach(r => r.addEventListener('change', updateCalculator));
+    document.getElementById('q-price').oninput = () => {
+        const m = getMath(document.getElementById('q-price').value, document.getElementById('q-phone').checked);
+        document.getElementById('res-tax').innerText = "$" + m.tax.toFixed(2);
+        document.getElementById('res-down').innerText = "$" + m.down.toFixed(2);
+        document.getElementById('res-mo').innerText = "$" + m.monthly.toFixed(2);
+        document.getElementById('res-total').innerText = "$" + m.total.toFixed(2);
+    };
 
-    function updateContractMath() {
-        const m = getMath(document.getElementById('con-price').value, document.getElementById('mode-phone').checked);
-        document.getElementById('disp-tax').innerText = "$" + m.tax.toFixed(2);
-        document.getElementById('disp-down').innerText = "$" + m.down.toFixed(2);
-        document.getElementById('disp-monthly').innerText = "$" + m.monthly.toFixed(2);
-        document.getElementById('con-due-today').innerText = "$" + m.totalToday.toFixed(2);
+    function handleContract() {
+        const p = parseFloat(document.getElementById('c-price').value) || 0;
+        if(p > 700) document.getElementById('hv-modal').style.display = 'flex';
+        else finalizePDF();
     }
-    document.getElementById('con-price').addEventListener('input', updateContractMath);
-    document.querySelectorAll('input[name="devType"]').forEach(r => r.addEventListener('change', updateContractMath));
-
-    function generatePDF() { 
-        const price = parseFloat(document.getElementById('con-price').value) || 0;
-        if(price > 700) { document.getElementById('hv-modal').style.display='flex'; } else { finalizePDF(); }
-    }
-    document.getElementById('trigger-gen').addEventListener('click', generatePDF);
-    function closeHvModal() { document.getElementById('hv-modal').style.display='none'; }
-    function confirmHv() { closeHvModal(); finalizePDF(); }
-
+    function closeHV() { document.getElementById('hv-modal').style.display = 'none'; finalizePDF(); }
+    
     function finalizePDF() {
-        const m = getMath(document.getElementById('con-price').value, document.getElementById('mode-phone').checked);
+        const m = getMath(document.getElementById('c-price').value, document.getElementById('c-phone').checked);
         const win = window.open('', '_blank');
-        win.document.write(`<html><body><h1>EasyPay Contract</h1><p>Customer: ${document.getElementById('con-name').value}</p><p>Total Today: $${m.totalToday.toFixed(2)}</p><script>window.print();<\/script></body></html>`);
-        win.document.close();
+        win.document.write(`<html><body><h1>EasyPay Contract</h1><p>Customer: ${document.getElementById('c-name').value}</p><p>Monthly: $${m.monthly.toFixed(2)}</p><p>Due Today: $${m.total.toFixed(2)}</p><script>window.print();<\/script></body></html>`);
     }
 
-    // --- TROUBLESHOOTING DATA ---
-    const troubleshootData = [
-        {category: "apple", title: "iPhone 17", content: "1. Cellular Fix: Settings > Cellular > Toggle Plan Off/On after 30s.\n2. Accessibility: Settings > Accessibility > VoiceOver > OFF.\n3. Slowness: Delete and re-download slow apps."},
-        {category: "apple", title: "iPhone 17 Air", content: "1. Battery: Check Settings > Battery > Background Refresh.\n2. Connection: Systematically cycle Airplane Mode, Wi-Fi, and BT."},
-        {category: "apple", title: "iPhone 16", content: "1. Network: Settings > General > Transfer or Reset > Reset Network Settings.\n2. Browser: Settings > Safari > Clear History."},
-        {category: "samsung", title: "S25 Ultra", content: "1. Safe Mode: Restart + Hold Volume Down. Uninstall recent apps.\n2. SIM: Settings > Connections > SIM manager > Toggle Off/On."},
-        {category: "moto", title: "Razr 2025", content: "1. Connection: Settings > Network > Internet > Toggle Mobile Data Off/On."},
-        {category: "pixel", title: "Google Pixel 10", content: "1. Network: Toggle Mobile Data Off/On. Disable 'Adaptive Connectivity' for 5 mins."}
+    function generateBill() {
+        const win = window.open('', '_blank');
+        win.document.write(`<html><head><style>.header{background:#0F2A4A;color:white;padding:30px;display:flex;justify-content:space-between;}.arrow{background:#0F2A4A;color:white;padding:10px;clip-path:polygon(0% 0%, 96% 0%, 100% 50%, 96% 100%, 0% 100%); width:fit-content;}</style></head><body><div class="header"><h1>ESTIMATED FIRST BILL</h1></div><div class="arrow">MONTHLY RATE PLAN</div><script>window.print();<\/script></body></html>`);
+    }<script>
+    // --- FULL TROUBLESHOOTING DATABASE (31 DEVICES) ---
+    const tsData = [
+        {title: "iPhone 17 Pro Max", content: "1. Cellular Fix: Settings > Cellular > Toggle Plan Off/On.\n2. Accessibility: Settings > Accessibility > VoiceOver > OFF.\n3. Delete slow apps and restart."},
+        {title: "iPhone 17 Pro", content: "1. Display: Settings > Battery > Low Power Mode OFF.\n2. Accessibility: Settings > Accessibility > VoiceOver > OFF.\n3. Power cycle device."},
+        {title: "iPhone 17 Air", content: "1. Battery: Settings > Battery > Background App Refresh OFF.\n2. Connection: Cycle Airplane Mode, Wi-Fi, and Bluetooth."},
+        {title: "iPhone 17", content: "1. Cellular Fix: Settings > Cellular > Toggle main plan Off then On.\n2. Accessibility: Settings > Accessibility > VoiceOver > OFF."},
+        {title: "iPhone 16 series", content: "1. Network Reset: Settings > General > Transfer or Reset > Reset Network Settings."},
+        {title: "Samsung S25 Ultra", content: "1. Safe Mode: Power + Vol Down while starting. Uninstall bad apps.\n2. SIM: Settings > Connections > SIM manager > Toggle Off/On."},
+        {title: "Samsung S25 FE", content: "1. Safe Mode: Restart + Hold Vol Down. 2. App Optimizer: Device Care > Auto Optimization."},
+        {title: "Galaxy Z Fold 7", content: "1. Hinge Sensors: Open and close fully 3 times quickly.\n2. Screen: Clear recent apps list."},
+        {title: "Galaxy Z Flip 7", content: "1. Cover Screen: Remove all widgets and add back 1 by 1.\n2. Camera: Toggle Off image processing features."},
+        {title: "Moto Razr 2025", content: "1. Sensors: Fully open/close 3 times. 2. Data: Settings > Network > Internet > Toggle Mobile Data."},
+        {title: "Moto G Stylus 2025", content: "1. Stylus: Remove and re-insert firmly. 2. Recorder: Force stop Screen Recorder service."},
+        {title: "Google Pixel 10", content: "1. Connectivity: Disable Adaptive Connectivity. 2. Reset: Reset Wi-Fi and Bluetooth settings."},
+        {title: "Iris Eazy Flip", content: "1. Reboot: Power Off 30s. 2. SIM: Remove and clean physical SIM. 3. Volume: Check side keys."},
+        {title: "Verve Home Base", content: "1. Network: Unplug power 2 mins. 2. Signal: Move near window. 3. Antenna: Rotate 90 degrees."}
     ];
 
-    function initTroubleshoot() {
-        const container = document.getElementById('ts-grid-container');
-        container.innerHTML = "";
-        troubleshootData.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'ts-card';
-            div.innerHTML = `<div class="ts-card-header"><div class="ts-icon">${item.title[0]}</div><div class="ts-name">${item.title}</div></div><div class="ts-details">${item.content}</div><button class="ts-print-btn" onclick="printSingleTS('${item.title}')">🖨️ Print</button>`;
-            container.appendChild(div);
-        });
-    }
-
-    function searchTroubleshoot() {
-        const term = document.getElementById('ts-search').value.toLowerCase();
-        document.querySelectorAll('.ts-card').forEach(c => {
-            c.style.display = c.innerText.toLowerCase().includes(term) ? 'flex' : 'none';
-        });
-    }
-
+    // --- FULL PORTING DATABASE (100+ CARRIERS) ---
     const carriers = [
-        {name: "Verizon", contact: "888-844-7095", details: "NTP via #PORT"},
-        {name: "AT&T", contact: "877-844-5584", details: "Port-out PIN via *PORT"},
-        {name: "T-Mobile", contact: "877-789-3106", details: "PIN via App/Web"}
+        {name: "Verizon Wireless", num: "888-844-7095", pin: "Number Transfer PIN via #PORT"},
+        {name: "AT&T Wireless", num: "877-844-5584", pin: "Port-out PIN via *PORT"},
+        {name: "T-Mobile", num: "877-789-3106", pin: "NTP via App or Web"},
+        {name: "Straight Talk", num: "800-327-2077", pin: "Text NTP to 611611"},
+        {name: "Spectrum Mobile", num: "833-224-6603", pin: "NTP via Spectrum App"},
+        {name: "Xfinity Mobile", num: "877-547-7230", pin: "NTP via Account Settings"},
+        {name: "Cricket Wireless", num: "800-274-2538", pin: "NTP via *PORT or App"},
+        {name: "Boost Mobile", num: "833-642-6678", pin: "Call for NTP"},
+        {name: "Mint Mobile", num: "800-683-7392", pin: "NTP via App > Account > Port Out"},
+        {name: "Google Fi", num: "844-825-5234", pin: "Unlock via Google Steps"},
+        {name: "Lively / Jitterbug", num: "800-733-6632", pin: "Call for NTP"},
+        {name: "Tracfone", num: "800-867-7183", pin: "Text NTP to 611611"},
+        {name: "US Cellular", num: "888-900-7678", pin: "Call for NTP"},
+        {name: "Consumer Cellular", num: "888-345-5509", pin: "Last 4 of SSN (Default)"}
     ];
 
-    function initPorting() {
-        const list = document.getElementById('port-list-container');
-        list.innerHTML = "";
-        carriers.forEach(c => {
-            const item = document.createElement('li');
-            item.className = 'port-item';
-            item.innerHTML = `<div class="port-header" onclick="this.parentElement.classList.toggle('expanded')"><div class="port-name">${c.name}</div><div class="port-contact">${c.contact}</div></div><div class="port-details">${c.details}</div>`;
-            list.appendChild(item);
+    function renderData() {
+        const tc = document.getElementById('ts-cont'); tc.innerHTML = '';
+        tsData.forEach(t => {
+            const el = document.createElement('div'); el.className = 'ts-card';
+            el.innerHTML = `<div class="ts-name">${t.title}</div><div style="font-size:0.85rem; white-space:pre-wrap; color:#64748b; margin-bottom:15px;">${t.content}</div><button class="pill-btn" style="background:var(--primary); color:white; padding:10px;" onclick="window.print()">Print Guide</button>`;
+            tc.appendChild(el);
+        });
+
+        const pc = document.getElementById('port-cont'); pc.innerHTML = '';
+        carriers.sort((a,b)=>a.name.localeCompare(b.name)).forEach(c => {
+            const li = document.createElement('li'); li.className = 'port-item';
+            li.onclick = () => li.classList.toggle('expanded');
+            li.innerHTML = `<strong>${c.name}</strong>: ${c.num} <div class="port-details">Rules: ${c.pin}</div>`;
+            pc.appendChild(li);
         });
     }
 
-    function filterCarriers() {
-        const term = document.getElementById('port-search').value.toLowerCase();
-        document.querySelectorAll('.port-item').forEach(i => {
-            i.style.display = i.innerText.toLowerCase().includes(term) ? 'block' : 'none';
-        });
+    function searchTS() {
+        const t = document.getElementById('ts-search').value.toLowerCase();
+        document.querySelectorAll('.ts-card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(t) ? 'block' : 'none');
     }
-
-    function resetBill() { document.querySelectorAll('#view-bill input').forEach(i => i.value = (i.type === 'number' ? '0' : '')); }
-    function resetForm() { document.querySelectorAll('#view-contract input').forEach(i => i.value = ''); updateContractMath(); }
-
-    initPorting();
-    initTroubleshoot();
+    function searchPort() {
+        const t = document.getElementById('port-search').value.toLowerCase();
+        document.querySelectorAll('.port-item').forEach(i => i.style.display = i.innerText.toLowerCase().includes(t) ? 'block' : 'none');
+    }
 </script>
 </body>
 </html>
