@@ -1,58 +1,319 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>EasyPay Contract (Page Images)</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Printable Forms</title>
   <style>
-    body{margin:0;background:#0b1220;color:#e7edf8;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    header{position:sticky;top:0;background:rgba(11,18,32,.92);backdrop-filter:blur(10px);
-      border-bottom:1px solid rgba(255,255,255,.12);padding:10px 12px;display:flex;gap:10px;align-items:center}
-    a,button{
-      color:#e7edf8;text-decoration:none;background:transparent;border:1px solid rgba(255,255,255,.16);
-      padding:8px 10px;border-radius:10px;cursor:pointer;font:inherit
+    :root{
+      --bg:#0b1220;
+      --card:#0f1b33;
+      --card2:#0c162b;
+      --text:#e7eefc;
+      --muted:#9fb1d1;
+      --border:rgba(255,255,255,.12);
+      --accent:#4aa3ff;
+      --danger:#ff6b6b;
+      --shadow: 0 14px 40px rgba(0,0,0,.45);
+      --radius: 16px;
     }
-    a:hover,button:hover{border-color:rgba(255,255,255,.28)}
-    
-    .wrap{max-width:980px;margin:0 auto;padding:16px}
-    .page{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 16px 60px rgba(0,0,0,.35);margin:0 0 16px}
-    img{display:block;width:100%;height:auto}
-    
-    /* --- PRINT FIXES --- */
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 30% -10%, rgba(74,163,255,.25), transparent 55%),
+                  radial-gradient(900px 700px at 95% 0%, rgba(255,107,107,.14), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(10px);
+      background: rgba(11,18,32,.76);
+      border-bottom:1px solid var(--border);
+    }
+    .wrap{max-width:1180px; margin:0 auto; padding:18px 16px;}
+    .titleRow{
+      display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    }
+    h1{margin:0; font-size:18px; letter-spacing:.2px;}
+    .sub{margin:6px 0 0; color:var(--muted); font-size:13px;}
+    .btnRow{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+    .btn{
+      appearance:none;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      color:var(--text);
+      padding:10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      box-shadow: 0 10px 20px rgba(0,0,0,.25);
+      user-select:none;
+      text-decoration:none;
+    }
+    .btn:hover{border-color: rgba(74,163,255,.45)}
+    .btn.primary{
+      border-color: rgba(74,163,255,.55);
+      background: linear-gradient(180deg, rgba(74,163,255,.28), rgba(74,163,255,.12));
+    }
+    .btn.danger{
+      border-color: rgba(255,107,107,.55);
+      background: linear-gradient(180deg, rgba(255,107,107,.22), rgba(255,107,107,.10));
+    }
+    .pill{
+      font-size:12px;
+      color:var(--muted);
+      padding:6px 10px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background: rgba(255,255,255,.04);
+    }
+
+    main .wrap{padding-top:16px; padding-bottom:28px;}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding:14px 14px 10px;
+      background: rgba(0,0,0,.15);
+      border-bottom:1px solid var(--border);
+      flex-wrap:wrap;
+    }
+    .cardHead h2{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.2px;
+    }
+    .cardHead .meta{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .cardBody{padding:0;}
+    .viewer{
+      width:100%;
+      height: calc(100vh - 230px);
+      min-height:520px;
+      border:0;
+      display:block;
+      background: #0a0f1a;
+    }
+
+    /* Tabs */
+    .tabBar{
+      display:flex;
+      gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      background: rgba(0,0,0,.10);
+      flex-wrap:wrap;
+    }
+    .tab{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:13px;
+      user-select:none;
+    }
+    .tab.active{
+      border-color: rgba(74,163,255,.55);
+      background: rgba(74,163,255,.18);
+    }
+    .hidden{display:none !important;}
+
+    /* Print */
     @media print{
-      @page { size: auto; margin: 0; }
-      header { display: none; }
-      body { background: white; margin: 0; }
-      .wrap { max-width: none; padding: 0; margin: 0; }
-      
-      .page {
-        box-shadow: none;
-        border-radius: 0;
-        margin: 0;
-        width: 100%;
-        /* Force a new sheet after each page image */
-        break-after: page;
-        page-break-after: always;
+      header, .tabBar, .noPrint { display:none !important; }
+      body{ background:#fff; color:#000; }
+      .wrap{ max-width:none; margin:0; padding:0; }
+      .card{ border:none; box-shadow:none; border-radius:0; }
+      .cardHead{ display:none; }
+      .viewer{
+        height:auto !important;
+        min-height:0 !important;
       }
-      
-      /* Don't force a blank page after the last one */
-      .page:last-child {
-        break-after: auto;
-        page-break-after: auto;
+      @page{
+        size: letter;
+        margin: 0;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <a href="index.html">← Home</a>
-    <button type="button" onclick="window.print()">Print</button>
+    <div class="wrap">
+      <div class="titleRow">
+        <div>
+          <h1>Printable Forms (GitHub Pages)</h1>
+          <div class="sub">
+            This uses the <b>PDF files directly</b> so it stays as close to “pixel-perfect” as the browser/PDF viewer allows.
+          </div>
+        </div>
+
+        <div class="btnRow noPrint">
+          <span class="pill">Put PDFs in repo root</span>
+          <a class="btn" href="BillEstimator.pdf" target="_blank" rel="noopener">Open Bill Estimator PDF</a>
+          <a class="btn" href="EasyPay_Beta_1_2.pdf" target="_blank" rel="noopener">Open EasyPay PDF</a>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <div class="wrap">
-    <div class="page"><img alt="EasyPay Contract Page 1" src="assets/easypay_contract_page1.png"></div>
-    <div class="page"><img alt="EasyPay Contract Page 2" src="assets/easypay_contract_page2.png"></div>
-    <div class="page"><img alt="EasyPay Contract Page 3" src="assets/easypay_contract_page3.png"></div>
-  </div>
+  <main>
+    <div class="wrap">
+      <div class="card">
+        <div class="tabBar noPrint">
+          <button class="tab active" id="tabBill" type="button">Estimated First Bill</button>
+          <button class="tab" id="tabEasy" type="button">EasyPay Contract (Beta 1.2)</button>
+
+          <div style="flex:1"></div>
+
+          <button class="btn primary" id="printCurrent" type="button">Print Current</button>
+          <button class="btn danger" id="printBoth" type="button">Print BOTH</button>
+        </div>
+
+        <div class="cardHead">
+          <div>
+            <h2 id="cardTitle">Estimated First Bill</h2>
+            <div class="meta" id="cardMeta">
+              File: <code>BillEstimator.pdf</code> (place in repo root)
+            </div>
+          </div>
+
+          <div class="btnRow noPrint">
+            <button class="btn" id="openCurrent" type="button">Open in new tab</button>
+          </div>
+        </div>
+
+        <div class="cardBody">
+          <!-- Bill Estimator -->
+          <iframe
+            id="billFrame"
+            class="viewer"
+            src="BillEstimator.pdf#view=FitH"
+            title="Bill Estimator PDF"
+          ></iframe>
+
+          <!-- EasyPay -->
+          <iframe
+            id="easyFrame"
+            class="viewer hidden"
+            src="EasyPay_Beta_1_2.pdf#view=FitH"
+            title="EasyPay Contract PDF"
+          ></iframe>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px;">
+        <div class="cardHead">
+          <div>
+            <h2>How to make this work on GitHub Pages</h2>
+            <div class="meta">
+              1) Create a GitHub repo • 2) Add <code>index.html</code>, <code>BillEstimator.pdf</code>, <code>EasyPay_Beta_1_2.pdf</code> in the repo root •
+              3) Settings → Pages → Deploy from branch → main / root.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // ✅ IMPORTANT:
+    // Rename your files in the GitHub repo to EXACTLY:
+    //   - BillEstimator.pdf
+    //   - EasyPay_Beta_1_2.pdf
+    // (matching the src/href in this file)
+
+    const tabBill = document.getElementById("tabBill");
+    const tabEasy = document.getElementById("tabEasy");
+    const billFrame = document.getElementById("billFrame");
+    const easyFrame = document.getElementById("easyFrame");
+
+    const cardTitle = document.getElementById("cardTitle");
+    const cardMeta  = document.getElementById("cardMeta");
+    const openCurrent = document.getElementById("openCurrent");
+    const printCurrent = document.getElementById("printCurrent");
+    const printBoth = document.getElementById("printBoth");
+
+    let current = "bill";
+
+    function setTab(which){
+      current = which;
+
+      const billOn = which === "bill";
+      tabBill.classList.toggle("active", billOn);
+      tabEasy.classList.toggle("active", !billOn);
+
+      billFrame.classList.toggle("hidden", !billOn);
+      easyFrame.classList.toggle("hidden", billOn);
+
+      if (billOn){
+        cardTitle.textContent = "Estimated First Bill";
+        cardMeta.innerHTML = 'File: <code>BillEstimator.pdf</code> (place in repo root)';
+      } else {
+        cardTitle.textContent = "EasyPay Contract (Beta 1.2)";
+        cardMeta.innerHTML = 'File: <code>EasyPay_Beta_1_2.pdf</code> (place in repo root)';
+      }
+    }
+
+    tabBill.addEventListener("click", () => setTab("bill"));
+    tabEasy.addEventListener("click", () => setTab("easy"));
+
+    function openPdf(which){
+      const url = which === "bill" ? "BillEstimator.pdf" : "EasyPay_Beta_1_2.pdf";
+      window.open(url, "_blank", "noopener");
+    }
+
+    // Printing PDFs from inside an iframe is inconsistent across browsers.
+    // The most reliable "pixel-perfect" method: open the PDF in a new tab and print from there.
+    function printPdfInNewTab(which){
+      const url = which === "bill" ? "BillEstimator.pdf" : "EasyPay_Beta_1_2.pdf";
+      const w = window.open(url, "_blank", "noopener");
+      // Some browsers allow auto print after the PDF loads, some block it.
+      // We keep it simple: user hits print in the PDF viewer if auto-print doesn't fire.
+      if (!w) return;
+      // Try a gentle auto-print nudge (may be blocked; harmless if it fails).
+      setTimeout(() => { try { w.print(); } catch (e) {} }, 900);
+    }
+
+    openCurrent.addEventListener("click", () => openPdf(current));
+    printCurrent.addEventListener("click", () => printPdfInNewTab(current));
+
+    // Print BOTH: open both PDFs in new tabs so you can print each.
+    // (Browsers don’t reliably allow auto-printing two different PDFs in one print job.)
+    printBoth.addEventListener("click", () => {
+      printPdfInNewTab("bill");
+      setTimeout(() => printPdfInNewTab("easy"), 600);
+    });
+
+    // default tab
+    setTab("bill");
+  </script>
 </body>
 </html>
