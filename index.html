@@ -1,97 +1,58 @@
-<style>
-    :root{
-      --baseW:1228;
-      --baseH:1583;
-      --ink:#0b1d34;
-    }
-    *{box-sizing:border-box}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EasyPay Contract (Page Images)</title>
+  <style>
     body{margin:0;background:#0b1220;color:#e7edf8;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    
-    /* UI HEADER */
     header{position:sticky;top:0;background:rgba(11,18,32,.92);backdrop-filter:blur(10px);
-      border-bottom:1px solid rgba(255,255,255,.12);padding:10px 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;z-index:100;}
+      border-bottom:1px solid rgba(255,255,255,.12);padding:10px 12px;display:flex;gap:10px;align-items:center}
     a,button{
       color:#e7edf8;text-decoration:none;background:transparent;border:1px solid rgba(255,255,255,.16);
       padding:8px 10px;border-radius:10px;cursor:pointer;font:inherit
     }
     a:hover,button:hover{border-color:rgba(255,255,255,.28)}
-    label{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.75);font-size:13px}
     
-    /* MAIN STAGE */
-    .stage{display:flex;justify-content:center;padding:14px}
-    .viewport{
-      width: min(calc(var(--baseW)*1px), calc(100vw - 24px));
-      max-width: calc(100vw - 24px);
-    }
-    .paperShell{
-      position:relative;
-      width: calc(var(--baseW)*1px);
-      height: calc(var(--baseH)*1px);
-      transform-origin: top left;
-      box-shadow:0 16px 60px rgba(0,0,0,.35);
-      background:#fff;
-    }
-    .paperBg{
-      position:absolute;inset:0;
-      /* IMPORTANT: We use !important to ensure this prints */
-      background:url("assets/bill_estimator_page1.png") no-repeat !important;
-      background-size:100% 100% !important;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
+    .wrap{max-width:980px;margin:0 auto;padding:16px}
+    .page{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 16px 60px rgba(0,0,0,.35);margin:0 0 16px}
+    img{display:block;width:100%;height:auto}
     
-    /* INPUT FIELDS */
-    .field{
-      position:absolute;
-      background:transparent;
-      border:0;
-      outline:none;
-      color:var(--ink);
-      font-size:22px;
-      line-height:1;
-      padding:0 2px;
-      font-family: inherit;
-    }
-    .field.small{font-size:20px}
-    .field.tiny{font-size:18px}
-    .field.money{text-align:right;padding-right:4px}
-    .field.center{text-align:center}
-    .boxDebug .field{outline:1px dashed rgba(255,106,42,.75); background:rgba(255,106,42,.06)}
-    .hint{color:rgba(255,255,255,.7);font-size:13px;margin-left:auto}
-
-    /* --- PRINT STYLES --- */
+    /* --- PRINT FIXES --- */
     @media print{
-      @page {
-        margin: 0;
-        size: letter portrait;
-      }
-      body {
-        background: white;
-        height: 100%;
-        overflow: visible;
-      }
-      header, .hint { display: none !important; }
+      @page { size: auto; margin: 0; }
+      header { display: none; }
+      body { background: white; margin: 0; }
+      .wrap { max-width: none; padding: 0; margin: 0; }
       
-      .stage { padding: 0; margin: 0; display: block; }
-      .viewport { width: 100%; max-width: none; }
-      
-      .paperShell {
+      .page {
         box-shadow: none;
-        /* Force the background image to render in print */
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        /* Scale down to fit standard paper (1228px width -> 8.5 inches) */
-        /* 0.66 is roughly the ratio to fit 1228px onto a Letter page */
-        transform: scale(0.66); 
+        border-radius: 0;
         margin: 0;
-        left: 0;
-        top: 0;
+        width: 100%;
+        /* Force a new sheet after each page image */
+        break-after: page;
+        page-break-after: always;
       }
       
-      /* Ensure inputs look clean */
-      .field {
-        background: transparent !important;
-        border: none !important;
+      /* Don't force a blank page after the last one */
+      .page:last-child {
+        break-after: auto;
+        page-break-after: auto;
       }
     }
   </style>
+</head>
+<body>
+  <header>
+    <a href="index.html">← Home</a>
+    <button type="button" onclick="window.print()">Print</button>
+  </header>
+
+  <div class="wrap">
+    <div class="page"><img alt="EasyPay Contract Page 1" src="assets/easypay_contract_page1.png"></div>
+    <div class="page"><img alt="EasyPay Contract Page 2" src="assets/easypay_contract_page2.png"></div>
+    <div class="page"><img alt="EasyPay Contract Page 3" src="assets/easypay_contract_page3.png"></div>
+  </div>
+</body>
+</html>
