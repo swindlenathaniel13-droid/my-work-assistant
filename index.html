@@ -2,22 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bill Estimator - Official Layout</title>
+    <title>Consumer Cellular - Estimated First Bill</title>
     <style>
         /* --- PRINT SETTINGS --- */
         @media print {
-            @page { margin: 0; size: letter; }
-            body { background: white; padding: 0; margin: 0; }
+            @page { size: letter; margin: 0; }
+            body { margin: 0; padding: 0; background: white; }
             .no-print { display: none !important; }
-            /* FORCE BACKGROUND COLORS & SHAPES TO PRINT */
+            /* Force background colors */
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             input { background: transparent !important; }
             input::placeholder { color: transparent; }
         }
 
+        /* --- SCREEN SETTINGS --- */
         body {
             background: #525659;
-            font-family: "Arial", "Helvetica", sans-serif;
+            font-family: "Arial", sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -29,15 +30,17 @@
             width: 8.5in;
             height: 11in;
             padding: 0.5in;
+            box-sizing: border-box;
             position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
+        /* --- COLORS --- */
         :root {
-            --cc-navy: #0F2A4A; /* Official Dark Navy */
-            --cc-orange: #F0602A; /* Official Orange */
+            --cc-navy: #0F2A4A; 
+            --cc-orange: #F0602A;
         }
 
         /* --- HEADER --- */
@@ -47,426 +50,339 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 0 0 20px;
-            margin-bottom: 15px;
-            /* Header does NOT have the arrow, usually just the total bars */
+            padding-left: 20px;
+            margin-bottom: 10px;
         }
-        .header-title {
+        .header h1 {
             color: white;
-            font-size: 36pt;
+            font-size: 38pt;
             font-weight: 900;
+            margin: 0;
             text-transform: uppercase;
-            font-family: "Arial Black", sans-serif;
+            font-family: "Arial Black", "Arial", sans-serif;
             letter-spacing: -1px;
         }
-        .header-logo {
+        .logo-box {
             background: var(--cc-orange);
-            width: 80px;
             height: 100%;
+            width: 90px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
             font-style: italic;
-            font-size: 11pt;
             text-align: center;
             line-height: 1.1;
+            font-size: 11pt;
         }
 
         /* --- SECTIONS --- */
-        .section-title {
+        .section-head {
             color: var(--cc-orange);
             font-weight: bold;
-            font-size: 14pt;
+            font-size: 13pt;
             text-transform: uppercase;
-            margin-top: 5px;
             border-bottom: 2px solid var(--cc-orange);
-            padding-bottom: 2px;
-            margin-bottom: 5px;
+            margin-top: 5px;
+            margin-bottom: 2px;
             display: flex;
             justify-content: space-between;
             align-items: baseline;
         }
-        .section-note {
-            font-size: 10pt; 
-            font-style: italic; 
-            color: var(--cc-orange); 
-            text-transform: none;
-        }
+        .section-sub { font-size: 10pt; font-style: italic; color: var(--cc-orange); text-transform: none; }
 
         /* --- ROWS --- */
         .row {
             display: flex;
             align-items: flex-end;
-            padding: 3px 0;
-            border-bottom: 1px solid #dcdcdc;
+            padding: 2px 0;
+            border-bottom: 1px solid #ddd;
             font-size: 11pt;
-            height: 28px;
+            height: 24px;
         }
-        .label {
-            flex-grow: 1;
-            font-weight: bold;
-            color: var(--cc-navy);
-        }
-        .mid-col {
-            color: var(--cc-orange);
-            font-weight: bold;
-            width: 120px;
-            text-align: right;
-            margin-right: 10px;
-        }
-        .currency {
-            color: var(--cc-orange);
-            font-weight: bold;
-            padding-bottom: 2px;
-        }
-        .input-box {
-            width: 80px;
-            border-bottom: 2px solid var(--cc-orange);
-            margin-left: 5px;
-            height: 22px;
-        }
+        .label { flex-grow: 1; font-weight: bold; color: var(--cc-navy); }
+        .mid { width: 120px; text-align: right; color: var(--cc-orange); font-weight: bold; margin-right: 5px; }
+        .currency { color: var(--cc-orange); font-weight: bold; padding-bottom: 3px; }
+        .input-wrap { width: 80px; border-bottom: 2px solid var(--cc-orange); margin-left: 5px; height: 20px; }
+        
         input {
             width: 100%; height: 100%; border: none; text-align: right;
-            font-weight: bold; font-size: 12pt; color: #000;
-            background: rgba(255, 255, 0, 0.1);
-            font-family: inherit;
+            font-weight: bold; font-size: 12pt; background: rgba(255, 230, 0, 0.1);
+            font-family: inherit; color: #000;
         }
-        input:focus { outline: none; background: rgba(255, 255, 0, 0.3); }
+        input:focus { outline: none; background: rgba(255, 230, 0, 0.3); }
 
-        /* --- ARROW BANNER (The fix) --- */
-        .arrow-bar {
-            background-color: var(--cc-navy);
+        /* --- ARROW BANNERS (CSS SHAPES) --- */
+        .total-arrow {
+            background: var(--cc-navy);
             color: white;
+            height: 32px;
+            margin-top: 2px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 10px;
+            padding-right: 40px; /* space for arrow tip */
             font-weight: bold;
             text-transform: uppercase;
-            height: 35px;
+            font-size: 11pt;
+            
+            /* The Arrow Shape */
+            clip-path: polygon(0% 0%, 96% 0%, 100% 50%, 96% 100%, 0% 100%);
+            -webkit-clip-path: polygon(0% 0%, 96% 0%, 100% 50%, 96% 100%, 0% 100%);
+        }
+        .total-arrow input {
+            color: white; background: transparent; border-bottom: 1px solid white; width: 90px;
+        }
+
+        .grand-arrow {
+            background: var(--cc-navy);
+            color: white;
+            height: 45px;
+            margin-top: 5px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding-left: 15px;
-            padding-right: 40px; /* Space for the arrow tip */
-            margin-top: 5px;
-            margin-bottom: 15px;
-            position: relative;
-            
-            /* CSS SHAPE TO CREATE THE ARROW POINT */
-            clip-path: polygon(0% 0%, 96% 0%, 100% 50%, 96% 100%, 0% 100%);
-            -webkit-clip-path: polygon(0% 0%, 96% 0%, 100% 50%, 96% 100%, 0% 100%);
+            padding-right: 50px;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 14pt;
+
+            /* Grand Total Arrow Shape */
+            clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
+            -webkit-clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
         }
-        
-        .arrow-bar input {
-            color: white;
-            background: transparent;
-            border-bottom: 1px solid white;
-            width: 90px;
+        .grand-arrow input {
+            color: white; background: transparent; border: none; width: 150px; font-size: 20pt; text-align: right;
         }
 
         /* --- CHECKBOXES --- */
         .chk {
-            display: inline-block;
-            width: 14px; height: 14px;
-            border: 2px solid var(--cc-orange);
-            margin-right: 3px;
-            cursor: pointer;
-            vertical-align: middle;
-            position: relative;
+            display: inline-block; width: 12px; height: 12px; border: 2px solid var(--cc-orange);
+            margin: 0 2px; vertical-align: middle; cursor: pointer; position: relative;
         }
         .chk.checked::after {
-            content: "X";
-            position: absolute; top: -2px; left: 2px;
-            color: var(--cc-orange); font-weight: bold; font-size: 12px;
+            content: "X"; position: absolute; top: -3px; left: 1px; color: var(--cc-orange); font-weight: bold; font-size: 12px;
         }
-
-        /* --- PROMO RED --- */
-        .red-text { color: #D00 !important; }
-        .red-border { border-color: #D00 !important; }
+        
+        /* --- HELPERS --- */
+        .red-text { color: #d00 !important; }
+        .red-border { border-color: #d00 !important; }
 
         /* --- FOOTER --- */
-        .grand-total-arrow {
-            background: var(--cc-navy);
-            color: white;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-left: 20px;
-            padding-right: 50px;
-            font-size: 16pt;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-top: 15px;
-            
-            /* Larger Arrow for Grand Total */
-            clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
-            -webkit-clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
-        }
-        .grand-total-arrow input {
-            font-size: 20pt;
-            border-bottom: none;
-            text-align: right;
-            width: 150px;
-        }
+        .footer-check { border-bottom: 2px solid #ccc; padding: 5px 0; margin-top: 5px; }
+        .footer-row { display: flex; justify-content: space-between; font-weight: bold; color: var(--cc-navy); font-size: 10pt; margin-bottom: 3px; }
+        .footer-legal { margin-top: auto; display: flex; justify-content: space-between; font-size: 10pt; color: #000; font-weight: bold; }
+        .fine-print { text-align: center; font-size: 7pt; color: #666; margin-top: 5px; }
 
-        .footer-info {
-            margin-top: auto;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 10pt;
-            color: var(--cc-navy);
-            font-weight: bold;
-        }
-
-        /* Controls */
+        /* Toolbar */
         .toolbar { position: fixed; top: 0; width: 100%; background: #333; text-align: center; padding: 10px; z-index: 99; }
-        .btn { background: var(--cc-orange); color: white; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        .btn { background: var(--cc-orange); color: white; border: none; padding: 8px 16px; font-weight: bold; cursor: pointer; border-radius: 4px; }
+
     </style>
 </head>
 <body>
+    <div class="toolbar no-print"><button class="btn" onclick="window.print()">Print Estimate</button></div>
 
-<div class="toolbar no-print">
-    <button class="btn" onclick="window.print()">Print Estimate</button>
-</div>
-
-<div class="page" style="margin-top: 60px;">
-
-    <div class="header">
-        [cite_start]<div class="header-title">ESTIMATED FIRST BILL [cite: 114]</div>
-        <div class="header-logo">Consumer<br>Cellular</div>
-    </div>
-
-    [cite_start]<div class="section-title">MONTHLY RATE PLAN [cite: 115]</div>
-    
-    <div class="row">
-        <div class="label">Plan</div>
-        <div class="currency">$</div>
-        <div class="input-box"><input type="number" id="basePlan" oninput="calc()"></div>
-    </div>
-
-    <div class="row">
-        [cite_start]<div class="label">Line 1 Included in Plan [cite: 118]</div>
-    </div>
-
-    <div class="row">
-        <div class="label"># of Additional Lines</div>
-        <div class="mid-col">
-            <input type="number" id="qtyLines" style="width:30px; border-bottom:1px solid #ccc; text-align:center;" oninput="calc()"> x $15
+    <div class="page" style="margin-top: 50px;">
+        <div class="header">
+            <h1>ESTIMATED FIRST BILL</h1>
+            <div class="logo-box">Consumer<br>Cellular</div>
         </div>
-        <div class="currency">$</div>
-        <div class="input-box"><input type="text" id="costLines" readonly></div>
-    </div>
 
-    <div class="row">
-        <div class="label"># of Additional Unlimited Lines</div>
-        <div class="mid-col">
-            <input type="number" id="qtyUnl" style="width:30px; border-bottom:1px solid #ccc; text-align:center;" oninput="calc()"> x $20
+        <div class="section-head">MONTHLY RATE PLAN</div>
+        <div class="row">
+            <div class="label">Plan</div>
+            <div class="currency">$</div>
+            <div class="input-wrap"><input type="number" id="base" oninput="c()"></div>
         </div>
-        <div class="currency">$</div>
-        <div class="input-box"><input type="text" id="costUnl" readonly></div>
-    </div>
-
-    <div class="row">
-        <div class="label"># of Smartwatch Lines</div>
-        <div class="mid-col">
-            <input type="number" id="qtyWatch" style="width:30px; border-bottom:1px solid #ccc; text-align:center;" oninput="calc()"> x $5
+        <div class="row">
+            <div class="label">Line 1 Included in Plan</div>
         </div>
-        <div class="currency">$</div>
-        <div class="input-box"><input type="text" id="costWatch" readonly></div>
-    </div>
-
-    <div class="row">
-        <div class="label"># of IRIS Ally Lines</div>
-        <div class="mid-col">
-            <input type="number" id="qtyIris" style="width:30px; border-bottom:1px solid #ccc; text-align:center;" oninput="calc()"> x $25
+        <div class="row">
+            <div class="label"># of Additional Lines</div>
+            <div class="mid"><input type="number" id="qL" style="width:25px; border-bottom:1px solid #ccc; text-align:center;" oninput="c()"> x $15</div>
+            <div class="currency">$</div>
+            <div class="input-wrap"><input type="text" id="cL" readonly></div>
         </div>
-        <div class="currency">$</div>
-        <div class="input-box"><input type="text" id="costIris" readonly></div>
-    </div>
-
-    <div class="row">
-        <div class="label"># of Home Phone Base Lines</div>
-        <div class="mid-col" style="font-size: 10pt; width: 160px;">
-            <span class="chk" id="chkHome15" onclick="toggleHome(15)"></span> x $15 
-            <span class="chk" id="chkHome20" onclick="toggleHome(20)"></span> x $20
+        <div class="row">
+            <div class="label"># of Additional Unlimited Lines</div>
+            <div class="mid"><input type="number" id="qU" style="width:25px; border-bottom:1px solid #ccc; text-align:center;" oninput="c()"> x $20</div>
+            <div class="currency">$</div>
+            <div class="input-wrap"><input type="text" id="cU" readonly></div>
         </div>
-        <div class="currency">$</div>
-        <div class="input-box"><input type="text" id="costHome" readonly></div>
-    </div>
-
-    <div class="row">
-        <div class="label">Asurion Protection</div>
-        <div class="mid-col" style="font-size: 10pt;">
-            <span class="chk" id="protNo" onclick="toggleProt('no')"></span> NO 
-            <span class="chk" id="protYes" onclick="toggleProt('yes')"></span> YES
+        <div class="row">
+            <div class="label"># of Smartwatch Lines</div>
+            <div class="mid"><input type="number" id="qW" style="width:25px; border-bottom:1px solid #ccc; text-align:center;" oninput="c()"> x $5</div>
+            <div class="currency">$</div>
+            <div class="input-wrap"><input type="text" id="cW" readonly></div>
         </div>
-        <div class="currency">$</div>
-        <div class="input-box"><input type="number" id="costProt" oninput="calc()"></div>
-    </div>
-
-    <div class="arrow-bar">
-        [cite_start]<span>TOTAL FOR RATE PLAN [cite: 140]</span>
-        <span>$ <input type="text" id="totalRate" readonly></span>
-    </div>
-
-
-    <div class="section-title">
-        [cite_start]SURCHARGES AND OTHER ITEMS <span class="section-note">Estimate [cite: 142]</span>
-    </div>
-    <div class="row">
-        <div class="label">Zip Code Entered</div>
-        <div class="input-box" style="width: 100px; border-color: #333;"><input type="text" style="text-align:center;"></div>
-    </div>
-    <div class="row">
-        <div class="label">Government Taxes and Fees</div>
-        <div class="currency">$</div>
-        <div class="input-box"><input type="number" id="costTax" oninput="calc()"></div>
-    </div>
-    
-    <div class="arrow-bar">
-        [cite_start]<span>TOTAL FOR SURCHARGES AND FEES [cite: 147]</span>
-        <span>$ <input type="text" id="totalSurch" readonly></span>
-    </div>
-
-
-    <div class="section-title">
-        [cite_start]EASYPAY <span class="section-note">Interest-Free Device Financing [cite: 149]</span>
-    </div>
-    <div class="row">
-        <div class="label">Device 1 <span style="font-weight:normal; font-size:10pt;">Monthly Fee</span></div>
-        <div class="currency">$</div>
-        <div class="input-box"><input type="number" id="dev1" oninput="calc()"></div>
-    </div>
-    <div class="row">
-        <div class="label">Device 2 <span style="font-weight:normal; font-size:10pt;">Monthly Fee</span></div>
-        <div class="currency">$</div>
-        <div class="input-box"><input type="number" id="dev2" oninput="calc()"></div>
-    </div>
-
-    <div class="arrow-bar">
-        [cite_start]<span>TOTAL FOR EASY PAY [cite: 156]</span>
-        <span>$ <input type="text" id="totalEp" readonly></span>
-    </div>
-
-
-    <div class="section-title">PROMOTIONS AND OTHER CREDITS</div>
-    <div class="row">
-        <div class="label">Rate Plan Promotion</div>
-        <div class="currency red-text">- $</div>
-        <div class="input-box red-border"><input type="number" id="promoPlan" class="red-text" oninput="calc()"></div>
-    </div>
-    <div class="row">
-        <div class="label"># of SIM Kit Credit(s)</div>
-        <div class="mid-col red-text">- $10</div>
-        <div class="currency red-text">- $</div>
-        <div class="input-box red-border"><input type="number" id="promoSim" class="red-text" oninput="calc()"></div>
-    </div>
-    <div class="row">
-        <div class="label"># of Customer Service Surveys</div>
-        <div class="mid-col red-text">- $10</div>
-        <div class="currency red-text">- $</div>
-        <div class="input-box red-border"><input type="number" id="promoSurv" class="red-text" oninput="calc()"></div>
-    </div>
-
-    <div class="arrow-bar">
-        [cite_start]<span>TOTAL CREDITS FOR PROMOTIONS [cite: 167]</span>
-        <span>- $ <input type="text" id="totalPromo" readonly></span>
-    </div>
-
-
-    <div style="margin-top: 10px; border-bottom: 2px solid #ccc; padding-bottom: 5px;">
-        <div class="row" style="border:none;">
-            <div class="label">Do You Have SmartFlex Turned On?</div>
-            <div class="mid-col" style="width:auto;"><span class="chk" onclick="toggleChk(this)"></span> NO <span class="chk" onclick="toggleChk(this)"></span> YES</div>
-            <div style="width: 80px; text-align:right; border-bottom:1px solid #000;">$ 0.00</div>
+        <div class="row">
+            <div class="label"># of IRIS Ally Lines</div>
+            <div class="mid"><input type="number" id="qI" style="width:25px; border-bottom:1px solid #ccc; text-align:center;" oninput="c()"> x $25</div>
+            <div class="currency">$</div>
+            <div class="input-wrap"><input type="text" id="cI" readonly></div>
         </div>
-        <div class="row" style="border:none;">
-            <div class="label">AARP or USAA Member ID Added?</div>
-            <div class="mid-col" style="width:auto;"><span class="chk" onclick="toggleChk(this)"></span> NO <span class="chk" onclick="toggleChk(this)"></span> YES</div>
-            <div style="width: 80px; text-align:right; border-bottom:1px solid #000;">$ 0.00</div>
+        <div class="row">
+            <div class="label"># of Home Phone Base Lines</div>
+            <div class="mid" style="width:160px; font-size:10pt;">
+                <span class="chk" onclick="tH(15, this)"></span> x $15 &nbsp; <span class="chk" onclick="tH(20, this)"></span> x $20
+            </div>
+            <div class="currency">$</div>
+            <div class="input-wrap"><input type="text" id="cH" readonly></div>
         </div>
-        <div class="row" style="border:none;">
-            <div class="label">AutoPay and E-Billing Active?</div>
-            <div class="mid-col" style="width:auto;"><span class="chk" onclick="toggleChk(this)"></span> NO <span class="chk" onclick="toggleChk(this)"></span> YES</div>
-            <div style="width: 80px; text-align:right; border-bottom:1px solid #000;">$ 0.00</div>
+        <div class="row">
+            <div class="label">Asurion Protection</div>
+            <div class="mid" style="font-size:10pt;">
+                <span class="chk" onclick="tP('n', this)"></span> NO &nbsp; <span class="chk" onclick="tP('y', this)"></span> YES
+            </div>
+            <div class="currency">$</div>
+            <div class="input-wrap"><input type="number" id="cP" oninput="c()"></div>
+        </div>
+
+        <div class="total-arrow">
+            <span>TOTAL FOR RATE PLAN</span>
+            <span>$ <input type="text" id="tRate" readonly></span>
+        </div>
+
+        <div class="section-head">SURCHARGES AND OTHER ITEMS <span class="section-sub">Estimate</span></div>
+        <div class="row">
+            <div class="label">Zip Code Entered</div>
+            <div class="input-wrap" style="width:100px; border-color:#333;"><input type="text" style="text-align:center;"></div>
+        </div>
+        <div class="row">
+            <div class="label">Government Taxes and Fees</div>
+            <div class="currency">$</div>
+            <div class="input-wrap"><input type="number" id="cTax" oninput="c()"></div>
+        </div>
+        <div class="total-arrow">
+            <span>TOTAL FOR SURCHARGES AND FEES</span>
+            <span>$ <input type="text" id="tSurch" readonly></span>
+        </div>
+
+        <div class="section-head">EASYPAY <span class="section-sub">Interest-Free Device Financing</span></div>
+        <div class="row">
+            <div class="label">Device 1 <span style="font-weight:normal; font-size:10pt;">Monthly Fee</span></div>
+            <div class="currency">$</div>
+            <div class="input-wrap"><input type="number" id="d1" oninput="c()"></div>
+        </div>
+        <div class="row">
+            <div class="label">Device 2 <span style="font-weight:normal; font-size:10pt;">Monthly Fee</span></div>
+            <div class="currency">$</div>
+            <div class="input-wrap"><input type="number" id="d2" oninput="c()"></div>
+        </div>
+        <div class="total-arrow">
+            <span>TOTAL FOR EASY PAY</span>
+            <span>$ <input type="text" id="tEp" readonly></span>
+        </div>
+
+        <div class="section-head">PROMOTIONS AND OTHER CREDITS</div>
+        <div class="row">
+            <div class="label">Rate Plan Promotion</div>
+            <div class="currency red-text">- $</div>
+            <div class="input-wrap red-border"><input type="number" id="p1" class="red-text" oninput="c()"></div>
+        </div>
+        <div class="row">
+            <div class="label"># of SIM Kit Credit(s)</div>
+            <div class="mid red-text">- $10</div>
+            <div class="currency red-text">- $</div>
+            <div class="input-wrap red-border"><input type="number" id="p2" class="red-text" oninput="c()"></div>
+        </div>
+        <div class="row">
+            <div class="label"># of Customer Service Surveys</div>
+            <div class="mid red-text">- $10</div>
+            <div class="currency red-text">- $</div>
+            <div class="input-wrap red-border"><input type="number" id="p3" class="red-text" oninput="c()"></div>
+        </div>
+        <div class="total-arrow">
+            <span>TOTAL CREDITS FOR PROMOTIONS</span>
+            <span>- $ <input type="text" id="tPromo" readonly></span>
+        </div>
+
+        <div class="footer-check">
+            <div class="footer-row">
+                <span>Do You Have SmartFlex Turned On?</span>
+                <div><span class="chk" onclick="tog(this)"></span> NO <span class="chk" onclick="tog(this)"></span> YES</div>
+                <div style="width:80px; text-align:right; border-bottom:1px solid #000;">$ 0.00</div>
+            </div>
+            <div style="text-align:right; font-size:8pt; color:#666;">Totals will change if data limits are exceeded and the plan is flexed up.</div>
+        </div>
+        <div class="footer-check">
+            <div class="footer-row">
+                <span>AARP or USAA Member ID Added?</span>
+                <div><span class="chk" onclick="tog(this)"></span> NO <span class="chk" onclick="tog(this)"></span> YES</div>
+                <div style="width:80px; text-align:right; border-bottom:1px solid #000;">$ 0.00</div>
+            </div>
+        </div>
+        <div class="footer-check">
+            <div class="footer-row">
+                <span>AutoPay and E-Billing Active?</span>
+                <div><span class="chk" onclick="tog(this)"></span> NO <span class="chk" onclick="tog(this)"></span> YES</div>
+                <div style="width:80px; text-align:right; border-bottom:1px solid #000;">$ 0.00</div>
+            </div>
+        </div>
+
+        <div class="grand-arrow">
+            <span>GRAND TOTAL OF FIRST MONTH INVOICE</span>
+            <span>$ <input type="text" id="gTotal" readonly></span>
+        </div>
+
+        <div class="footer-legal">
+            <div style="width:45%;">Estimate Provided By <div style="border-bottom:1px solid black; margin-top:5px;"><input type="text" style="text-align:left;"></div></div>
+            <div style="width:45%;">Date <div style="border-bottom:1px solid black; margin-top:5px;"><input type="text" id="dateBot" style="text-align:left;"></div></div>
+        </div>
+        <div class="fine-print">
+            2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025
         </div>
     </div>
 
-    <div class="grand-total-arrow">
-        [cite_start]<span>GRAND TOTAL OF FIRST MONTH INVOICE [cite: 182]</span>
-        <span>$ <input type="text" id="grandTotal" readonly></span>
-    </div>
-
-    <div class="footer-info">
-        <div style="width: 48%;">Estimate Provided By <div style="border-bottom:1px solid black; margin-top: 5px;"><input type="text" style="text-align:left;"></div></div>
-        <div style="width: 48%;">Date <div style="border-bottom:1px solid black; margin-top: 5px;"><input type="text" id="dateBot" style="text-align:left;"></div></div>
-    </div>
-    <div style="text-align:center; font-size: 8pt; color: #666; margin-top: 10px;">
-        2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. [cite_start]Q42025 [cite: 185]
-    </div>
-
-</div>
-
-<script>
-    document.getElementById('dateBot').value = new Date().toLocaleDateString();
-
-    function toggleChk(el) { el.classList.toggle('checked'); }
-    
-    function toggleProt(val) {
-        document.getElementById('protNo').classList.remove('checked');
-        document.getElementById('protYes').classList.remove('checked');
-        if(val === 'no') document.getElementById('protNo').classList.add('checked');
-        if(val === 'yes') document.getElementById('protYes').classList.add('checked');
-    }
-
-    let homeVal = 0;
-    function toggleHome(amt) {
-        document.getElementById('chkHome15').classList.remove('checked');
-        document.getElementById('chkHome20').classList.remove('checked');
-        if(homeVal === amt) { homeVal = 0; } 
-        else {
-            homeVal = amt;
-            if(amt === 15) document.getElementById('chkHome15').classList.add('checked');
-            if(amt === 20) document.getElementById('chkHome20').classList.add('checked');
-        }
-        document.getElementById('costHome').value = homeVal > 0 ? homeVal.toFixed(2) : "";
-        calc();
-    }
-
-    function calc() {
-        let base = parseFloat(document.getElementById('basePlan').value) || 0;
+    <script>
+        document.getElementById('dateBot').value = new Date().toLocaleDateString();
+        function tog(el) { el.classList.toggle('checked'); }
         
-        let cLines = (parseFloat(document.getElementById('qtyLines').value) || 0) * 15;
-        document.getElementById('costLines').value = cLines > 0 ? cLines.toFixed(2) : "";
+        let hVal = 0;
+        function tH(val, el) {
+            // Logic to handle radio-like behavior for home phone
+            const row = el.parentElement; 
+            const chks = row.querySelectorAll('.chk');
+            chks.forEach(c => c.classList.remove('checked'));
+            if(hVal !== val) {
+                hVal = val;
+                el.classList.add('checked');
+            } else { hVal = 0; }
+            document.getElementById('cH').value = hVal > 0 ? hVal.toFixed(2) : "";
+            c();
+        }
 
-        let cUnl = (parseFloat(document.getElementById('qtyUnl').value) || 0) * 20;
-        document.getElementById('costUnl').value = cUnl > 0 ? cUnl.toFixed(2) : "";
+        function tP(type, el) {
+            const row = el.parentElement;
+            row.querySelectorAll('.chk').forEach(c => c.classList.remove('checked'));
+            el.classList.add('checked');
+        }
 
-        let cWatch = (parseFloat(document.getElementById('qtyWatch').value) || 0) * 5;
-        document.getElementById('costWatch').value = cWatch > 0 ? cWatch.toFixed(2) : "";
+        function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+        function s(id, val) { document.getElementById(id).value = val > 0 ? val.toFixed(2) : ""; }
 
-        let cIris = (parseFloat(document.getElementById('qtyIris').value) || 0) * 25;
-        document.getElementById('costIris').value = cIris > 0 ? cIris.toFixed(2) : "";
+        function c() {
+            let rate = v('base') + (v('qL')*15) + (v('qU')*20) + (v('qW')*5) + (v('qI')*25) + hVal + v('cP');
+            s('cL', v('qL')*15); s('cU', v('qU')*20); s('cW', v('qW')*5); s('cI', v('qI')*25);
+            document.getElementById('tRate').value = rate.toFixed(2);
 
-        let cProt = parseFloat(document.getElementById('costProt').value) || 0;
-        let totalRate = base + cLines + cUnl + cWatch + cIris + homeVal + cProt;
-        document.getElementById('totalRate').value = totalRate.toFixed(2);
+            let tax = v('cTax');
+            document.getElementById('tSurch').value = tax.toFixed(2);
 
-        let tax = parseFloat(document.getElementById('costTax').value) || 0;
-        document.getElementById('totalSurch').value = tax.toFixed(2);
+            let ep = v('d1') + v('d2');
+            document.getElementById('tEp').value = ep.toFixed(2);
 
-        let totalEp = (parseFloat(document.getElementById('dev1').value) || 0) + (parseFloat(document.getElementById('dev2').value) || 0);
-        document.getElementById('totalEp').value = totalEp.toFixed(2);
+            let promo = v('p1') + v('p2') + v('p3');
+            document.getElementById('tPromo').value = promo.toFixed(2);
 
-        let totalPromo = (parseFloat(document.getElementById('promoPlan').value) || 0) + (parseFloat(document.getElementById('promoSim').value) || 0) + (parseFloat(document.getElementById('promoSurv').value) || 0);
-        document.getElementById('totalPromo').value = totalPromo.toFixed(2);
-
-        let grand = totalRate + tax + totalEp - totalPromo;
-        document.getElementById('grandTotal').value = grand.toFixed(2);
-    }
-</script>
-
+            let grand = rate + tax + ep - promo;
+            document.getElementById('gTotal').value = grand.toFixed(2);
+        }
+    </script>
 </body>
 </html>
