@@ -2,292 +2,559 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CC Store Manager Portal</title>
+    <title>CC Manager Portal - Official Forms</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap');
+
         :root {
-            --cc-orange: #FF6B00;
-            --cc-grey: #333;
-            --cc-light: #f4f4f4;
+            --cc-orange: #f36f21; /* Official-looking orange */
+            --cc-dark: #333;
+            --border-color: #000;
         }
-        body { font-family: 'Arial', sans-serif; margin: 0; background: #e9ecef; color: #333; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #555; /* Dark background for the portal view */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* --- UI CONTROLS (Hide when printing) --- */
+        .portal-controls {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            z-index: 999;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .portal-controls button {
+            background: var(--cc-orange);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 10px;
+        }
+        .portal-controls button:hover { background: white; color: var(--cc-orange); }
+
+        /* --- PAGE LAYOUT (Paper simulation) --- */
+        .page {
+            background: white;
+            width: 8.5in;
+            min-height: 11in;
+            padding: 0.5in;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            margin-top: 50px; /* Space for navbar */
+            display: none; /* Hidden by default */
+            position: relative;
+        }
+        .page.active { display: block; }
+
+        /* --- SHARED STYLES --- */
+        input[type="text"], input[type="number"], input[type="date"] {
+            border: none;
+            background: rgba(255, 255, 0, 0.1); /* Slight highlight on screen to show it's editable */
+            font-family: inherit;
+            font-size: inherit;
+            width: 100%;
+            height: 100%;
+        }
+        input:focus { outline: 2px solid var(--cc-orange); background: white; }
         
-        /* Navigation */
-        .navbar { background: var(--cc-orange); padding: 1rem; color: white; display: flex; justify-content: space-between; align-items: center; }
-        .navbar h1 { margin: 0; font-size: 1.5rem; }
-        .nav-links button { background: none; border: 2px solid white; color: white; padding: 8px 16px; margin-left: 10px; cursor: pointer; border-radius: 4px; font-weight: bold; }
-        .nav-links button:hover { background: white; color: var(--cc-orange); }
-        .nav-links button.active { background: white; color: var(--cc-orange); }
+        /* Checkbox styling to match PDF squares */
+        .chk-box {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 1px solid black;
+            margin-right: 5px;
+            cursor: pointer;
+            text-align: center;
+            line-height: 10px;
+            font-size: 10px;
+        }
+        .chk-box.checked::after { content: "X"; font-weight: bold; }
 
-        /* Container */
-        .container { max-width: 900px; margin: 20px auto; background: white; padding: 40px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 8px; }
+        /* --- BILL ESTIMATOR STYLES --- */
+        .be-header {
+            background-color: var(--cc-orange);
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+            text-transform: uppercase;
+            margin-top: 15px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .be-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ccc;
+            padding: 4px 0;
+            font-size: 12px;
+            align-items: center;
+        }
+        .be-row label { flex-grow: 1; }
+        .be-row .val-input { width: 80px; text-align: right; }
+        .be-total-row {
+            background-color: #eee;
+            font-weight: bold;
+            border-top: 2px solid black;
+            border-bottom: 2px solid black;
+            padding: 5px 0;
+        }
+        .be-grand-total {
+            background-color: var(--cc-orange);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .logo-text {
+            color: var(--cc-orange);
+            font-weight: bold;
+            font-size: 24px;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
 
-        /* Sections */
-        .portal-section { display: none; }
-        .portal-section.active { display: block; }
-
-        /* Forms */
-        h2 { border-bottom: 2px solid var(--cc-orange); padding-bottom: 10px; margin-top: 0; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-        .full-width { grid-column: span 2; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
-        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        /* --- EASYPAY STYLES --- */
+        .ep-notice {
+            border: 2px solid black;
+            padding: 10px;
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+        .ep-title {
+            text-align: center;
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .ep-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .ep-table td, .ep-table th {
+            border: 1px solid black;
+            padding: 4px;
+        }
+        .tila-box {
+            border: 1px solid black;
+            margin: 10px 0;
+        }
+        .tila-header {
+            background: #e0e0e0;
+            display: flex;
+            border-bottom: 1px solid black;
+        }
+        .tila-col {
+            flex: 1;
+            border-right: 1px solid black;
+            padding: 5px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .tila-col:last-child { border-right: none; }
+        .tila-content {
+            display: flex;
+        }
+        .tila-val {
+            flex: 1;
+            border-right: 1px solid black;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .tila-val:last-child { border-right: none; }
         
-        /* Tables & readouts */
-        .calc-box { background: var(--cc-light); padding: 15px; border-radius: 5px; margin-top: 20px; }
-        .total-row { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-top: 10px; padding-top: 10px; border-top: 1px solid #ccc; }
-        
-        /* Buttons */
-        .action-btn { background: var(--cc-grey); color: white; border: none; padding: 12px 24px; font-size: 1rem; cursor: pointer; border-radius: 4px; margin-top: 20px; width: 100%; }
-        .action-btn:hover { background: #000; }
+        .legal-block {
+            font-size: 10px;
+            text-align: justify;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
 
-        /* Print Styles - Crucial for your PDF generation */
+        /* --- PRINT MEDIA QUERY --- */
         @media print {
-            body { background: white; }
-            .navbar, .action-btn, .no-print { display: none !important; }
-            .container { box-shadow: none; margin: 0; padding: 0; max-width: 100%; }
-            .portal-section { display: block; } /* Ensure content shows */
-            .portal-section:not(.active) { display: none; } /* Only print active tab */
-            input { border: none; border-bottom: 1px solid #000; background: transparent; padding: 0; }
-            select { appearance: none; border: none; background: transparent; }
-            /* Force specific print layouts */
-            .legal-text { font-size: 10px; text-align: justify; margin-top: 20px; }
+            body { background: white; margin: 0; padding: 0; }
+            .portal-controls { display: none; }
+            .page { 
+                display: none; 
+                margin: 0; 
+                padding: 0.25in; 
+                width: 100%; 
+                box-shadow: none; 
+            }
+            .page.active { display: block; }
+            input { background: transparent !important; } /* Hide yellow background on print */
+            
+            /* Ensure colors print */
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
     </style>
 </head>
 <body>
 
-<div class="navbar">
-    <h1>CC Store Portal | Spokane Valley</h1>
-    <div class="nav-links">
-        <button onclick="switchTab('estimator')" id="btn-estimator" class="active">Bill Estimator</button>
-        <button onclick="switchTab('easypay')" id="btn-easypay">EasyPay Contract</button>
-    </div>
-</div>
-
-<div class="container">
-
-    <div id="estimator" class="portal-section active">
-        <h2>Estimated First Bill</h2>
-        <div class="form-grid">
-            <div>
-                <label>Base Plan Cost ($)</label>
-                <input type="number" id="basePlan" value="0" oninput="calcBill()">
-            </div>
-            <div>
-                <label>Activation Fee (if any)</label>
-                <input type="number" id="actFee" value="0" oninput="calcBill()">
-            </div>
-        </div>
-
-        <h3>Monthly Rates & Add-ons</h3>
-        <div class="form-grid">
-            <div>
-                <label>Add'l Lines (Qty) x $15</label>
-                <input type="number" id="linesReg" value="0" oninput="calcBill()">
-            </div>
-            <div>
-                <label>Add'l Unlimited Lines (Qty) x $20</label>
-                <input type="number" id="linesUnl" value="0" oninput="calcBill()">
-            </div>
-            <div>
-                <label>Smartwatches (Qty) x $5</label>
-                <input type="number" id="linesWatch" value="0" oninput="calcBill()">
-            </div>
-            <div>
-                <label>IRIS Ally (Qty) x $25</label>
-                <input type="number" id="linesIris" value="0" oninput="calcBill()">
-            </div>
-            <div>
-                <label>Home Phone Base</label>
-                <select id="homePhone" onchange="calcBill()">
-                    <option value="0">None</option>
-                    <option value="15">$15 Plan</option>
-                    <option value="20">$20 Plan</option>
-                </select>
-            </div>
-            <div>
-                <label>Asurion Protection ($)</label>
-                <input type="number" id="protection" value="0" oninput="calcBill()">
-            </div>
-        </div>
-
-        <h3>Devices (EasyPay)</h3>
-        <div class="form-grid">
-            <div>
-                <label>Device 1 Monthly Fee ($)</label>
-                <input type="number" id="dev1" value="0" oninput="calcBill()">
-            </div>
-            <div>
-                <label>Device 2 Monthly Fee ($)</label>
-                <input type="number" id="dev2" value="0" oninput="calcBill()">
-            </div>
-        </div>
-
-        <h3>Taxes & Credits</h3>
-        <div class="form-grid">
-            <div>
-                <label>Est. Govt Taxes & Fees ($)</label>
-                <input type="number" id="taxes" value="0" oninput="calcBill()">
-            </div>
-            <div>
-                <label>Discounts/Promos (-$)</label>
-                <input type="number" id="discounts" value="0" oninput="calcBill()">
-            </div>
-             <div class="full-width">
-                <label>AARP/USAA Member ID Added?</label>
-                <select id="aarp">
-                    <option>No</option>
-                    <option>Yes (5% Discount applied to usage)</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="calc-box">
-            <div class="total-row">
-                <span>GRAND TOTAL EST. (1st Month):</span>
-                <span id="billTotal">$0.00</span>
-            </div>
-            <p style="font-size: 0.8rem; margin-top: 10px; color: #666;">*Includes plan, devices, fees, and estimated taxes. Charges may vary based on billing cycle.</p>
-        </div>
-
-        <button class="action-btn" onclick="window.print()">Print Estimate for Customer</button>
+    <div class="portal-controls">
+        <span style="font-weight:bold; margin-right:20px;">Store Portal</span>
+        <button onclick="showPage('estimator')">Bill Estimator</button>
+        <button onclick="showPage('easypay')">EasyPay Contract</button>
+        <button onclick="window.print()" style="background: #333; border: 1px solid white;">Print / Save PDF</button>
     </div>
 
-    <div id="easypay" class="portal-section">
-        <h2>Consumer Credit Installment Sale Contract</h2>
-        <p class="no-print" style="color: red; font-size: 0.9em;">*Fill this out, click Print, then "Save as PDF" to upload to the system.</p>
+    <div id="estimator" class="page active">
+        <div class="logo-text">Consumer Cellular</div>
+        
+        <div class="be-header">
+            <span>ESTIMATED FIRST BILL [cite: 1]</span>
+        </div>
 
-        <div class="form-grid">
-            <div class="full-width">
-                <label>Buyer Name</label>
-                <input type="text" placeholder="Customer Name">
-            </div>
-            <div class="full-width">
-                <label>Address</label>
-                <input type="text" placeholder="123 Example St, Spokane, WA">
+        <div class="be-header" style="margin-top: 0; background: #333;">MONTHLY RATE PLAN</div>
+        <div class="be-row" style="font-weight: bold;">
+            <label>Plan</label>
+            <span style="margin-right: 10px;">$</span>
+        </div>
+
+        <div class="be-row">
+            <label>Base Plan Cost (Line 1 Included) [cite: 5]</label>
+            <input type="number" class="val-input" id="be-base" value="0" oninput="recalc()">
+        </div>
+        
+        <div class="be-row">
+            <label style="display:flex;"># of Additional Lines <input type="number" id="qty-lines" value="0" style="width:30px; border-bottom:1px solid #ccc; text-align:center; margin:0 5px;" oninput="recalc()"> x $15 [cite: 6,7]</label>
+            <span class="val-input" id="disp-lines">$0.00</span>
+        </div>
+
+        <div class="be-row">
+            <label style="display:flex;"># of Additional Unlimited Lines <input type="number" id="qty-unl" value="0" style="width:30px; border-bottom:1px solid #ccc; text-align:center; margin:0 5px;" oninput="recalc()"> x $20 [cite: 9,10]</label>
+            <span class="val-input" id="disp-unl">$0.00</span>
+        </div>
+
+        <div class="be-row">
+            <label style="display:flex;"># of Smartwatch Lines <input type="number" id="qty-watch" value="0" style="width:30px; border-bottom:1px solid #ccc; text-align:center; margin:0 5px;" oninput="recalc()"> x $5 [cite: 12,13]</label>
+            <span class="val-input" id="disp-watch">$0.00</span>
+        </div>
+        
+        <div class="be-row">
+            <label style="display:flex;"># of IRIS Ally Lines <input type="number" id="qty-iris" value="0" style="width:30px; border-bottom:1px solid #ccc; text-align:center; margin:0 5px;" oninput="recalc()"> x $25 [cite: 15,16]</label>
+            <span class="val-input" id="disp-iris">$0.00</span>
+        </div>
+
+        <div class="be-row">
+            <label>Asurion Protection [cite: 22]</label>
+            <div style="display:flex; align-items:center;">
+                <span class="chk-box" onclick="toggleChk(this)"></span> NO
+                <span class="chk-box" onclick="toggleChk(this)"></span> YES
+                <input type="number" class="val-input" id="be-prot" value="0" oninput="recalc()" style="margin-left:10px;">
             </div>
         </div>
 
-        <h3>Device Details</h3>
-        <div class="form-grid">
-            <div>
-                <label>SKU Number</label>
-                <input type="text" id="epSku">
+        <div class="be-row be-total-row">
+            <label style="padding-left: 10px;">TOTAL FOR RATE PLAN [cite: 27]</label>
+            <span class="val-input" id="total-rate">$0.00</span>
+        </div>
+
+        <div class="be-header">SURCHARGES AND OTHER ITEMS Estimate</div>
+        <div class="be-row">
+            <label>Zip Code Entered: <input type="text" style="width:60px; display:inline;" placeholder="99201"></label>
+        </div>
+        <div class="be-row">
+            <label>Government Taxes and Fees [cite: 32]</label>
+            <input type="number" class="val-input" id="be-tax" value="0" oninput="recalc()">
+        </div>
+        <div class="be-row be-total-row">
+            <label style="padding-left: 10px;">TOTAL FOR SURCHARGES AND FEES [cite: 34]</label>
+            <span class="val-input" id="total-surch">$0.00</span>
+        </div>
+
+        <div class="be-header">EASYPAY Interest-Free Device Financing</div>
+        <div class="be-row">
+            <label>Device 1 Monthly Fee [cite: 37, 38]</label>
+            <input type="number" class="val-input" id="be-dev1" value="0" oninput="recalc()">
+        </div>
+        <div class="be-row">
+            <label>Device 2 Monthly Fee [cite: 40, 41]</label>
+            <input type="number" class="val-input" id="be-dev2" value="0" oninput="recalc()">
+        </div>
+        <div class="be-row be-total-row">
+            <label style="padding-left: 10px;">TOTAL FOR EASY PAY [cite: 43]</label>
+            <span class="val-input" id="total-ep">$0.00</span>
+        </div>
+
+        <div class="be-header">PROMOTIONS AND OTHER CREDITS</div>
+        <div class="be-row">
+            <label>Rate Plan Promotion [cite: 46]</label>
+            <input type="number" class="val-input" id="be-promo-rate" value="0" oninput="recalc()" style="color:red;">
+        </div>
+        <div class="be-row">
+            <label># of Customer Service Surveys [cite: 51] (-$10)</label>
+            <input type="number" class="val-input" id="be-promo-srv" value="0" oninput="recalc()" style="color:red;">
+        </div>
+        <div class="be-row be-total-row">
+            <label style="padding-left: 10px;">TOTAL CREDITS FOR PROMOTIONS [cite: 54]</label>
+            <span class="val-input" id="total-promo" style="color:red;">-$0.00</span>
+        </div>
+
+        <div style="margin-top: 10px; font-size: 12px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
+                <span>Do You Have SmartFlex Turned On? [cite: 56]</span>
+                <div>
+                    <span class="chk-box" onclick="toggleChk(this)"></span> NO
+                    <span class="chk-box" onclick="toggleChk(this)"></span> YES
+                </div>
             </div>
-            <div>
-                <label>Item Description</label>
-                <input type="text" id="epDesc">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
+                <span>AARP or USAA Member ID Added? [cite: 61]</span>
+                <div>
+                    <span class="chk-box" onclick="toggleChk(this)"></span> NO
+                    <span class="chk-box" onclick="toggleChk(this)"></span> YES
+                </div>
             </div>
-            <div>
-                <label>Total Price ($)</label>
-                <input type="number" id="epPrice" value="0" oninput="calcEasyPay()">
-            </div>
-            <div>
-                <label>Down Payment Paid Today ($)</label>
-                <input type="number" id="epDown" value="0" oninput="calcEasyPay()">
+             <div style="display:flex; justify-content:space-between;">
+                <span>AutoPay and E-Billing Active? [cite: 65]</span>
+                <div>
+                    <span class="chk-box" onclick="toggleChk(this)"></span> NO
+                    <span class="chk-box" onclick="toggleChk(this)"></span> YES
+                </div>
             </div>
         </div>
 
-        <h3>Federal Truth-in-Lending Disclosures</h3>
-        <table style="width:100%; border-collapse: collapse; text-align: center; border: 1px solid #000; margin-bottom: 20px;">
-            <tr style="background: #ddd; font-weight: bold;">
-                <td style="border: 1px solid #000; padding: 5px;">APR</td>
-                <td style="border: 1px solid #000; padding: 5px;">Finance Charge</td>
-                <td style="border: 1px solid #000; padding: 5px;">Amount Financed</td>
-                <td style="border: 1px solid #000; padding: 5px;">Total of Payments</td>
-            </tr>
+        <div class="be-grand-total">
+            <span>GRAND TOTAL OF FIRST MONTH INVOICE</span>
+            <span id="grand-total">$0.00</span>
+        </div>
+        
+        <div style="margin-top:20px; font-size: 10px; color: #666;">
+            Estimate Provided By: <input type="text" style="width: 150px; border-bottom: 1px solid black; display:inline;"> [cite: 71]<br>
+            Date: <input type="text" id="date1" style="width: 100px; display:inline;"> [cite: 73]
+        </div>
+    </div>
+
+
+    <div id="easypay" class="page">
+        
+        <div class="ep-notice">
+            <strong>NOTICE TO CONSUMER</strong><br>
+            By signing below, you consent to receipt of the included contract and Truth-in-Lending disclosures in an electronic form.
+            You have a right to withdraw this consent and to receive this document in a non-electronic form. [cite: 76, 77]
+            <br><br>
+            <div style="display:flex;">
+                <span style="margin-right:10px;">DATE: <input type="text" id="date2" style="width:100px; border-bottom:1px solid black;"></span>
+                <span style="flex-grow:1;">BUYER'S SIGNATURE: <input type="text" style="width:60%; border-bottom:1px solid black; background: #eee;"></span>
+            </div>
+        </div>
+
+        <div class="ep-title">CONSUMER CREDIT INSTALLMENT SALE CONTRACT [cite: 84]</div>
+
+        <table class="ep-table">
             <tr>
-                <td style="border: 1px solid #000; padding: 10px;">0%</td>
-                <td style="border: 1px solid #000; padding: 10px;">$0.00</td>
-                <td style="border: 1px solid #000; padding: 10px;" id="epAmtFinanced">$0.00</td>
-                <td style="border: 1px solid #000; padding: 10px;" id="epTotalPay">$0.00</td>
+                <td style="width:50%;">
+                    <strong>Seller/Creditor:</strong><br>
+                    Consumer Cellular, Incorporated<br>
+                    12447 SW 69th Avenue<br>
+                    Portland, OR 97223-8517
+                </td>
+                <td style="width:50%;">
+                    <strong>Buyer:</strong><br>
+                    <input type="text" placeholder="Customer Name"><br>
+                    <input type="text" placeholder="Address"><br>
+                    <input type="text" placeholder="City, State, Zip">
+                </td>
             </tr>
         </table>
 
-        <div class="calc-box">
-            <div class="total-row">
-                <span>Monthly Payment (24 Months):</span>
-                <span id="epMonthly">$0.00 / mo</span>
+        <table class="ep-table">
+            <tr style="background:#eee;">
+                <th>SKU Number</th>
+                <th>Item Description</th>
+                <th>Price</th>
+                <th>Down payment Paid today</th>
+                <th>Balance</th>
+            </tr>
+            <tr>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td>$<input type="number" id="ep-price" value="0" oninput="calcEP()" style="width:50px; display:inline;"></td>
+                <td>$<input type="number" id="ep-down" value="0" oninput="calcEP()" style="width:50px; display:inline;"></td>
+                <td id="ep-bal-cell">$0.00</td>
+            </tr>
+        </table>
+
+        <div style="font-weight:bold; font-size:12px; margin-top:10px;">Federal Truth-in-Lending Disclosures</div>
+        <div class="tila-box">
+            <div class="tila-header">
+                <div class="tila-col">ANNUAL % RATE</div>
+                <div class="tila-col">FINANCE CHARGE</div>
+                <div class="tila-col">Amount Financed</div>
+                <div class="tila-col">Total of Payments</div>
+                <div class="tila-col">Total Sale Price</div>
             </div>
-            <div class="total-row" style="font-size: 1rem; border: none; margin-top: 5px;">
-                <span>Balance Due Today:</span>
-                <span id="epToday">$0.00</span>
+            <div class="tila-header" style="background:white; border-bottom:1px solid black; font-weight:normal; font-style:italic; font-size:10px;">
+                <div class="tila-col">The cost of your credit as a yearly rate.</div>
+                <div class="tila-col">The dollar amount the credit will cost you.</div>
+                <div class="tila-col">The amount of credit provided to you or on your behalf.</div>
+                <div class="tila-col">The amount you will have paid after you have made all payments as scheduled.</div>
+                <div class="tila-col">The total cost of your purchase on credit, including your down payment.</div>
+            </div>
+            <div class="tila-content">
+                <div class="tila-val">0%</div>
+                <div class="tila-val">$0.00</div>
+                <div class="tila-val" id="tila-amt">$0.00</div>
+                <div class="tila-val" id="tila-tot">$0.00</div>
+                <div class="tila-val" id="tila-sale">$0.00</div>
             </div>
         </div>
 
-        <div class="form-grid" style="margin-top: 30px;">
-             <div class="full-width">
-                <label>Buyer's Signature (Type to Sign)</label>
-                <input type="text" style="font-family: 'Courier New', monospace; font-style: italic; font-size: 1.2rem; border-bottom: 2px solid black;">
+        <div style="font-size:12px; margin-bottom:5px;">Your Payment Schedule will be:</div>
+        <table class="ep-table">
+            <tr style="background:#eee;">
+                <th>Number of Payments</th>
+                <th>Amount of Payments</th>
+                <th>When Payments are Due</th>
+            </tr>
+            <tr>
+                <td style="text-align:center;">24</td>
+                <td style="text-align:center;" id="ep-monthly-pay">$0.00</td>
+                <td>Monthly, beginning on <input type="date" style="display:inline; width:100px;"></td>
+            </tr>
+        </table>
+
+        <div class="legal-block" style="margin-top:10px;">
+            [cite: 91] See your Wireless Customer Agreement for any additional information about nonpayment, default, any required repayment in full before the scheduled date, and prepayment refunds and penalties.
+        </div>
+        
+        <div class="legal-block">
+            <strong>Itemization of the Amount Financed:</strong> Cash Price: <span id="item-price">$0</span> | Down Payment: <span id="item-down">$0</span> | Amount Financed: <span id="item-fin">$0</span> [cite: 92, 93]
+        </div>
+
+        <div class="legal-block">
+            <strong>Agreement to Purchase and Make Payments:</strong> The Buyer ("you") agrees to purchase from the Seller ("we") the items described above. You agree to make payments according to the payment schedule above. [cite: 94, 95]
+        </div>
+
+        <div class="legal-block">
+             Payments will first be applied to any past due balances and then, in order, to any deposit due, payments due under this contract, and current service charges. [cite: 98] You may prepay this contract in full or make additional payments at any time. [cite: 100]
+        </div>
+
+        <div class="legal-block">
+            <strong>Default:</strong> Except where prohibited by law, if you commit any substantial default under this contract, we may declare the remaining unpaid balance immediately due. You agree to maintain Service for any device purchased under this contract. [cite: 102, 103]
+        </div>
+
+        <div class="legal-block" style="font-weight:bold; text-transform:uppercase;">
+            ANY HOLDER OF THIS CONSUMER CREDIT CONTRACT IS SUBJECT TO ALL CLAIMS AND DEFENSES WHICH THE DEBTOR COULD ASSERT AGAINST THE SELLER. [cite: 105]
+        </div>
+
+        <div style="margin-top: 20px; border-top: 1px solid black; padding-top: 10px;">
+            <div style="display:flex; margin-bottom: 20px;">
+                <span style="width: 150px; font-weight: bold;">BUYER'S SIGNATURE:</span>
+                <input type="text" style="flex-grow:1; border-bottom: 1px solid black; font-family: 'Courier New'; font-style:italic;"> [cite: 108]
             </div>
-            <div>
-                <label>Date</label>
-                <input type="text" id="currentDate">
+             <div style="display:flex;">
+                <span style="width: 150px; font-weight: bold;">SELLER'S SIGNATURE:</span>
+                <span>CONSUMER CELLULAR, INCORPORATED</span> [cite: 110]
             </div>
         </div>
 
-        <div class="legal-text">
-            <p><strong>NOTICE TO CONSUMER:</strong> By signing above, you consent to receipt of the included contract and Truth-in-Lending disclosures. You agree to make payments according to the schedule above (24 months). Default: If you cancel service, the remaining balance becomes immediately due.</p>
-            <p>Seller: Consumer Cellular, Inc. 12447 SW 69th Avenue, Portland, OR 97223.</p>
-        </div>
-
-        <button class="action-btn" onclick="window.print()">Print / Save as PDF</button>
     </div>
 
-</div>
+    <script>
+        // Set dates
+        const today = new Date().toLocaleDateString();
+        document.getElementById('date1').value = today;
+        document.getElementById('date2').value = today;
 
-<script>
-    // Set Date Automatically
-    document.getElementById('currentDate').value = new Date().toLocaleDateString();
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
 
-    function switchTab(tabId) {
-        document.querySelectorAll('.portal-section').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
-        
-        document.getElementById(tabId).classList.add('active');
-        document.getElementById('btn-' + tabId).classList.add('active');
-    }
+        function toggleChk(el) {
+            el.classList.toggle('checked');
+        }
 
-    function calcBill() {
-        // Get values
-        let base = parseFloat(document.getElementById('basePlan').value) || 0;
-        let linesReg = (parseFloat(document.getElementById('linesReg').value) || 0) * 15;
-        let linesUnl = (parseFloat(document.getElementById('linesUnl').value) || 0) * 20;
-        let linesWatch = (parseFloat(document.getElementById('linesWatch').value) || 0) * 5;
-        let linesIris = (parseFloat(document.getElementById('linesIris').value) || 0) * 25;
-        let homePhone = parseFloat(document.getElementById('homePhone').value) || 0;
-        let protection = parseFloat(document.getElementById('protection').value) || 0;
-        
-        let dev1 = parseFloat(document.getElementById('dev1').value) || 0;
-        let dev2 = parseFloat(document.getElementById('dev2').value) || 0;
-        
-        let taxes = parseFloat(document.getElementById('taxes').value) || 0;
-        let actFee = parseFloat(document.getElementById('actFee').value) || 0;
-        let discounts = parseFloat(document.getElementById('discounts').value) || 0;
+        function recalc() {
+            // Bill Estimator Logic
+            let base = parseFloat(document.getElementById('be-base').value) || 0;
+            
+            let qLines = parseFloat(document.getElementById('qty-lines').value) || 0;
+            let cLines = qLines * 15;
+            document.getElementById('disp-lines').innerText = "$" + cLines.toFixed(2);
 
-        // Calculate
-        let total = base + linesReg + linesUnl + linesWatch + linesIris + homePhone + protection + dev1 + dev2 + taxes + actFee - discounts;
+            let qUnl = parseFloat(document.getElementById('qty-unl').value) || 0;
+            let cUnl = qUnl * 20;
+            document.getElementById('disp-unl').innerText = "$" + cUnl.toFixed(2);
 
-        // Update Display
-        document.getElementById('billTotal').innerText = "$" + total.toFixed(2);
-    }
+            let qWatch = parseFloat(document.getElementById('qty-watch').value) || 0;
+            let cWatch = qWatch * 5;
+            document.getElementById('disp-watch').innerText = "$" + cWatch.toFixed(2);
 
-    function calcEasyPay() {
-        let price = parseFloat(document.getElementById('epPrice').value) || 0;
-        let down = parseFloat(document.getElementById('epDown').value) || 0;
-        
-        let financed = price - down;
-        if(financed < 0) financed = 0;
-        
-        let monthly = financed / 24;
+            let qIris = parseFloat(document.getElementById('qty-iris').value) || 0;
+            let cIris = qIris * 25;
+            document.getElementById('disp-iris').innerText = "$" + cIris.toFixed(2);
 
-        document.getElementById('epAmtFinanced').innerText = "$" + financed.toFixed(2);
-        document.getElementById('epTotalPay').innerText = "$" + financed.toFixed(2);
-        document.getElementById('epMonthly').innerText = "$" + monthly.toFixed(2) + " / mo";
-        document.getElementById('epToday').innerText = "$" + down.toFixed(2) + " (Tax not incl.)";
-    }
-</script>
+            let prot = parseFloat(document.getElementById('be-prot').value) || 0;
 
+            let rateTotal = base + cLines + cUnl + cWatch + cIris + prot;
+            document.getElementById('total-rate').innerText = "$" + rateTotal.toFixed(2);
+
+            let tax = parseFloat(document.getElementById('be-tax').value) || 0;
+            document.getElementById('total-surch').innerText = "$" + tax.toFixed(2);
+
+            let dev1 = parseFloat(document.getElementById('be-dev1').value) || 0;
+            let dev2 = parseFloat(document.getElementById('be-dev2').value) || 0;
+            let epTotal = dev1 + dev2;
+            document.getElementById('total-ep').innerText = "$" + epTotal.toFixed(2);
+
+            let promoRate = parseFloat(document.getElementById('be-promo-rate').value) || 0;
+            let promoSrv = parseFloat(document.getElementById('be-promo-srv').value) || 0;
+            let promoTotal = promoRate + promoSrv;
+            document.getElementById('total-promo').innerText = "-$" + promoTotal.toFixed(2);
+
+            let grand = rateTotal + tax + epTotal - promoTotal;
+            document.getElementById('grand-total').innerText = "$" + grand.toFixed(2);
+        }
+
+        function calcEP() {
+            // EasyPay Logic
+            let price = parseFloat(document.getElementById('ep-price').value) || 0;
+            let down = parseFloat(document.getElementById('ep-down').value) || 0;
+            let balance = price - down;
+            let monthly = balance / 24;
+
+            // Update Table
+            document.getElementById('ep-bal-cell').innerText = "$" + balance.toFixed(2);
+            
+            // Update TILA
+            document.getElementById('tila-amt').innerText = "$" + balance.toFixed(2);
+            document.getElementById('tila-tot').innerText = "$" + balance.toFixed(2);
+            document.getElementById('tila-sale').innerText = "$" + price.toFixed(2); // Sale price includes downpayment
+
+            // Update Schedule
+            document.getElementById('ep-monthly-pay').innerText = "$" + monthly.toFixed(2);
+
+            // Update Itemization text
+            document.getElementById('item-price').innerText = "$" + price.toFixed(2);
+            document.getElementById('item-down').innerText = "$" + down.toFixed(2);
+            document.getElementById('item-fin').innerText = "$" + balance.toFixed(2);
+        }
+    </script>
 </body>
 </html>
