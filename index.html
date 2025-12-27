@@ -2,20 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EasyPay Contract - Consumer Cellular</title>
+    <title>Bill Estimator - Consumer Cellular</title>
     <style>
         /* --- PRINT & PAGE SETUP --- */
         @media print {
             @page { margin: 0; size: letter; }
             body { background: white; padding: 0; margin: 0; }
             .no-print { display: none !important; }
-            input { border: none !important; border-bottom: none !important; }
-            /* Force background graphics for the grey headers */
+            /* Force background colors */
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            input { background: transparent !important; }
+            /* Hide the placeholder text when printing */
+            input::placeholder { color: transparent; }
         }
 
         body {
-            background: #525659; /* Acrobat Reader Grey */
+            background: #525659; /* Acrobat Dark Grey */
             font-family: "Arial", "Helvetica", sans-serif;
             margin: 0;
             padding: 20px;
@@ -27,381 +29,507 @@
             background: white;
             width: 8.5in;
             height: 11in;
-            padding: 0.5in;
+            padding: 0.5in; /* Standard margins */
             box-sizing: border-box;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- COLORS --- */
+        :root {
+            --cc-navy: #002C5F; /* Deep Navy */
+            --cc-orange: #FF6B00; /* CC Orange */
+            --cc-grey: #E6E6E6;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            background-color: var(--cc-navy);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
             margin-bottom: 20px;
         }
-
-        /* --- TYPOGRAPHY --- */
-        p { margin: 0 0 10px 0; font-size: 10pt; line-height: 1.3; text-align: justify; }
-        strong { font-weight: bold; }
-        
         .header-title {
-            text-align: center;
-            font-weight: bold;
-            font-size: 11pt;
-            margin-bottom: 5px;
+            color: white;
+            font-size: 32pt;
+            font-weight: 900;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: "Arial Black", "Arial", sans-serif; /* Thicker font */
+        }
+        .header-logo {
+            background: var(--cc-orange);
+            color: white;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-style: italic;
+            font-size: 9pt;
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* --- SECTIONS --- */
+        .section-title {
+            color: var(--cc-orange);
+            font-weight: bold;
+            font-size: 14pt;
+            text-transform: uppercase;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .section-subtitle {
+            font-size: 10pt;
+            font-style: italic;
+            text-transform: none;
+            color: var(--cc-orange);
+        }
+
+        /* --- ROWS & GRID --- */
+        .row {
+            display: flex;
+            align-items: flex-end;
+            padding: 4px 0;
+            border-bottom: 1px solid #ccc; /* faint underline for the whole row */
+            font-size: 11pt;
+            min-height: 28px;
+        }
+        .label {
+            flex-grow: 1;
+            font-weight: bold;
+            color: var(--cc-navy);
+        }
+        .multiplier {
+            color: var(--cc-orange);
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 60px;
+            text-align: right;
+        }
+        .currency {
+            color: var(--cc-orange);
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .value-field {
+            width: 80px;
+            border-bottom: 2px solid var(--cc-orange); /* The orange writing line */
+            height: 20px;
         }
         
-        /* --- INPUT FIELDS (Digital Fill-in) --- */
-        input {
-            font-family: "Courier New", monospace; /* Typewriter look */
-            font-size: 11pt;
-            color: #000;
-            background: rgba(255, 246, 143, 0.2); /* Faint yellow on screen */
-            border: none;
+        /* --- INPUTS --- */
+        input[type="number"], input[type="text"] {
             width: 100%;
             height: 100%;
-        }
-        input:focus { background: rgba(255, 246, 143, 0.6); outline: none; }
-        
-        .input-line {
-            display: inline-block;
-            border-bottom: 1px solid black;
-            height: 14pt;
-        }
-
-        /* --- TABLES --- */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 9pt;
-            margin-bottom: 15px;
-        }
-        td, th {
-            border: 1px solid black;
-            padding: 4px 6px;
-            vertical-align: top;
-        }
-        th {
-            background-color: #E6E6E6; /* Light grey headers */
-            font-weight: bold;
-            text-align: center;
-        }
-
-        /* --- SPECIFIC SECTIONS --- */
-        .notice-box {
-            border: 1px solid black; /* Usually standard, though PDF source 75-80 is just text. Adding box for form structure if needed, or keeping plain. Source implies plain text top. */
-            margin-bottom: 15px;
-        }
-        
-        .seller-buyer-table td { width: 50%; }
-
-        /* TILA BOX (Federal Box) */
-        .tila-box td { text-align: center; vertical-align: middle; }
-        .tila-header { font-weight: bold; font-size: 8pt; background: #E6E6E6; height: 25px; }
-        .tila-desc { font-size: 7pt; font-style: italic; vertical-align: top; height: 35px; }
-        .tila-val { font-size: 11pt; font-weight: bold; height: 30px; }
-
-        /* --- BUTTONS --- */
-        .toolbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: #333;
-            padding: 10px;
-            text-align: center;
-            z-index: 100;
-        }
-        .btn {
-            background: #f36f21;
-            color: white;
             border: none;
-            padding: 8px 16px;
+            background: rgba(255, 230, 0, 0.1); /* Screen highlight */
+            text-align: right;
             font-weight: bold;
-            cursor: pointer;
-            border-radius: 4px;
+            font-size: 12pt;
+            font-family: inherit;
+            color: #333;
         }
+        input:focus { outline: none; background: rgba(255, 230, 0, 0.3); }
+
+        /* --- CHECKBOXES --- */
+        .chk-container {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .chk-box {
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--cc-orange);
+            margin-right: 4px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--cc-orange);
+            font-weight: bold;
+        }
+        .chk-box.checked::after { content: "X"; }
+
+        /* --- TOTAL BARS --- */
+        .total-bar {
+            background-color: var(--cc-navy);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+            font-size: 12pt;
+        }
+        .total-input {
+            width: 100px;
+            background: transparent !important;
+            color: white !important;
+            border-bottom: 1px solid white !important;
+        }
+
+        /* --- PROMO TEXT RED --- */
+        .text-red { color: #D32F2F !important; }
+        .border-red { border-color: #D32F2F !important; }
+
+        /* --- FOOTER --- */
+        .footer-questions {
+            margin-top: auto; /* Push to bottom */
+            border-top: 2px solid #ccc;
+            padding-top: 10px;
+        }
+        .question-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 10pt;
+            font-weight: bold;
+            color: var(--cc-navy);
+        }
+        .grand-total {
+            background: var(--cc-navy);
+            color: white;
+            padding: 15px;
+            font-size: 16pt;
+            font-weight: 900;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .legal-footer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10pt;
+            color: #666;
+            font-weight: bold;
+        }
+        .legal-fineprint {
+            font-size: 7pt;
+            color: #999;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        /* Toolbar */
+        .toolbar { position: fixed; top: 0; width: 100%; background: #333; text-align: center; padding: 10px; z-index: 99; }
+        .btn { background: var(--cc-orange); color: white; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
 <body>
 
 <div class="toolbar no-print">
-    <button class="btn" onclick="window.print()">Print / Save PDF</button>
+    <button class="btn" onclick="window.print()">Print Estimate</button>
 </div>
 
-<div class="page" style="margin-top: 50px;">
+<div class="page" style="margin-top: 60px;">
     
-    <div class="header-title" style="text-align: left; margin-bottom: 5px;">NOTICE TO CONSUMER</div>
-    <p>
-        By signing below, you consent to receipt of the included contract and Truth-in-Lending disclosures in an electronic form. 
-        You have a right to withdraw this consent and to receive this document in a non-electronic form. 
-        To withdraw consent and request this document in a non-electronic form, send a written request including your name, 
-        address and contact phone number to Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517. 
-        Your consent only applies to the included contract and Truth-in-Lending disclosures. To update the information needed to 
-        contact you electronically, contact Consumer Cellular, Incorporated at 12447 SW 69th Avenue, Portland, OR 97223-8517, 
-        call 800-686-4460 or manage your account online at www.ConsumerCellular.com.
-    </p>
+    <div class="header">
+        <div class="header-title">ESTIMATED FIRST BILL</div>
+        <div class="header-logo">Consumer<br>Cellular</div>
+    </div>
 
-    <div style="display: flex; gap: 20px; margin-bottom: 5px; align-items: flex-end;">
-        <div style="width: 150px;">
-            <strong>DATE:</strong>
-            <div class="input-line" style="width: 100%;"><input type="text" id="dateTop"></div>
+    <div class="section-title">MONTHLY RATE PLAN</div>
+    
+    <div class="row">
+        <div class="label">Plan</div>
+        <div class="currency">$</div>
+        <div class="value-field"><input type="number" id="basePlan" oninput="calc()"></div>
+    </div>
+    
+    <div class="row">
+        [cite_start]<div class="label">Line 1 Included in Plan [cite: 5]</div>
         </div>
-        <div style="flex-grow: 1;">
-            <strong>BUYER'S SIGNATURE:</strong>
-            <div class="input-line" style="width: 100%; border: 1px solid black; height: 25px; background: #f9f9f9;">
-                <input type="text" placeholder="(Type name to sign)" style="font-style: italic;">
+
+    <div class="row">
+        <div class="label">
+            # of Additional Lines 
+            <input type="number" id="qtyLines" style="width: 30px; display:inline; border-bottom:1px solid #ccc; height:auto; text-align:center;" oninput="calc()">
+        </div>
+        <div class="multiplier">x $15</div>
+        <div class="currency">$</div>
+        <div class="value-field"><input type="text" id="costLines" readonly tabindex="-1"></div>
+    </div>
+
+    <div class="row">
+        <div class="label">
+            # of Additional Unlimited Lines
+            <input type="number" id="qtyUnl" style="width: 30px; display:inline; border-bottom:1px solid #ccc; height:auto; text-align:center;" oninput="calc()">
+        </div>
+        <div class="multiplier">x $20</div>
+        <div class="currency">$</div>
+        <div class="value-field"><input type="text" id="costUnl" readonly tabindex="-1"></div>
+    </div>
+
+    <div class="row">
+        <div class="label">
+            # of Smartwatch Lines
+            <input type="number" id="qtyWatch" style="width: 30px; display:inline; border-bottom:1px solid #ccc; height:auto; text-align:center;" oninput="calc()">
+        </div>
+        <div class="multiplier">x $5</div>
+        <div class="currency">$</div>
+        <div class="value-field"><input type="text" id="costWatch" readonly tabindex="-1"></div>
+    </div>
+    
+    <div class="row">
+        <div class="label">
+            # of IRIS Ally Lines
+            <input type="number" id="qtyIris" style="width: 30px; display:inline; border-bottom:1px solid #ccc; height:auto; text-align:center;" oninput="calc()">
+        </div>
+        <div class="multiplier">x $25</div>
+        <div class="currency">$</div>
+        <div class="value-field"><input type="text" id="costIris" readonly tabindex="-1"></div>
+    </div>
+
+    <div class="row">
+        [cite_start]<div class="label"># of Home Phone Base Lines [cite: 18]</div>
+        <div class="multiplier" style="width: 200px;">
+            <div class="chk-container" onclick="toggleHome(15)">
+                <div class="chk-box" id="chkHome15"></div> x $15
+            </div>
+            <div class="chk-container" onclick="toggleHome(20)">
+                <div class="chk-box" id="chkHome20"></div> x $20
+            </div>
+        </div>
+        <div class="currency">$</div>
+        <div class="value-field"><input type="text" id="costHome" readonly tabindex="-1"></div>
+    </div>
+
+    <div class="row">
+        [cite_start]<div class="label">Asurion Protection [cite: 22]</div>
+        <div class="multiplier" style="width: 150px; text-align: right;">
+             <div class="chk-container" onclick="toggleProt('no')"><div class="chk-box" id="protNo"></div> NO</div>
+             <div class="chk-container" onclick="toggleProt('yes')"><div class="chk-box" id="protYes"></div> YES</div>
+        </div>
+        <div class="currency">$</div>
+        <div class="value-field"><input type="number" id="costProt" oninput="calc()"></div>
+    </div>
+
+    <div class="total-bar">
+        [cite_start]<span>TOTAL FOR RATE PLAN [cite: 27]</span>
+        <div style="display:flex;">$ <input type="text" class="total-input" id="totalRate" readonly></div>
+    </div>
+
+
+    <div class="section-title">
+        SURCHARGES AND OTHER ITEMS
+        <span class="section-subtitle">Estimate</span>
+    </div>
+    
+    <div class="row">
+        <div class="label">Zip Code Entered</div>
+        <div class="value-field" style="width: 100px; border-bottom: 1px solid black;"><input type="text" style="text-align:center;"></div>
+    </div>
+
+    <div class="row">
+        [cite_start]<div class="label">Government Taxes and Fees [cite: 32]</div>
+        <div class="currency">$</div>
+        <div class="value-field"><input type="number" id="costTax" oninput="calc()"></div>
+    </div>
+
+    <div class="total-bar">
+        <span>TOTAL FOR SURCHARGES AND FEES</span>
+        <div style="display:flex;">$ <input type="text" class="total-input" id="totalSurch" readonly></div>
+    </div>
+
+
+    <div class="section-title">
+        EASYPAY
+        <span class="section-subtitle">Interest-Free Device Financing</span>
+    </div>
+
+    <div class="row">
+        <div class="label">Device 1 <span style="font-weight:normal; font-size: 10pt;">Monthly Fee</span></div>
+        <div class="currency">$</div>
+        <div class="value-field"><input type="number" id="dev1" oninput="calc()"></div>
+    </div>
+
+    <div class="row">
+        <div class="label">Device 2 <span style="font-weight:normal; font-size: 10pt;">Monthly Fee</span></div>
+        <div class="currency">$</div>
+        <div class="value-field"><input type="number" id="dev2" oninput="calc()"></div>
+    </div>
+
+    <div class="total-bar">
+        <span>TOTAL FOR EASY PAY</span>
+        <div style="display:flex;">$ <input type="text" class="total-input" id="totalEp" readonly></div>
+    </div>
+
+
+    <div class="section-title">PROMOTIONS AND OTHER CREDITS</div>
+
+    <div class="row">
+        <div class="label">Rate Plan Promotion</div>
+        <div class="currency text-red">- $</div>
+        <div class="value-field border-red"><input type="number" id="promoPlan" class="text-red" oninput="calc()"></div>
+    </div>
+
+    <div class="row">
+        <div class="label"># of SIM Kit Credit(s)</div>
+        <div class="multiplier text-red">- $10</div>
+        <div class="currency text-red">- $</div>
+        <div class="value-field border-red"><input type="number" id="promoSim" class="text-red" oninput="calc()"></div>
+    </div>
+    
+    <div class="row">
+        <div class="label"># of Customer Service Surveys</div>
+        <div class="multiplier text-red">- $10</div>
+        <div class="currency text-red">- $</div>
+        <div class="value-field border-red"><input type="number" id="promoSurv" class="text-red" oninput="calc()"></div>
+    </div>
+
+    <div class="total-bar">
+        <span>TOTAL CREDITS FOR PROMOTIONS</span>
+        <div style="display:flex;">- $ <input type="text" class="total-input" id="totalPromo" readonly></div>
+    </div>
+
+
+    <div class="footer-questions">
+        <div class="question-row">
+            <span>Do You Have SmartFlex Turned On?</span>
+            <div style="display:flex; align-items:center;">
+                <div class="chk-container" onclick="toggleChk(this)"><div class="chk-box"></div> NO</div>
+                <div class="chk-container" onclick="toggleChk(this)"><div class="chk-box"></div> YES</div>
+                <div style="width: 80px; border-bottom: 1px solid black; margin-left: 10px; text-align:right;">$ 0.00</div>
+            </div>
+        </div>
+        <div style="font-size: 8pt; color: #666; margin-bottom: 10px; text-align:right;">Totals will change if data limits are exceeded and the plan is flexed up.</div>
+
+        <div class="question-row">
+            <span>AARP or USAA Member ID Added?</span>
+            <div style="display:flex; align-items:center;">
+                <div class="chk-container" onclick="toggleChk(this)"><div class="chk-box"></div> NO</div>
+                <div class="chk-container" onclick="toggleChk(this)"><div class="chk-box"></div> YES</div>
+                <div style="width: 80px; border-bottom: 1px solid black; margin-left: 10px; text-align:right;">$ 0.00</div>
+            </div>
+        </div>
+
+        <div class="question-row">
+            <span>AutoPay and E-Billing Active?</span>
+            <div style="display:flex; align-items:center;">
+                <div class="chk-container" onclick="toggleChk(this)"><div class="chk-box"></div> NO</div>
+                <div class="chk-container" onclick="toggleChk(this)"><div class="chk-box"></div> YES</div>
+                <div style="width: 80px; border-bottom: 1px solid black; margin-left: 10px; text-align:right;">$ 0.00</div>
             </div>
         </div>
     </div>
-    <div style="text-align: right; font-size: 8pt; margin-bottom: 20px;">
-        (Please type your name in the box above to electronically sign this document)
+
+    <div class="grand-total">
+        <span>GRAND TOTAL OF FIRST MONTH INVOICE</span>
+        <div style="display:flex;">$ <input type="text" class="total-input" id="grandTotal" style="font-size: 24pt; width: 150px;" readonly></div>
     </div>
 
-    <div class="header-title" style="font-size: 12pt; text-decoration: underline; margin-bottom: 15px;">
-        CONSUMER CREDIT INSTALLMENT SALE CONTRACT
+    <div class="legal-footer">
+        <div style="width: 45%;">Estimate Provided By <div style="border-bottom: 1px solid black; height: 20px;"><input type="text" style="text-align:left;"></div></div>
+        <div style="width: 45%;">Date <div style="border-bottom: 1px solid black; height: 20px;"><input type="text" id="dateBot" style="text-align:left;"></div></div>
     </div>
-
-    <table class="seller-buyer-table">
-        <tr>
-            <td>
-                <strong>Seller/Creditor:</strong><br>
-                Consumer Cellular<br>
-                12447 SW 69th Avenue<br>
-                Portland, OR 97223-8517
-            </td>
-            <td>
-                <strong>Buyer:</strong><br>
-                <div style="margin-bottom: 2px;"><input type="text" placeholder="Name"></div>
-                <div style="margin-bottom: 2px;"><input type="text" placeholder="Address"></div>
-                <div><input type="text" placeholder="City, State, Zip"></div>
-            </td>
-        </tr>
-    </table>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 15%;">SKU Number</th>
-                <th style="width: 40%;">Item Description</th>
-                <th style="width: 15%;">Price</th>
-                <th style="width: 15%;">Down payment<br>Paid today</th>
-                <th style="width: 15%;">Balance</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="height: 30px;"><input type="text" id="sku"></td>
-                <td><input type="text" id="desc"></td>
-                <td>$ <input type="number" id="price" style="width: 70%;" oninput="calc()"></td>
-                <td>$ <input type="number" id="down" style="width: 70%;" oninput="calc()"></td>
-                <td>$ <span id="balance">0.00</span></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div style="font-weight: bold; font-size: 10pt; margin-bottom: 3px;">Federal Truth-in-Lending Disclosures</div>
-    <table class="tila-box" style="border: 2px solid black;">
-        <tr>
-            <td class="tila-header">ANNUAL %<br>RATE</td>
-            <td class="tila-header">FINANCE<br>CHARGE</td>
-            <td class="tila-header">Amount<br>Financed</td>
-            <td class="tila-header">Total of<br>Payments</td>
-            <td class="tila-header">Total Sale<br>Price</td>
-        </tr>
-        <tr>
-            <td class="tila-desc">The cost of your credit as a yearly rate.</td>
-            <td class="tila-desc">The dollar amount the credit will cost you.</td>
-            <td class="tila-desc">The amount of credit provided to you or on your behalf.</td>
-            <td class="tila-desc">The amount you will have paid after you have made all payments as scheduled.</td>
-            <td class="tila-desc">The total cost of your purchase on credit, including your down payment.</td>
-        </tr>
-        <tr>
-            <td class="tila-val">0%</td>
-            <td class="tila-val">$0.00</td>
-            <td class="tila-val" id="tila-financed">$0.00</td>
-            <td class="tila-val" id="tila-total">$0.00</td>
-            <td class="tila-val" id="tila-sale">$0.00</td>
-        </tr>
-    </table>
-
-    <div style="font-size: 10pt; margin-bottom: 3px;">Your Payment Schedule will be:</div>
-    <table>
-        <thead>
-            <tr>
-                <th>Number of Payments</th>
-                <th>Amount of Payments</th>
-                <th>When Payments are Due</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="text-align: center; height: 30px;">24</td>
-                <td style="text-align: center;">$ <span id="monthly">0.00</span></td>
-                <td style="padding: 0;">
-                    <div style="padding: 6px;">Monthly, beginning on: <input type="date" id="startDate" style="display:inline; width: 110px;"></div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <p style="font-size: 9pt;">
-        See your Wireless Customer Agreement for any additional information about nonpayment, default,
-        any required repayment in full before the scheduled date, and prepayment refunds and penalties.
-    </p>
-
-    <div style="font-size: 10pt; font-weight: bold; border-top: 1px solid black; padding-top: 10px;">
-        Itemization of the Amount Financed of $ <span id="item-financed">0.00</span>
-    </div>
-</div>
-
-<div class="page">
     
-    <table style="width: 60%; margin-bottom: 20px;">
-        <tr>
-            <td>Cash Price</td>
-            <td style="width: 100px;">$ <span id="item-price">0.00</span></td>
-        </tr>
-        <tr>
-            <td>Sales Tax</td>
-            <td>$ 0.00</td>
-        </tr>
-        <tr>
-            <td>Total Cash Price plus Sales Tax</td>
-            <td>$ <span id="item-total-cash">0.00</span></td>
-        </tr>
-        <tr>
-            <td>Cash Down payment</td>
-            <td>$ <span id="item-down">0.00</span></td>
-        </tr>
-        <tr>
-            <td>Sales Tax paid at time of sale</td>
-            <td>$ 0.00</td>
-        </tr>
-        <tr>
-            <td>Unpaid Balance of Cash Price/Unpaid Balance</td>
-            <td>$ <span id="item-unpaid">0.00</span></td>
-        </tr>
-        <tr>
-            <td>Prepaid FINANCE CHARGE</td>
-            <td>$ 0.00</td>
-        </tr>
-        <tr>
-            <td>Amount Financed</td>
-            <td>$ <span id="item-final-amt">0.00</span></td>
-        </tr>
-    </table>
-
-    <p>
-        <strong>Agreement to Purchase and Make Payments:</strong> The Buyer ("you" or "Buyer") agrees to purchase
-        from the Seller ("we", "us", "our", or "Seller") the items described above on the terms set forth in
-        this contract. You agree to make payments according to the payment schedule above. The
-        Federal Truth-in-Lending Disclosures above are part of this contract. Items payable under this
-        contract will appear on the monthly billing statements for your plan. Payments will first be applied
-        to any past due balances and then, in order, to any deposit due, payments due under this
-        contract, current service charges for your plan and then to any other charges for your service
-        plan. Partial payments may result in the suspension or cancellation of your plan service and in
-        equipment not operating on our network. You may prepay this contract in full or make
-        additional payments in increments of <span id="inc-payment">$0.00</span> at any time.
-    </p>
-
-    <p>
-        <strong>Consumer Cellular, Incorporated Wireless Customer Agreement ("WCA"):</strong> You have been
-        provided with a copy of the WCA. The WCA also applies to this transaction, but if the WCA is
-        inconsistent with anything stated in this contract, this contract will prevail. Provisions of the WCA
-        that are prohibited by law will not apply. Manufacturer warranty information, if any, is provided with
-        the items sold.
-    </p>
-
-    <p>
-        <strong>Default:</strong> Except where prohibited by law, if you commit any substantial default under this contract,
-        we may declare the remaining unpaid balance of the contract immediately due and payable. You
-        agree to maintain Service for any device purchased under this contract, and any termination of
-        that Service will be a substantial default under this contract.
-    </p>
-
-    <div style="border: 2px solid black; padding: 10px; margin: 20px 0; font-size: 9pt; font-weight: bold; text-align: justify;">
-        NOTICE<br>
-        ANY HOLDER OF THIS CONSUMER CREDIT CONTRACT IS SUBJECT TO ALL CLAIMS
-        AND DEFENSES WHICH THE DEBTOR COULD ASSERT AGAINST THE SELLER OF
-        GOODS OR SERVICES OBTAINED PURSUANT HERETO OR WITH THE PROCEEDS
-        HEREOF. RECOVERY HEREUNDER BY THE DEBTOR SHALL NOT EXCEED AMOUNTS
-        PAID BY THE DEBTOR HEREUNDER.
+    <div class="legal-fineprint">
+        2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025
     </div>
 
-    <p>
-        You acknowledge receipt of the Consumer Cellular, Incorporated WCA. You also
-        acknowledge receipt of a completely filled in copy of this contract when you signed it.
-    </p>
-
-    <div style="margin-top: 30px;">
-        <strong>BUYER'S SIGNATURE:</strong>
-        <div style="border: 1px solid black; height: 30px; background: #f9f9f9; margin-top: 5px;">
-            <input type="text" placeholder="(Type name to sign)" style="font-style: italic;">
-        </div>
-        <div style="font-size: 8pt; margin-top: 2px; text-align: center;">
-            (Please type your name in the box above to electronically sign this document)
-        </div>
-    </div>
-
-    <div style="margin-top: 30px; border-bottom: 1px solid black; padding-bottom: 2px;">
-        <strong>SELLER'S SIGNATURE:</strong> 
-        <span style="font-family: 'Times New Roman', serif; font-size: 12pt; margin-left: 10px;">CONSUMER CELLULAR, INCORPORATED</span>
-    </div>
-
-    <div style="margin-top: 20px;">
-        <button style="background: #D3D3D3; border: 1px solid #999; padding: 5px 20px; font-weight: bold; pointer-events: none;">Save</button>
-    </div>
-
-</div>
-
-<div class="page" style="height: auto; min-height: 200px; border: none; box-shadow: none; background: transparent;">
-    <div style="background: white; padding: 0.5in; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
-        <div style="margin-bottom: 10px;">
-            <strong>Account Number:</strong> 
-            <input type="text" style="width: 200px; border-bottom: 1px solid #ccc; background: transparent;">
-        </div>
-        <div>
-            <strong>Phone Number:</strong> 
-            <input type="text" style="width: 200px; border-bottom: 1px solid #ccc; background: transparent;">
-        </div>
-    </div>
 </div>
 
 <script>
-    // Logic to update totals automatically
-    const today = new Date();
-    document.getElementById('dateTop').value = today.toLocaleDateString();
+    // Set date
+    document.getElementById('dateBot').value = new Date().toLocaleDateString();
+
+    // Checkbox togglers
+    function toggleChk(el) {
+        let box = el.querySelector('.chk-box');
+        box.classList.toggle('checked');
+    }
+
+    function toggleProt(val) {
+        document.getElementById('protNo').classList.remove('checked');
+        document.getElementById('protYes').classList.remove('checked');
+        if(val === 'no') document.getElementById('protNo').classList.add('checked');
+        if(val === 'yes') document.getElementById('protYes').classList.add('checked');
+    }
+
+    let homeVal = 0;
+    function toggleHome(amt) {
+        document.getElementById('chkHome15').classList.remove('checked');
+        document.getElementById('chkHome20').classList.remove('checked');
+        
+        if (homeVal === amt) {
+            // uncheck if clicking same
+            homeVal = 0; 
+        } else {
+            homeVal = amt;
+            if(amt === 15) document.getElementById('chkHome15').classList.add('checked');
+            if(amt === 20) document.getElementById('chkHome20').classList.add('checked');
+        }
+        document.getElementById('costHome').value = homeVal > 0 ? homeVal.toFixed(2) : "";
+        calc();
+    }
 
     function calc() {
-        // Get Inputs
-        let price = parseFloat(document.getElementById('price').value) || 0;
-        let down = parseFloat(document.getElementById('down').value) || 0;
+        // --- 1. RATE PLAN ---
+        let base = parseFloat(document.getElementById('basePlan').value) || 0;
         
-        // Calculate
-        let balance = price - down;
-        if(balance < 0) balance = 0;
-        let monthly = balance / 24;
+        // Lines
+        let qLines = parseFloat(document.getElementById('qtyLines').value) || 0;
+        let cLines = qLines * 15;
+        document.getElementById('costLines').value = cLines > 0 ? cLines.toFixed(2) : "";
 
-        // Update DOM elements
-        // 1. SKU Row
-        document.getElementById('balance').innerText = balance.toFixed(2);
-        
-        // 2. TILA Box
-        document.getElementById('tila-financed').innerText = "$" + balance.toFixed(2);
-        document.getElementById('tila-total').innerText = "$" + balance.toFixed(2);
-        document.getElementById('tila-sale').innerText = "$" + price.toFixed(2); // Sale price includes downpayment
+        let qUnl = parseFloat(document.getElementById('qtyUnl').value) || 0;
+        let cUnl = qUnl * 20;
+        document.getElementById('costUnl').value = cUnl > 0 ? cUnl.toFixed(2) : "";
 
-        // 3. Schedule
-        document.getElementById('monthly').innerText = monthly.toFixed(2);
+        let qWatch = parseFloat(document.getElementById('qtyWatch').value) || 0;
+        let cWatch = qWatch * 5;
+        document.getElementById('costWatch').value = cWatch > 0 ? cWatch.toFixed(2) : "";
 
-        // 4. Itemization (Bottom Pg 1)
-        document.getElementById('item-financed').innerText = balance.toFixed(2);
+        let qIris = parseFloat(document.getElementById('qtyIris').value) || 0;
+        let cIris = qIris * 25;
+        document.getElementById('costIris').value = cIris > 0 ? cIris.toFixed(2) : "";
 
-        // 5. Itemization (Pg 2)
-        document.getElementById('item-price').innerText = price.toFixed(2);
-        document.getElementById('item-total-cash').innerText = price.toFixed(2);
-        document.getElementById('item-down').innerText = down.toFixed(2);
-        document.getElementById('item-unpaid').innerText = balance.toFixed(2);
-        document.getElementById('item-final-amt').innerText = balance.toFixed(2);
-        
-        // 6. Text Body
-        document.getElementById('inc-payment').innerText = "$" + monthly.toFixed(2);
+        let cProt = parseFloat(document.getElementById('costProt').value) || 0;
+
+        let totalRate = base + cLines + cUnl + cWatch + cIris + homeVal + cProt;
+        document.getElementById('totalRate').value = totalRate.toFixed(2);
+
+        // --- 2. SURCHARGES ---
+        let tax = parseFloat(document.getElementById('costTax').value) || 0;
+        document.getElementById('totalSurch').value = tax.toFixed(2);
+
+        // --- 3. EASYPAY ---
+        let dev1 = parseFloat(document.getElementById('dev1').value) || 0;
+        let dev2 = parseFloat(document.getElementById('dev2').value) || 0;
+        let totalEp = dev1 + dev2;
+        document.getElementById('totalEp').value = totalEp.toFixed(2);
+
+        // --- 4. PROMOS ---
+        let pPlan = parseFloat(document.getElementById('promoPlan').value) || 0;
+        let pSim = parseFloat(document.getElementById('promoSim').value) || 0;
+        let pSurv = parseFloat(document.getElementById('promoSurv').value) || 0;
+        let totalPromo = pPlan + pSim + pSurv;
+        document.getElementById('totalPromo').value = totalPromo.toFixed(2);
+
+        // --- GRAND TOTAL ---
+        let grand = totalRate + tax + totalEp - totalPromo;
+        document.getElementById('grandTotal').value = grand.toFixed(2);
     }
 </script>
 
