@@ -1,388 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Consumer Cellular - Estimated First Bill</title>
-    <style>
-        /* --- PRINT SETTINGS --- */
-        @media print {
-            @page { size: letter; margin: 0; }
-            body { margin: 0; padding: 0; background: white; }
-            .no-print { display: none !important; }
-            /* Force background colors */
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            input { background: transparent !important; }
-            input::placeholder { color: transparent; }
-        }
+<style>
+    :root{
+      --baseW:1228;
+      --baseH:1583;
+      --ink:#0b1d34;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:#0b1220;color:#e7edf8;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    
+    /* UI HEADER */
+    header{position:sticky;top:0;background:rgba(11,18,32,.92);backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.12);padding:10px 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;z-index:100;}
+    a,button{
+      color:#e7edf8;text-decoration:none;background:transparent;border:1px solid rgba(255,255,255,.16);
+      padding:8px 10px;border-radius:10px;cursor:pointer;font:inherit
+    }
+    a:hover,button:hover{border-color:rgba(255,255,255,.28)}
+    label{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.75);font-size:13px}
+    
+    /* MAIN STAGE */
+    .stage{display:flex;justify-content:center;padding:14px}
+    .viewport{
+      width: min(calc(var(--baseW)*1px), calc(100vw - 24px));
+      max-width: calc(100vw - 24px);
+    }
+    .paperShell{
+      position:relative;
+      width: calc(var(--baseW)*1px);
+      height: calc(var(--baseH)*1px);
+      transform-origin: top left;
+      box-shadow:0 16px 60px rgba(0,0,0,.35);
+      background:#fff;
+    }
+    .paperBg{
+      position:absolute;inset:0;
+      /* IMPORTANT: We use !important to ensure this prints */
+      background:url("assets/bill_estimator_page1.png") no-repeat !important;
+      background-size:100% 100% !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    
+    /* INPUT FIELDS */
+    .field{
+      position:absolute;
+      background:transparent;
+      border:0;
+      outline:none;
+      color:var(--ink);
+      font-size:22px;
+      line-height:1;
+      padding:0 2px;
+      font-family: inherit;
+    }
+    .field.small{font-size:20px}
+    .field.tiny{font-size:18px}
+    .field.money{text-align:right;padding-right:4px}
+    .field.center{text-align:center}
+    .boxDebug .field{outline:1px dashed rgba(255,106,42,.75); background:rgba(255,106,42,.06)}
+    .hint{color:rgba(255,255,255,.7);font-size:13px;margin-left:auto}
 
-        /* --- SCREEN SETTINGS --- */
-        body {
-            background: #525659;
-            font-family: "Arial", sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .page {
-            background: white;
-            width: 8.5in;
-            height: 11in;
-            padding: 0.5in;
-            box-sizing: border-box;
-            position: relative;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- COLORS --- */
-        :root {
-            --cc-navy: #0F2A4A; 
-            --cc-orange: #F0602A;
-        }
-
-        /* --- HEADER --- */
-        .header {
-            background-color: var(--cc-navy);
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-left: 20px;
-            margin-bottom: 10px;
-        }
-        .header h1 {
-            color: white;
-            font-size: 38pt;
-            font-weight: 900;
-            margin: 0;
-            text-transform: uppercase;
-            font-family: "Arial Black", "Arial", sans-serif;
-            letter-spacing: -1px;
-        }
-        .logo-box {
-            background: var(--cc-orange);
-            height: 100%;
-            width: 90px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-style: italic;
-            text-align: center;
-            line-height: 1.1;
-            font-size: 11pt;
-        }
-
-        /* --- SECTIONS --- */
-        .section-head {
-            color: var(--cc-orange);
-            font-weight: bold;
-            font-size: 13pt;
-            text-transform: uppercase;
-            border-bottom: 2px solid var(--cc-orange);
-            margin-top: 5px;
-            margin-bottom: 2px;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-        .section-sub { font-size: 10pt; font-style: italic; color: var(--cc-orange); text-transform: none; }
-
-        /* --- ROWS --- */
-        .row {
-            display: flex;
-            align-items: flex-end;
-            padding: 2px 0;
-            border-bottom: 1px solid #ddd;
-            font-size: 11pt;
-            height: 24px;
-        }
-        .label { flex-grow: 1; font-weight: bold; color: var(--cc-navy); }
-        .mid { width: 120px; text-align: right; color: var(--cc-orange); font-weight: bold; margin-right: 5px; }
-        .currency { color: var(--cc-orange); font-weight: bold; padding-bottom: 3px; }
-        .input-wrap { width: 80px; border-bottom: 2px solid var(--cc-orange); margin-left: 5px; height: 20px; }
-        
-        input {
-            width: 100%; height: 100%; border: none; text-align: right;
-            font-weight: bold; font-size: 12pt; background: rgba(255, 230, 0, 0.1);
-            font-family: inherit; color: #000;
-        }
-        input:focus { outline: none; background: rgba(255, 230, 0, 0.3); }
-
-        /* --- ARROW BANNERS (CSS SHAPES) --- */
-        .total-arrow {
-            background: var(--cc-navy);
-            color: white;
-            height: 32px;
-            margin-top: 2px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-left: 10px;
-            padding-right: 40px; /* space for arrow tip */
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 11pt;
-            
-            /* The Arrow Shape */
-            clip-path: polygon(0% 0%, 96% 0%, 100% 50%, 96% 100%, 0% 100%);
-            -webkit-clip-path: polygon(0% 0%, 96% 0%, 100% 50%, 96% 100%, 0% 100%);
-        }
-        .total-arrow input {
-            color: white; background: transparent; border-bottom: 1px solid white; width: 90px;
-        }
-
-        .grand-arrow {
-            background: var(--cc-navy);
-            color: white;
-            height: 45px;
-            margin-top: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-left: 15px;
-            padding-right: 50px;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 14pt;
-
-            /* Grand Total Arrow Shape */
-            clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
-            -webkit-clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
-        }
-        .grand-arrow input {
-            color: white; background: transparent; border: none; width: 150px; font-size: 20pt; text-align: right;
-        }
-
-        /* --- CHECKBOXES --- */
-        .chk {
-            display: inline-block; width: 12px; height: 12px; border: 2px solid var(--cc-orange);
-            margin: 0 2px; vertical-align: middle; cursor: pointer; position: relative;
-        }
-        .chk.checked::after {
-            content: "X"; position: absolute; top: -3px; left: 1px; color: var(--cc-orange); font-weight: bold; font-size: 12px;
-        }
-        
-        /* --- HELPERS --- */
-        .red-text { color: #d00 !important; }
-        .red-border { border-color: #d00 !important; }
-
-        /* --- FOOTER --- */
-        .footer-check { border-bottom: 2px solid #ccc; padding: 5px 0; margin-top: 5px; }
-        .footer-row { display: flex; justify-content: space-between; font-weight: bold; color: var(--cc-navy); font-size: 10pt; margin-bottom: 3px; }
-        .footer-legal { margin-top: auto; display: flex; justify-content: space-between; font-size: 10pt; color: #000; font-weight: bold; }
-        .fine-print { text-align: center; font-size: 7pt; color: #666; margin-top: 5px; }
-
-        /* Toolbar */
-        .toolbar { position: fixed; top: 0; width: 100%; background: #333; text-align: center; padding: 10px; z-index: 99; }
-        .btn { background: var(--cc-orange); color: white; border: none; padding: 8px 16px; font-weight: bold; cursor: pointer; border-radius: 4px; }
-
-    </style>
-</head>
-<body>
-    <div class="toolbar no-print"><button class="btn" onclick="window.print()">Print Estimate</button></div>
-
-    <div class="page" style="margin-top: 50px;">
-        <div class="header">
-            <h1>ESTIMATED FIRST BILL</h1>
-            <div class="logo-box">Consumer<br>Cellular</div>
-        </div>
-
-        <div class="section-head">MONTHLY RATE PLAN</div>
-        <div class="row">
-            <div class="label">Plan</div>
-            <div class="currency">$</div>
-            <div class="input-wrap"><input type="number" id="base" oninput="c()"></div>
-        </div>
-        <div class="row">
-            <div class="label">Line 1 Included in Plan</div>
-        </div>
-        <div class="row">
-            <div class="label"># of Additional Lines</div>
-            <div class="mid"><input type="number" id="qL" style="width:25px; border-bottom:1px solid #ccc; text-align:center;" oninput="c()"> x $15</div>
-            <div class="currency">$</div>
-            <div class="input-wrap"><input type="text" id="cL" readonly></div>
-        </div>
-        <div class="row">
-            <div class="label"># of Additional Unlimited Lines</div>
-            <div class="mid"><input type="number" id="qU" style="width:25px; border-bottom:1px solid #ccc; text-align:center;" oninput="c()"> x $20</div>
-            <div class="currency">$</div>
-            <div class="input-wrap"><input type="text" id="cU" readonly></div>
-        </div>
-        <div class="row">
-            <div class="label"># of Smartwatch Lines</div>
-            <div class="mid"><input type="number" id="qW" style="width:25px; border-bottom:1px solid #ccc; text-align:center;" oninput="c()"> x $5</div>
-            <div class="currency">$</div>
-            <div class="input-wrap"><input type="text" id="cW" readonly></div>
-        </div>
-        <div class="row">
-            <div class="label"># of IRIS Ally Lines</div>
-            <div class="mid"><input type="number" id="qI" style="width:25px; border-bottom:1px solid #ccc; text-align:center;" oninput="c()"> x $25</div>
-            <div class="currency">$</div>
-            <div class="input-wrap"><input type="text" id="cI" readonly></div>
-        </div>
-        <div class="row">
-            <div class="label"># of Home Phone Base Lines</div>
-            <div class="mid" style="width:160px; font-size:10pt;">
-                <span class="chk" onclick="tH(15, this)"></span> x $15 &nbsp; <span class="chk" onclick="tH(20, this)"></span> x $20
-            </div>
-            <div class="currency">$</div>
-            <div class="input-wrap"><input type="text" id="cH" readonly></div>
-        </div>
-        <div class="row">
-            <div class="label">Asurion Protection</div>
-            <div class="mid" style="font-size:10pt;">
-                <span class="chk" onclick="tP('n', this)"></span> NO &nbsp; <span class="chk" onclick="tP('y', this)"></span> YES
-            </div>
-            <div class="currency">$</div>
-            <div class="input-wrap"><input type="number" id="cP" oninput="c()"></div>
-        </div>
-
-        <div class="total-arrow">
-            <span>TOTAL FOR RATE PLAN</span>
-            <span>$ <input type="text" id="tRate" readonly></span>
-        </div>
-
-        <div class="section-head">SURCHARGES AND OTHER ITEMS <span class="section-sub">Estimate</span></div>
-        <div class="row">
-            <div class="label">Zip Code Entered</div>
-            <div class="input-wrap" style="width:100px; border-color:#333;"><input type="text" style="text-align:center;"></div>
-        </div>
-        <div class="row">
-            <div class="label">Government Taxes and Fees</div>
-            <div class="currency">$</div>
-            <div class="input-wrap"><input type="number" id="cTax" oninput="c()"></div>
-        </div>
-        <div class="total-arrow">
-            <span>TOTAL FOR SURCHARGES AND FEES</span>
-            <span>$ <input type="text" id="tSurch" readonly></span>
-        </div>
-
-        <div class="section-head">EASYPAY <span class="section-sub">Interest-Free Device Financing</span></div>
-        <div class="row">
-            <div class="label">Device 1 <span style="font-weight:normal; font-size:10pt;">Monthly Fee</span></div>
-            <div class="currency">$</div>
-            <div class="input-wrap"><input type="number" id="d1" oninput="c()"></div>
-        </div>
-        <div class="row">
-            <div class="label">Device 2 <span style="font-weight:normal; font-size:10pt;">Monthly Fee</span></div>
-            <div class="currency">$</div>
-            <div class="input-wrap"><input type="number" id="d2" oninput="c()"></div>
-        </div>
-        <div class="total-arrow">
-            <span>TOTAL FOR EASY PAY</span>
-            <span>$ <input type="text" id="tEp" readonly></span>
-        </div>
-
-        <div class="section-head">PROMOTIONS AND OTHER CREDITS</div>
-        <div class="row">
-            <div class="label">Rate Plan Promotion</div>
-            <div class="currency red-text">- $</div>
-            <div class="input-wrap red-border"><input type="number" id="p1" class="red-text" oninput="c()"></div>
-        </div>
-        <div class="row">
-            <div class="label"># of SIM Kit Credit(s)</div>
-            <div class="mid red-text">- $10</div>
-            <div class="currency red-text">- $</div>
-            <div class="input-wrap red-border"><input type="number" id="p2" class="red-text" oninput="c()"></div>
-        </div>
-        <div class="row">
-            <div class="label"># of Customer Service Surveys</div>
-            <div class="mid red-text">- $10</div>
-            <div class="currency red-text">- $</div>
-            <div class="input-wrap red-border"><input type="number" id="p3" class="red-text" oninput="c()"></div>
-        </div>
-        <div class="total-arrow">
-            <span>TOTAL CREDITS FOR PROMOTIONS</span>
-            <span>- $ <input type="text" id="tPromo" readonly></span>
-        </div>
-
-        <div class="footer-check">
-            <div class="footer-row">
-                <span>Do You Have SmartFlex Turned On?</span>
-                <div><span class="chk" onclick="tog(this)"></span> NO <span class="chk" onclick="tog(this)"></span> YES</div>
-                <div style="width:80px; text-align:right; border-bottom:1px solid #000;">$ 0.00</div>
-            </div>
-            <div style="text-align:right; font-size:8pt; color:#666;">Totals will change if data limits are exceeded and the plan is flexed up.</div>
-        </div>
-        <div class="footer-check">
-            <div class="footer-row">
-                <span>AARP or USAA Member ID Added?</span>
-                <div><span class="chk" onclick="tog(this)"></span> NO <span class="chk" onclick="tog(this)"></span> YES</div>
-                <div style="width:80px; text-align:right; border-bottom:1px solid #000;">$ 0.00</div>
-            </div>
-        </div>
-        <div class="footer-check">
-            <div class="footer-row">
-                <span>AutoPay and E-Billing Active?</span>
-                <div><span class="chk" onclick="tog(this)"></span> NO <span class="chk" onclick="tog(this)"></span> YES</div>
-                <div style="width:80px; text-align:right; border-bottom:1px solid #000;">$ 0.00</div>
-            </div>
-        </div>
-
-        <div class="grand-arrow">
-            <span>GRAND TOTAL OF FIRST MONTH INVOICE</span>
-            <span>$ <input type="text" id="gTotal" readonly></span>
-        </div>
-
-        <div class="footer-legal">
-            <div style="width:45%;">Estimate Provided By <div style="border-bottom:1px solid black; margin-top:5px;"><input type="text" style="text-align:left;"></div></div>
-            <div style="width:45%;">Date <div style="border-bottom:1px solid black; margin-top:5px;"><input type="text" id="dateBot" style="text-align:left;"></div></div>
-        </div>
-        <div class="fine-print">
-            2025 Consumer Cellular, Inc. *Exact charges may vary due to your billing cycle, applicable proration and other varying fees. Q42025
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('dateBot').value = new Date().toLocaleDateString();
-        function tog(el) { el.classList.toggle('checked'); }
-        
-        let hVal = 0;
-        function tH(val, el) {
-            // Logic to handle radio-like behavior for home phone
-            const row = el.parentElement; 
-            const chks = row.querySelectorAll('.chk');
-            chks.forEach(c => c.classList.remove('checked'));
-            if(hVal !== val) {
-                hVal = val;
-                el.classList.add('checked');
-            } else { hVal = 0; }
-            document.getElementById('cH').value = hVal > 0 ? hVal.toFixed(2) : "";
-            c();
-        }
-
-        function tP(type, el) {
-            const row = el.parentElement;
-            row.querySelectorAll('.chk').forEach(c => c.classList.remove('checked'));
-            el.classList.add('checked');
-        }
-
-        function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
-        function s(id, val) { document.getElementById(id).value = val > 0 ? val.toFixed(2) : ""; }
-
-        function c() {
-            let rate = v('base') + (v('qL')*15) + (v('qU')*20) + (v('qW')*5) + (v('qI')*25) + hVal + v('cP');
-            s('cL', v('qL')*15); s('cU', v('qU')*20); s('cW', v('qW')*5); s('cI', v('qI')*25);
-            document.getElementById('tRate').value = rate.toFixed(2);
-
-            let tax = v('cTax');
-            document.getElementById('tSurch').value = tax.toFixed(2);
-
-            let ep = v('d1') + v('d2');
-            document.getElementById('tEp').value = ep.toFixed(2);
-
-            let promo = v('p1') + v('p2') + v('p3');
-            document.getElementById('tPromo').value = promo.toFixed(2);
-
-            let grand = rate + tax + ep - promo;
-            document.getElementById('gTotal').value = grand.toFixed(2);
-        }
-    </script>
-</body>
-</html>
+    /* --- PRINT STYLES --- */
+    @media print{
+      @page {
+        margin: 0;
+        size: letter portrait;
+      }
+      body {
+        background: white;
+        height: 100%;
+        overflow: visible;
+      }
+      header, .hint { display: none !important; }
+      
+      .stage { padding: 0; margin: 0; display: block; }
+      .viewport { width: 100%; max-width: none; }
+      
+      .paperShell {
+        box-shadow: none;
+        /* Force the background image to render in print */
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        /* Scale down to fit standard paper (1228px width -> 8.5 inches) */
+        /* 0.66 is roughly the ratio to fit 1228px onto a Letter page */
+        transform: scale(0.66); 
+        margin: 0;
+        left: 0;
+        top: 0;
+      }
+      
+      /* Ensure inputs look clean */
+      .field {
+        background: transparent !important;
+        border: none !important;
+      }
+    }
+  </style>
